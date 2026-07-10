@@ -5,14 +5,35 @@ export interface DashboardStats {
   totalParticipants: number;
   totalTickets: number;
   completedMissions: number;
-  pendingProofs: number;
   activeCampaigns?: number;
 }
 
+// Linha de participante retornada pela listagem admin: "tickets" aqui é o total
+// somado na campanha filtrada (número), não a lista de Ticket do participante.
+export type AdminParticipant = Omit<User, 'tickets'> & { tickets?: number };
+
+export interface PaginatedParticipants {
+  data: AdminParticipant[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
 export const adminService = {
-  async getParticipants(campaignId?: string): Promise<User[]> {
-    const response = await api.get<User[]>('/admin/participants', {
-      params: campaignId ? { campaignId } : {},
+  async getParticipants(params: {
+    campaignId?: string;
+    search?: string;
+    page?: number;
+    pageSize?: number;
+  } = {}): Promise<PaginatedParticipants> {
+    const response = await api.get<PaginatedParticipants>('/admin/participants', {
+      params: {
+        campaignId: params.campaignId || undefined,
+        search: params.search?.trim() || undefined,
+        page: params.page,
+        pageSize: params.pageSize,
+      },
     });
     return response.data;
   },
@@ -32,27 +53,18 @@ export const adminService = {
   },
 
   async getDashboardStats(campaignId: string): Promise<DashboardStats> {
-    try {
-      const response = await api.get<any>('/admin/dashboard', {
-        params: { campaignId },
-      });
-      return {
-        totalParticipants: response.data.totalParticipants,
-        totalTickets: response.data.totalTickets,
-        completedMissions: response.data.totalCompletions !== undefined ? response.data.totalCompletions : (response.data.completedMissions ?? 0),
-        pendingProofs: response.data.approvedProofs !== undefined ? response.data.approvedProofs : (response.data.pendingProofs ?? 0),
-      };
-    } catch (e) {
-      console.warn('Failed to fetch from /admin/dashboard, trying /admin/stats', e);
-      const response = await api.get<DashboardStats>('/admin/stats', {
-        params: { campaignId },
-      });
-      return response.data;
-    }
+    const response = await api.get<any>('/admin/dashboard', {
+      params: { campaignId },
+    });
+    return {
+      totalParticipants: response.data.totalParticipants,
+      totalTickets: response.data.totalTickets,
+      completedMissions: response.data.totalCompletions ?? 0,
+    };
   },
 
-  async getParticipantProofs(userId: string): Promise<MissionProof[]> {
-    const response = await api.get<MissionProof[]>(`/admin/participants/${userId}/proofs`);
+  async getParticipantProofs(userId: string): Promise<AdminProofWithUrl[]> {
+    const response = await api.get<AdminProofWithUrl[]>(`/admin/participants/${userId}/proofs`);
     return response.data;
   },
 
@@ -61,3 +73,7 @@ export const adminService = {
     return response.data;
   },
 };
+
+// Comprovante com a URL assinada da S3, já pronta pra exibir a imagem —
+// só existe na resposta do endpoint de admin (nunca exposta ao participante).
+export type AdminProofWithUrl = MissionProof & { signedUrl: string };

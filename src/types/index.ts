@@ -16,6 +16,9 @@ export interface User {
   phone: string;
   email?: string | null;
   instagram?: string | null;
+  // Código de 6 dígitos gerado no cadastro, usado por outros participantes
+  // pra cumprir a missão de indicar um amigo.
+  referralCode?: string;
   mustChangePinOnNextLogin: boolean;
   createdAt: string;
   updatedAt: string;
@@ -34,21 +37,23 @@ export interface Campaign {
   id: string;
   name: string;
   description?: string | null;
+  coverImageUrl?: string | null;
   status: CampaignStatus;
   startDate?: string | null;
   drawDate?: string | null;
   createdAt: string;
   updatedAt: string;
   missions?: Mission[];
-  prizes?: Prize[];
+  vault?: Vault | null;
   draws?: Draw[];
+  drawSessions?: DrawSession[];
   tickets?: Ticket[];
   quiz?: Quiz | null;
   feedbackForm?: FeedbackForm | null;
 }
 
 // ─── MISSION TYPES ───────────────────────────────────────────────
-export type MissionType = 'PROOF_UPLOAD' | 'QUIZ' | 'FEEDBACK_FORM' | 'AUTOMATIC';
+export type MissionType = 'PROOF_UPLOAD' | 'QUIZ' | 'FEEDBACK_FORM' | 'REFERRAL';
 
 export interface Mission {
   id: string;
@@ -56,7 +61,11 @@ export interface Mission {
   title: string;
   description: string;
   imageUrl?: string | null;
+  links?: string[];
   reward: number;
+  // Só se aplica ao tipo REFERRAL: bônus de tickets pro dono do código usado.
+  // Nulo = usa o mesmo valor de `reward`.
+  referrerReward?: number | null;
   type: MissionType;
   order: number;
   active: boolean;
@@ -65,10 +74,9 @@ export interface Mission {
   campaign?: Campaign;
   completions?: MissionCompletion[];
   proofs?: MissionProof[];
-  
+
   // Custom UI helper attributes
   isCompleted?: boolean;
-  proofStatus?: ProofStatus;
 }
 
 export interface MissionCompletion {
@@ -98,7 +106,8 @@ export interface MissionProof {
 // ─── QUIZ TYPES ──────────────────────────────────────────────────
 export interface Quiz {
   id: string;
-  campaignId: string;
+  missionId: string;
+  campaignId?: string | null;
   title: string;
   createdAt: string;
   updatedAt: string;
@@ -126,6 +135,14 @@ export interface QuizOption {
   question?: QuizQuestion;
 }
 
+// Resposta do endpoint de submissão do quiz (não é a linha do banco QuizAnswer)
+export interface QuizSubmitResult {
+  score: number;
+  totalQuestions: number;
+  percentage: number;
+  ticketsEarned: number;
+}
+
 export interface QuizAnswer {
   id: string;
   userId: string;
@@ -142,7 +159,8 @@ export type QuestionType = 'TEXT' | 'MULTIPLE_CHOICE' | 'CHECKBOX' | 'SCALE';
 
 export interface FeedbackForm {
   id: string;
-  campaignId: string;
+  missionId: string;
+  campaignId?: string | null;
   title: string;
   createdAt: string;
   updatedAt: string;
@@ -183,6 +201,37 @@ export interface FeedbackResponse {
   form?: FeedbackForm;
 }
 
+// ─── FEEDBACK STATS (central de resultados) ──────────────────────
+export interface FeedbackOptionStat {
+  value: string;
+  text: string;
+  count: number;
+  percentage: number;
+}
+
+export interface FeedbackScaleStat {
+  average: number;
+  distribution: { value: number; count: number }[];
+}
+
+export interface FeedbackQuestionStat {
+  id: string;
+  text: string;
+  type: QuestionType;
+  order: number;
+  answeredCount: number;
+  options?: FeedbackOptionStat[];
+  scale?: FeedbackScaleStat;
+  textAnswers?: string[];
+}
+
+export interface FeedbackFormStats {
+  formId: string;
+  title: string;
+  totalResponses: number;
+  questions: FeedbackQuestionStat[];
+}
+
 // ─── TICKET TYPES ────────────────────────────────────────────────
 export interface Ticket {
   id: string;
@@ -195,27 +244,57 @@ export interface Ticket {
   campaign?: Campaign;
 }
 
-// ─── PRIZE TYPES ─────────────────────────────────────────────────
-export interface Prize {
+// Entrada do histórico de cupons do participante (GET /campaigns/:id/my-ticket-history)
+export interface TicketHistoryEntry {
+  id: string;
+  quantity: number;
+  createdAt: string;
+  missionTitle: string | null;
+  missionType: MissionType | null;
+  // true só no ticket de bônus creditado a quem é DONO do código usado.
+  isReferralBonus: boolean;
+  // Pra tickets de missão REFERRAL: nome da pessoa do outro lado da indicação.
+  relatedUserName: string | null;
+}
+
+// ─── COFRE (VAULT) & PRIZE TYPES ──────────────────────────────────
+export interface Vault {
   id: string;
   campaignId: string;
+  createdAt: string;
+  updatedAt: string;
+  campaign?: Campaign;
+  prizes?: Prize[];
+}
+
+export interface Prize {
+  id: string;
+  vaultId: string;
   name: string;
   description?: string | null;
   imageUrl?: string | null;
   quantity: number;
+  claimed: number;
+  // Conveniência calculada pelo backend: quantity - claimed
+  available?: number;
   createdAt: string;
   updatedAt: string;
-  campaign?: Campaign;
+  vault?: Vault;
   draws?: Draw[];
 }
 
 // ─── DRAW TYPES ──────────────────────────────────────────────────
+// Todo sorteio decide o ganhador e o prêmio do cofre juntos. Sem sessão =
+// sorteio avulso; com sessão = uma rodada de um sorteio em cadeia.
 export type DrawStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+export type DrawSessionStatus = 'ACTIVE' | 'ENDED';
+export type SessionOrderStrategy = 'RANDOM' | 'FIXED_ORDER';
 
 export interface Draw {
   id: string;
   campaignId: string;
-  prizeId: string;
+  prizeId?: string | null;
+  sessionId?: string | null;
   status: DrawStatus;
   winnerId?: string | null;
   winnerName?: string | null;
@@ -223,9 +302,23 @@ export interface Draw {
   drawnAt?: string | null;
   createdAt: string;
   campaign?: Campaign;
-  prize?: Prize;
+  prize?: Prize | null;
+  session?: DrawSession | null;
   participants?: DrawParticipant[];
   auditLog?: AuditLog | null;
+}
+
+export interface DrawSession {
+  id: string;
+  campaignId: string;
+  status: DrawSessionStatus;
+  orderStrategy: SessionOrderStrategy;
+  prizeOrder?: string[] | null;
+  nextOrderIndex: number;
+  createdAt: string;
+  endedAt?: string | null;
+  campaign?: Campaign;
+  draws?: Draw[];
 }
 
 export interface DrawParticipant {
@@ -241,7 +334,7 @@ export interface AuditLog {
   id: string;
   drawId: string;
   campaignId: string;
-  prizeId: string;
+  prizeId?: string | null;
   winnerId?: string | null;
   totalParticipants: number;
   totalTickets: number;

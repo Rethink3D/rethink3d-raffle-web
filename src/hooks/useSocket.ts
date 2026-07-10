@@ -4,131 +4,102 @@ import { io } from 'socket.io-client';
 import type { Socket } from 'socket.io-client';
 import { useAuthStore } from '../store/authStore';
 import { useDrawStore } from '../store/drawStore';
-import type { DrawWinner } from '../store/drawStore';
+import type { DrawParticipantPreview, DrawWinner } from '../store/drawStore';
 
 const SOCKET_URL = (import.meta.env.VITE_SOCKET_URL as string) || 'http://localhost:3000';
 
-// Single socket instance for the '/draw' namespace
+// Instância única do socket, namespace '/draw'
 export const socket: Socket = io(`${SOCKET_URL}/draw`, {
   path: '/socket.io',
   autoConnect: false,
   reconnection: true,
   reconnectionAttempts: Infinity,
   reconnectionDelay: 1000,
+  // Sem isso, o ngrok free tier intercepta o polling/handshake do socket.io
+  // com uma página HTML de aviso em vez de deixar passar pro backend.
+  extraHeaders: { 'ngrok-skip-browser-warning': 'true' },
 });
 
+// Conecta ao namespace /draw e entra na sala da campanha (isolamento real via
+// Socket.IO rooms no backend — sem isso, sorteios de campanhas diferentes se
+// misturariam). Usado tanto pela tela pública de sorteio quanto pelo admin.
 export const useSocket = (campaignId?: string) => {
   const navigate = useNavigate();
-  const { token, user, role } = useAuthStore();
+  const { token, role } = useAuthStore();
   const {
-    setStatus,
-    setDrawDetails,
+    setDrawStarted,
+    setParticipants,
     setWinner,
-    setIsSpinning,
-    setStats,
+    setSessionEnded,
+    setOnlineCount,
     clearDraw,
   } = useDrawStore();
 
-  // 1. Manage socket connection state based on authentication token
   useEffect(() => {
     if (token) {
       socket.auth = { token };
-      if (!socket.connected) {
-        socket.connect();
-      }
-    } else {
-      if (socket.connected) {
-        socket.disconnect();
-      }
+      if (!socket.connected) socket.connect();
+    } else if (socket.connected) {
+      socket.disconnect();
     }
-
-    return () => {
-      // We don't necessarily disconnect on every re-render, only when token changes/unmounts
-    };
   }, [token]);
 
-  // 2. Manage room joins on connect and/or when user/campaignId changes
   useEffect(() => {
-    const handleConnect = () => {
-      console.log('Socket connected successfully to /draw namespace');
-      if (role === 'participant' && user && campaignId) {
-        socket.emit('participant:join', { userId: user.id, campaignId });
-        console.log(`Joined campaign room: ${campaignId} as participant: ${user.id}`);
-      } else if (role === 'admin' && user) {
-        socket.emit('admin:join', { adminId: user.id });
-        console.log(`Joined admin room as admin: ${user.id}`);
-      }
-    };
+    if (!campaignId) return;
 
-    socket.on('connect', handleConnect);
-
-    // If socket is already connected when this effect runs, join room immediately
-    if (socket.connected) {
-      handleConnect();
-    }
+    const join = () => socket.emit('join', { campaignId });
+    socket.on('connect', join);
+    if (socket.connected) join();
 
     return () => {
-      socket.off('connect', handleConnect);
+      socket.off('connect', join);
+      socket.emit('leave', { campaignId });
     };
-  }, [role, user, campaignId]);
+  }, [campaignId]);
 
-  // 3. Register real-time draw and stats event listeners
   useEffect(() => {
-    const onDrawStarted = (data: { drawId: string; campaignName: string; prize: any }) => {
-      console.log('Socket Event - draw:started:', data);
-      setStatus('IN_PROGRESS');
-      setDrawDetails({
-        drawId: data.drawId,
-        campaignName: data.campaignName,
-        prize: data.prize,
-      });
-      if (role === 'participant') {
-        navigate('/draw/watch');
-      }
+    const onDrawStarted = (data: { drawId: string; sessionId?: string }) => {
+      setDrawStarted(data);
+      if (role === 'participant') navigate('/draw/watch');
     };
 
-    const onDrawSpinning = () => {
-      console.log('Socket Event - draw:spinning');
-      setIsSpinning(true);
+    const onParticipants = (data: { participants: DrawParticipantPreview[]; totalTickets: number; othersTickets: number; othersCount: number }) => {
+      setParticipants(data);
     };
 
-    const onDrawWinner = (winner: DrawWinner) => {
-      console.log('Socket Event - draw:winner:', winner);
-      setIsSpinning(false);
-      setWinner(winner);
-      setStatus('COMPLETED');
+    const onWinner = (data: DrawWinner) => {
+      setWinner(data);
     };
 
-    const onDrawCancelled = () => {
-      console.log('Socket Event - draw:cancelled');
+    const onSessionEnded = (data: { reason: 'exhausted' | 'manual' }) => {
+      setSessionEnded(data.reason);
+    };
+
+    const onCancelled = () => {
       clearDraw();
-      if (role === 'participant') {
-        navigate('/dashboard');
-      }
+      if (role === 'participant') navigate('/dashboard');
     };
 
-    const onStatsUpdate = (stats: { participantCount?: number; onlineCount?: number }) => {
-      console.log('Socket Event - stats:update:', stats);
-      setStats(stats);
+    const onStats = (data: { onlineCount: number }) => {
+      setOnlineCount(data.onlineCount);
     };
 
     socket.on('draw:started', onDrawStarted);
-    socket.on('draw:spinning', onDrawSpinning);
-    socket.on('draw:winner', onDrawWinner);
-    socket.on('draw:cancelled', onDrawCancelled);
-    socket.on('stats:update', onStatsUpdate);
+    socket.on('draw:participants', onParticipants);
+    socket.on('draw:winner', onWinner);
+    socket.on('draw:sessionEnded', onSessionEnded);
+    socket.on('draw:cancelled', onCancelled);
+    socket.on('draw:stats', onStats);
 
     return () => {
       socket.off('draw:started', onDrawStarted);
-      socket.off('draw:spinning', onDrawSpinning);
-      socket.off('draw:winner', onDrawWinner);
-      socket.off('draw:cancelled', onDrawCancelled);
-      socket.off('stats:update', onStatsUpdate);
+      socket.off('draw:participants', onParticipants);
+      socket.off('draw:winner', onWinner);
+      socket.off('draw:sessionEnded', onSessionEnded);
+      socket.off('draw:cancelled', onCancelled);
+      socket.off('draw:stats', onStats);
     };
-  }, [role, navigate, setStatus, setDrawDetails, setIsSpinning, setWinner, clearDraw, setStats]);
+  }, [role, navigate, setDrawStarted, setParticipants, setWinner, setSessionEnded, setOnlineCount, clearDraw]);
 
-  return {
-    socket,
-    isConnected: socket.connected,
-  };
+  return { socket, isConnected: socket.connected };
 };

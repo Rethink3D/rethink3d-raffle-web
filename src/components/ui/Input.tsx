@@ -9,9 +9,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, statusIndicator, icon, className = '', ...props }, ref) => {
-    // Generate default status indicators if none is provided
-    const status = statusIndicator || (error ? '[SYS_ERR]' : '[SYS_READY]');
-    
+    const status = statusIndicator;
+
     return (
       <div className="w-full flex flex-col gap-1.5 font-inter">
         {/* Label & Status Row */}
@@ -57,7 +56,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {/* Error message */}
         {error && (
           <p className="text-xs font-rajdhani font-semibold text-cyber-danger tracking-wider mt-0.5 uppercase px-1">
-            ⚠ ERROR // {error}
+            ⚠ {error}
           </p>
         )}
       </div>

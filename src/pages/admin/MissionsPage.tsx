@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { campaignService } from '../../services/campaign.service';
 import { questService } from '../../services/quest.service';
+import { getCampaignStatusLabel } from '../../utils/campaignStatus';
 import type { Campaign, Mission, MissionType } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
-import { Input } from '../../components/ui/Input';
 import { Modal } from '../../components/ui/Modal';
-import { 
+import {
   Plus, Edit2, Trash2, ArrowUp, ArrowDown, RefreshCw,
-  Globe, Link2, Unlink, Layers
+  Globe, Link2, Layers, BarChart3
 } from 'lucide-react';
 
 type Tab = 'campaign' | 'global';
 
 export const MissionsPage: React.FC = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<Tab>('campaign');
 
   // ─── Campaign tab ─────────────────────────────────────────────────────────
@@ -34,20 +36,6 @@ export const MissionsPage: React.FC = () => {
   const [isAssignOpen, setIsAssignOpen] = useState(false);
   const [missionToAssign, setMissionToAssign] = useState<Mission | null>(null);
   const [assignTargetCampaignId, setAssignTargetCampaignId] = useState<string>('');
-
-  // ─── Create/Edit Modal ────────────────────────────────────────────────────
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingQuest, setEditingQuest] = useState<Mission | null>(null);
-  // Track whether form is creating in "global" mode (no campaign)
-  const [formIsGlobal, setFormIsGlobal] = useState(false);
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    reward: 10,
-    type: 'PROOF_UPLOAD' as MissionType,
-    imageUrl: '',
-    active: true,
-  });
 
   // ─── Delete Modal ─────────────────────────────────────────────────────────
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -112,64 +100,22 @@ export const MissionsPage: React.FC = () => {
     }
   }, [activeTab, selectedCampaignId]);
 
-  // ─── Create / Edit handlers ───────────────────────────────────────────────
+  // ─── Create / Edit navigation ─────────────────────────────────────────────
 
   const handleOpenCreate = (isGlobal: boolean) => {
-    setEditingQuest(null);
-    setFormIsGlobal(isGlobal);
-    setFormData({ title: '', description: '', reward: 10, type: 'PROOF_UPLOAD', imageUrl: '', active: true });
-    setIsFormOpen(true);
-  };
-
-  const handleOpenEdit = (mission: Mission, isGlobal: boolean) => {
-    setEditingQuest(mission);
-    setFormIsGlobal(isGlobal);
-    setFormData({
-      title: mission.title,
-      description: mission.description,
-      reward: mission.reward,
-      type: mission.type,
-      imageUrl: mission.imageUrl || '',
-      active: mission.active,
-    });
-    setIsFormOpen(true);
-  };
-
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.title || !formData.description) return;
-
-    setIsActionLoading(true);
-    setError(null);
-    try {
-      const payload = {
-        campaignId: formIsGlobal ? undefined : selectedCampaignId,
-        title: formData.title,
-        description: formData.description,
-        reward: Number(formData.reward),
-        type: formData.type,
-        imageUrl: formData.imageUrl || undefined,
-        active: formData.active,
-      };
-
-      if (editingQuest) {
-        await questService.updateQuest(editingQuest.id, payload);
-      } else {
-        const list = formIsGlobal ? globalMissions : missions;
-        const maxOrder = list.reduce((max, m) => m.order > max ? m.order : max, 0);
-        await questService.createQuest({ ...payload, order: maxOrder + 1 });
-      }
-      setIsFormOpen(false);
-      if (formIsGlobal) {
-        loadGlobalMissions();
-      } else {
-        loadMissions(selectedCampaignId);
-      }
-    } catch (err: any) {
-      setError('Erro ao salvar missão.');
-    } finally {
-      setIsActionLoading(false);
+    if (isGlobal) {
+      navigate('/admin/missions/new?global=true');
+    } else {
+      navigate(`/admin/missions/new?campaignId=${selectedCampaignId}`);
     }
+  };
+
+  const handleOpenEdit = (mission: Mission) => {
+    navigate(`/admin/missions/${mission.id}/edit`, { state: { mission } });
+  };
+
+  const handleViewFeedbackResults = (mission: Mission) => {
+    navigate(`/admin/missions/${mission.id}/feedback-results`, { state: { missionTitle: mission.title } });
   };
 
   // ─── Delete ───────────────────────────────────────────────────────────────
@@ -251,21 +197,6 @@ export const MissionsPage: React.FC = () => {
     }
   };
 
-  // ─── Unassign (from campaign tab) ─────────────────────────────────────────
-
-  const handleUnassign = async (mission: Mission) => {
-    if (!window.confirm(`Desatribuir "${mission.title}" da campanha e torná-la global?`)) return;
-    setIsActionLoading(true);
-    try {
-      await questService.unassignMission(mission.id);
-      loadMissions(selectedCampaignId);
-    } catch (err: any) {
-      setError('Erro ao desatribuir missão.');
-    } finally {
-      setIsActionLoading(false);
-    }
-  };
-
   // ─── Helpers ──────────────────────────────────────────────────────────────
 
   const getMissionTypeLabel = (type: MissionType) => {
@@ -273,7 +204,7 @@ export const MissionsPage: React.FC = () => {
       case 'PROOF_UPLOAD': return 'Envio de Comprovante';
       case 'QUIZ': return 'Quiz';
       case 'FEEDBACK_FORM': return 'Formulário de Feedback';
-      case 'AUTOMATIC': return 'Automática';
+      case 'REFERRAL': return 'Indique um Amigo';
       default: return type;
     }
   };
@@ -293,7 +224,7 @@ export const MissionsPage: React.FC = () => {
         <div className="text-center py-10 font-mono text-cyber-muted">
           {isGlobal
             ? 'NENHUMA MISSÃO GLOBAL. CRIE UMA MISSÃO SEM CAMPANHA PARA COMEÇAR.'
-            : 'NENHUMA QUEST NESTA CAMPANHA. CLIQUE EM "CRIAR QUEST" PARA INICIAR.'}
+            : 'NENHUMA MISSÃO NESTA CAMPANHA. CLIQUE EM "CRIAR MISSÃO" PARA INICIAR.'}
         </div>
       </Card>
     );
@@ -349,21 +280,30 @@ export const MissionsPage: React.FC = () => {
                   </td>
                   <td className="p-4 text-center font-mono text-cyber-secondary text-sm">+{mission.reward}</td>
                   <td className="p-4 text-center">
-                    <button
-                      onClick={() => handleToggleActive(mission, isGlobal)}
-                      disabled={isActionLoading}
-                      className={`px-2 py-0.5 rounded text-[10px] font-mono border cursor-pointer ${
-                        mission.active
-                          ? 'bg-cyber-success/15 border-cyber-success text-cyber-success hover:bg-cyber-success/25'
-                          : 'bg-cyber-danger/15 border-cyber-danger text-cyber-danger hover:bg-cyber-danger/25'
-                      }`}
-                    >
-                      {mission.active ? 'ATIVO' : 'INATIVO'}
-                    </button>
+                    {isGlobal ? (
+                      <span
+                        title="Ativo/inativo só se aplica quando a missão está vinculada a uma campanha"
+                        className="px-2 py-0.5 rounded text-[10px] font-mono border bg-cyber-border/30 border-cyber-border/60 text-cyber-muted"
+                      >
+                        MODELO
+                      </span>
+                    ) : (
+                      <button
+                        onClick={() => handleToggleActive(mission, isGlobal)}
+                        disabled={isActionLoading}
+                        className={`px-2 py-0.5 rounded text-[10px] font-mono border cursor-pointer ${
+                          mission.active
+                            ? 'bg-cyber-success/15 border-cyber-success text-cyber-success hover:bg-cyber-success/25'
+                            : 'bg-cyber-danger/15 border-cyber-danger text-cyber-danger hover:bg-cyber-danger/25'
+                        }`}
+                      >
+                        {mission.active ? 'ATIVO' : 'INATIVO'}
+                      </button>
+                    )}
                   </td>
                   <td className="p-4 text-right">
                     <div className="flex gap-2 justify-end flex-wrap">
-                      {isGlobal ? (
+                      {isGlobal && (
                         <Button
                           variant="accent"
                           size="sm"
@@ -374,23 +314,24 @@ export const MissionsPage: React.FC = () => {
                         >
                           Atribuir
                         </Button>
-                      ) : (
+                      )}
+                      {!isGlobal && mission.type === 'FEEDBACK_FORM' && (
                         <Button
-                          variant="secondary"
+                          variant="accent"
                           size="sm"
-                          icon={<Unlink size={13} />}
-                          onClick={() => handleUnassign(mission)}
+                          icon={<BarChart3 size={13} />}
+                          onClick={() => handleViewFeedbackResults(mission)}
                           disabled={isActionLoading}
-                          title="Tornar missão global"
+                          title="Ver resultados do formulário"
                         >
-                          Desatribuir
+                          Resultados
                         </Button>
                       )}
                       <Button
                         variant="primary"
                         size="sm"
                         icon={<Edit2 size={13} />}
-                        onClick={() => handleOpenEdit(mission, isGlobal)}
+                        onClick={() => handleOpenEdit(mission)}
                         disabled={isActionLoading}
                       >
                         Editar
@@ -419,10 +360,10 @@ export const MissionsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-cyber-border/40 pb-5">
         <div>
           <h1 className="text-2xl font-orbitron font-extrabold text-white tracking-widest uppercase">
-            GESTOR DE QUESTS (MISSÕES)
+            GERENCIAR MISSÕES
           </h1>
           <p className="text-xs font-rajdhani font-bold text-cyber-secondary tracking-widest mt-1">
-            // CRIAÇÃO E CONFIGURAÇÃO DE DESAFIOS PARA OS PARTICIPANTES
+            Criação e configuração das missões dos participantes
           </p>
         </div>
         <div className="flex gap-2">
@@ -433,7 +374,7 @@ export const MissionsPage: React.FC = () => {
             onClick={() => handleOpenCreate(activeTab === 'global')}
             disabled={activeTab === 'campaign' && !selectedCampaignId}
           >
-            {activeTab === 'global' ? 'Nova Missão Global' : 'Criar Quest'}
+            {activeTab === 'global' ? 'Nova Missão Global' : 'Criar Missão'}
           </Button>
           <Button
             variant="secondary"
@@ -448,7 +389,7 @@ export const MissionsPage: React.FC = () => {
 
       {error && (
         <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider">
-          ⚠ TERMINAL_ERR // {error}
+          ⚠ {error}
         </div>
       )}
 
@@ -505,7 +446,7 @@ export const MissionsPage: React.FC = () => {
                   ) : (
                     campaigns.map((c) => (
                       <option key={c.id} value={c.id}>
-                        {c.name} ({c.status})
+                        {c.name} ({getCampaignStatusLabel(c.status)})
                       </option>
                     ))
                   )}
@@ -540,107 +481,6 @@ export const MissionsPage: React.FC = () => {
         </>
       )}
 
-      {/* ─── Modal: Criar / Editar ─── */}
-      <Modal
-        isOpen={isFormOpen}
-        onClose={() => setIsFormOpen(false)}
-        title={editingQuest
-          ? `Editar Quest${formIsGlobal ? ' (Global)' : ''}`
-          : `Criar ${formIsGlobal ? 'Missão Global' : 'Quest na Campanha'}`}
-        size="md"
-      >
-        <form onSubmit={handleFormSubmit} className="flex flex-col gap-4">
-          {formIsGlobal && (
-            <div className="flex items-center gap-2 bg-cyber-accent/10 border border-cyber-accent/30 rounded p-3 text-xs font-mono text-cyber-accent">
-              <Globe size={14} />
-              Esta missão será criada sem campanha vinculada (global).
-              Você poderá atribuí-la a uma campanha depois.
-            </div>
-          )}
-
-          <Input
-            label="Título da Missão"
-            placeholder="Ex: Enviar comprovante de impressão"
-            value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-            required
-            statusIndicator="[STR_TITLE]"
-          />
-
-          <div className="flex flex-col gap-1.5 font-inter">
-            <label className="text-xs font-rajdhani font-bold tracking-wider text-cyber-text uppercase px-1">
-              Descrição do Desafio
-            </label>
-            <textarea
-              className="w-full bg-cyber-bg border border-cyber-border rounded px-4 py-2.5 text-sm font-rajdhani font-semibold text-white tracking-wide placeholder-cyber-muted focus:border-cyber-secondary focus:ring-1 focus:ring-cyber-secondary focus:outline-none"
-              rows={3}
-              placeholder="Explique o que o participante precisa fazer para receber a recompensa."
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              required
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Input
-              label="Recompensa (Tickets)"
-              type="number"
-              min={1}
-              value={formData.reward}
-              onChange={(e) => setFormData({ ...formData, reward: Number(e.target.value) })}
-              required
-              statusIndicator="[NUM_REWARD]"
-            />
-
-            <div className="flex flex-col gap-1.5 font-inter">
-              <label className="text-xs font-rajdhani font-bold tracking-wider text-cyber-text uppercase px-1">
-                Tipo da Missão
-              </label>
-              <select
-                value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value as MissionType })}
-                className="w-full bg-cyber-bg border border-cyber-border rounded px-4 py-2.5 text-sm font-rajdhani font-bold text-white tracking-wide focus:border-cyber-secondary focus:outline-none h-[42px]"
-              >
-                <option value="PROOF_UPLOAD">Envio de Comprovante (Impressão)</option>
-                <option value="QUIZ">Questionário (Quiz)</option>
-                <option value="FEEDBACK_FORM">Formulário de Feedback</option>
-                <option value="AUTOMATIC">Inscrição Automática</option>
-              </select>
-            </div>
-          </div>
-
-          <Input
-            label="Link da Imagem Decorativa (Opcional)"
-            placeholder="Ex: https://imgur.com/image.png"
-            value={formData.imageUrl}
-            onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-            statusIndicator="[URL_IMG]"
-          />
-
-          <div className="flex items-center gap-2 p-1">
-            <input
-              type="checkbox"
-              id="active"
-              checked={formData.active}
-              onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
-              className="accent-cyber-secondary rounded bg-cyber-bg border border-cyber-border w-4 h-4 cursor-pointer"
-            />
-            <label htmlFor="active" className="text-xs font-rajdhani font-bold text-cyber-text uppercase tracking-wider cursor-pointer">
-              Ativar missão imediatamente
-            </label>
-          </div>
-
-          <div className="flex justify-end gap-3 mt-4 border-t border-cyber-border/40 pt-4">
-            <Button type="button" variant="secondary" onClick={() => setIsFormOpen(false)} disabled={isActionLoading}>
-              Cancelar
-            </Button>
-            <Button type="submit" variant="primary" isLoading={isActionLoading}>
-              Salvar Quest
-            </Button>
-          </div>
-        </form>
-      </Modal>
-
       {/* ─── Modal: Atribuir a Campanha ─── */}
       <Modal
         isOpen={isAssignOpen}
@@ -658,7 +498,7 @@ export const MissionsPage: React.FC = () => {
             className="w-full bg-cyber-bg border border-cyber-border rounded px-3 py-2 text-sm font-rajdhani font-bold text-white tracking-wide focus:border-cyber-secondary focus:outline-none"
           >
             {campaigns.map((c) => (
-              <option key={c.id} value={c.id}>{c.name} ({c.status})</option>
+              <option key={c.id} value={c.id}>{c.name} ({getCampaignStatusLabel(c.status)})</option>
             ))}
           </select>
           <div className="flex justify-end gap-3 pt-4 border-t border-cyber-border/40">
@@ -676,12 +516,12 @@ export const MissionsPage: React.FC = () => {
       <Modal
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
-        title="Confirmar Exclusão de Quest"
+        title="Confirmar Exclusão de Missão"
         size="sm"
       >
         <div className="space-y-4">
           <p className="text-sm font-inter text-cyber-text">
-            Tem certeza de que deseja deletar a quest{' '}
+            Tem certeza de que deseja excluir a missão{' '}
             <strong className="text-white">"{questToDelete?.title}"</strong>?
             Esta ação apagará todos os dados de completude e comprovantes associados.
           </p>

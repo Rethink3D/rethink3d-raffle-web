@@ -1,5 +1,5 @@
 import api from './api';
-import type { FeedbackForm, FeedbackResponse, QuestionType } from '../types';
+import type { FeedbackForm, FeedbackResponse, FeedbackFormStats, QuestionType } from '../types';
 
 export interface CreateFeedbackQuestionInput {
   text: string;
@@ -12,8 +12,8 @@ export interface CreateFeedbackQuestionInput {
 }
 
 export const feedbackService = {
-  async getFeedbackByCampaign(campaignId: string): Promise<FeedbackForm> {
-    const response = await api.get<FeedbackForm>(`/campaigns/${campaignId}/feedback`);
+  async getFeedbackByMission(missionId: string): Promise<FeedbackForm> {
+    const response = await api.get<FeedbackForm>(`/missions/${missionId}/feedback`);
     return response.data;
   },
 
@@ -21,16 +21,35 @@ export const feedbackService = {
     formId: string,
     answers: Record<string, string | string[]>
   ): Promise<FeedbackResponse> {
-    const response = await api.post<FeedbackResponse>(`/feedback/${formId}/submit`, { answers });
+    const response = await api.post<FeedbackResponse>(`/feedback/forms/${formId}/submit`, { answers });
     return response.data;
   },
 
   async createFeedbackForm(data: {
-    campaignId: string;
+    missionId: string;
     title: string;
     questions: CreateFeedbackQuestionInput[];
   }): Promise<FeedbackForm> {
-    const response = await api.post<FeedbackForm>('/feedback', data);
+    const response = await api.post<FeedbackForm>('/feedback/forms', data);
+    return response.data;
+  },
+
+  // Substitui título + perguntas de um formulário já existente (edição)
+  async updateFeedbackForm(
+    formId: string,
+    data: { title: string; questions: CreateFeedbackQuestionInput[] }
+  ): Promise<FeedbackForm> {
+    const response = await api.patch<FeedbackForm>(`/feedback/forms/${formId}`, data);
+    return response.data;
+  },
+
+  async getResponses(formId: string): Promise<FeedbackResponse[]> {
+    const response = await api.get<FeedbackResponse[]>(`/feedback/forms/${formId}/responses`);
+    return response.data;
+  },
+
+  async getStats(formId: string): Promise<FeedbackFormStats> {
+    const response = await api.get<FeedbackFormStats>(`/feedback/forms/${formId}/stats`);
     return response.data;
   },
 };

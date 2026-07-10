@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '../../services/auth.service';
 import { useAuthStore } from '../../store/authStore';
+import { getApiErrorMessage } from '../../utils/apiError';
 import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
@@ -99,8 +100,7 @@ export const RegisterPage: React.FC = () => {
       navigate('/dashboard');
     } catch (err: any) {
       console.error('Registration failed:', err);
-      const backendMessage = err.response?.data?.message || 'Falha no registro. O nó do sistema rejeitou as credenciais.';
-      setServerError(Array.isArray(backendMessage) ? backendMessage[0] : backendMessage);
+      setServerError(getApiErrorMessage(err, 'Falha no registro. Verifique os dados e tente novamente.'));
     } finally {
       setIsLoading(false);
     }

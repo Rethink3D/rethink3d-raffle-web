@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { Layout } from '../components/layout/Layout';
 
@@ -7,6 +7,7 @@ import { Layout } from '../components/layout/Layout';
 import LandingPage from '../pages/public/LandingPage';
 import LoginPage from '../pages/public/LoginPage';
 import RegisterPage from '../pages/public/RegisterPage';
+import ChangePinPage from '../pages/public/ChangePinPage';
 import DashboardPage from '../pages/participant/DashboardPage';
 const QuestsPage     = lazy(() => import('../pages/participant/QuestsPage'));
 const QuizPage       = lazy(() => import('../pages/participant/QuizPage'));
@@ -18,7 +19,10 @@ const AdminLoginPage  = lazy(() => import('../pages/admin/AdminLoginPage'));
 const AdminDashboard  = lazy(() => import('../pages/admin/AdminDashboard'));
 const CampaignsPage   = lazy(() => import('../pages/admin/CampaignsPage'));
 const MissionsPage    = lazy(() => import('../pages/admin/MissionsPage'));
+const MissionFormPage = lazy(() => import('../pages/admin/MissionFormPage'));
 const ParticipantsPage = lazy(() => import('../pages/admin/ParticipantsPage'));
+const ParticipantProofsPage = lazy(() => import('../pages/admin/ParticipantProofsPage'));
+const FeedbackResultsPage = lazy(() => import('../pages/admin/FeedbackResultsPage'));
 const PrizesPage      = lazy(() => import('../pages/admin/PrizesPage'));
 const DrawControlPage = lazy(() => import('../pages/admin/DrawControlPage'));
 
@@ -56,8 +60,12 @@ const LayoutWrapper: React.FC = () => (
 );
 
 const ParticipantRoute: React.FC = () => {
-  const { token, role } = useAuthStore();
+  const { token, role, mustChangePin } = useAuthStore();
+  const location = useLocation();
   if (!token || role !== 'participant') return <Navigate to="/login" replace />;
+  if (mustChangePin && location.pathname !== '/change-pin') {
+    return <Navigate to="/change-pin" replace />;
+  }
   return <Outlet />;
 };
 
@@ -100,10 +108,11 @@ export const AppRouter: React.FC = () => {
 
         {/* Rotas protegidas — Participante */}
         <Route element={<ParticipantRoute />}>
+          <Route path="/change-pin"             element={<ChangePinPage />} />
           <Route path="/dashboard"              element={<DashboardPage />} />
           <Route path="/quests"                 element={<QuestsPage />} />
-          <Route path="/quiz/:campaignId"       element={<QuizPage />} />
-          <Route path="/feedback/:campaignId"   element={<FeedbackPage />} />
+          <Route path="/quiz/:missionId"        element={<QuizPage />} />
+          <Route path="/feedback/:missionId"    element={<FeedbackPage />} />
         </Route>
 
         {/* Rotas protegidas — Admin */}
@@ -111,7 +120,11 @@ export const AppRouter: React.FC = () => {
           <Route path="/admin"                  element={<AdminDashboard />} />
           <Route path="/admin/campaigns"        element={<CampaignsPage />} />
           <Route path="/admin/missions"         element={<MissionsPage />} />
+          <Route path="/admin/missions/new"     element={<MissionFormPage />} />
+          <Route path="/admin/missions/:missionId/edit" element={<MissionFormPage />} />
+          <Route path="/admin/missions/:missionId/feedback-results" element={<FeedbackResultsPage />} />
           <Route path="/admin/participants"     element={<ParticipantsPage />} />
+          <Route path="/admin/participants/:userId/proofs" element={<ParticipantProofsPage />} />
           <Route path="/admin/prizes"           element={<PrizesPage />} />
           <Route path="/admin/draw-control"     element={<DrawControlPage />} />
         </Route>

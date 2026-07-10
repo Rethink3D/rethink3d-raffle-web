@@ -3,12 +3,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { FileText, ArrowLeft, Send, CheckCircle2, ShieldAlert, AlertTriangle } from 'lucide-react';
 import { feedbackService } from '../../services/feedback.service';
 import { questService } from '../../services/quest.service';
+import { getApiErrorMessage } from '../../utils/apiError';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
+import { useTicketRefreshStore } from '../../store/ticketRefreshStore';
 import type { FeedbackForm, FeedbackQuestion } from '../../types';
 
 export const FeedbackPage: React.FC = () => {
-  const { campaignId } = useParams<{ campaignId: string }>();
+  const { missionId } = useParams<{ missionId: string }>();
   const navigate = useNavigate();
 
   const [form, setForm] = useState<FeedbackForm | null>(null);
@@ -25,13 +27,13 @@ export const FeedbackPage: React.FC = () => {
 
   useEffect(() => {
     const fetchFormAndQuest = async () => {
-      if (!campaignId) return;
+      if (!missionId) return;
       try {
         setLoading(true);
         setError(null);
 
-        // 1. Fetch form
-        const formData = await feedbackService.getFeedbackByCampaign(campaignId);
+        // 1. Fetch form da missão específica
+        const formData = await feedbackService.getFeedbackByMission(missionId);
         setForm(formData);
 
         if (formData && formData.questions) {
@@ -40,23 +42,25 @@ export const FeedbackPage: React.FC = () => {
           setQuestions(sorted);
         }
 
-        // 2. Fetch quests to display exact ticket reward
-        try {
-          const quests = await questService.getCampaignQuests(campaignId);
-          const feedbackQuest = quests.find(q => q.type === 'FEEDBACK_FORM');
-          if (feedbackQuest) {
-            setRewardAmount(feedbackQuest.reward);
+        // 2. Fetch quests para exibir a recompensa exata desta missão de feedback
+        if (formData.campaignId) {
+          try {
+            const quests = await questService.getCampaignQuests(formData.campaignId);
+            const feedbackQuest = quests.find(q => q.id === missionId);
+            if (feedbackQuest) {
+              setRewardAmount(feedbackQuest.reward);
+            }
+          } catch (e) {
+            console.warn('Failed to load quest reward amount', e);
           }
-        } catch (e) {
-          console.warn('Failed to load quest reward amount', e);
         }
 
       } catch (err: any) {
         console.error('Error loading feedback form:', err);
         if (err?.response?.status === 404) {
-          setError('No feedback form is currently active for this campaign.');
+          setError('Nenhum formulário de feedback está configurado para esta missão.');
         } else {
-          setError('Failed to download feedback structure from the secure raffle network.');
+          setError('Falha ao carregar o formulário de feedback.');
         }
       } finally {
         setLoading(false);
@@ -64,7 +68,7 @@ export const FeedbackPage: React.FC = () => {
     };
 
     fetchFormAndQuest();
-  }, [campaignId]);
+  }, [missionId]);
 
   // Visbility logic helper for dynamic routing of conditional questions
   const isQuestionVisible = (q: FeedbackQuestion, currentAnswers: Record<string, string | string[]>) => {
@@ -121,16 +125,16 @@ export const FeedbackPage: React.FC = () => {
         const val = answers[q.id];
         
         if (val === undefined || val === null) {
-          errors[q.id] = 'This field is required by operators.';
+          errors[q.id] = 'Esse campo é obrigatório.';
           return;
         }
 
         if (q.type === 'TEXT' && typeof val === 'string' && val.trim() === '') {
-          errors[q.id] = 'Please type a valid response.';
+          errors[q.id] = 'Escreva uma resposta válida.';
         }
 
         if (q.type === 'CHECKBOX' && Array.isArray(val) && val.length === 0) {
-          errors[q.id] = 'Select at least one checkbox option.';
+          errors[q.id] = 'Selecione ao menos uma opção.';
         }
       }
     });
@@ -161,9 +165,10 @@ export const FeedbackPage: React.FC = () => {
       setSubmitting(true);
       await feedbackService.submitFeedback(form.id, payload);
       setSubmittedSuccess(true);
+      useTicketRefreshStore.getState().trigger();
     } catch (err: any) {
       console.error('Error submitting feedback form:', err);
-      setError(err?.response?.data?.message || 'Failed to submit feedback. Try again.');
+      setError(getApiErrorMessage(err, 'Falha ao enviar o feedback. Tente novamente.'));
     } finally {
       setSubmitting(false);
     }
@@ -171,12 +176,22 @@ export const FeedbackPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] font-mono select-none">
-        <div className="text-cyber-accent animate-pulse text-lg font-bold tracking-widest">
-          [SYS_DOWNLOAD_FEEDBACK_SCHEMA...]
-        </div>
-        <div className="w-56 h-1 bg-cyber-border rounded overflow-hidden mt-4">
-          <div className="h-full bg-cyber-accent animate-pulse-glow" style={{ width: '45%' }} />
+      <div className="flex flex-col items-center justify-center min-h-[60vh] select-none">
+        <div
+          style={{ width: 120, height: 120 }}
+          dangerouslySetInnerHTML={{
+            __html: `<lottie-player
+              src="/Pokeball Loading.json"
+              background="transparent"
+              speed="1.2"
+              style="width: 100%; height: 100%;"
+              loop
+              autoplay
+            ></lottie-player>`
+          }}
+        />
+        <div className="text-cyber-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
+          Carregando formulário...
         </div>
       </div>
     );
@@ -185,14 +200,14 @@ export const FeedbackPage: React.FC = () => {
   if (error && !submittedSuccess) {
     return (
       <div className="max-w-md mx-auto my-10 select-none">
-        <Card variant="danger" title="CRITICAL SYSTEM ERROR" glow>
+        <Card variant="danger" title="Ops, algo deu errado" glow>
           <div className="flex flex-col items-center gap-4 text-center">
             <ShieldAlert size={48} className="text-cyber-danger" />
             <p className="text-sm font-rajdhani font-bold text-white tracking-wider">
               {error}
             </p>
             <Button variant="danger" size="md" onClick={() => navigate('/dashboard')} icon={<ArrowLeft size={14} />}>
-              Back to Dashboard
+              Voltar ao Dashboard
             </Button>
           </div>
         </Card>
@@ -204,29 +219,29 @@ export const FeedbackPage: React.FC = () => {
   if (submittedSuccess) {
     return (
       <div className="max-w-md mx-auto my-10 select-none font-inter">
-        <Card variant="primary" title="FEEDBACK TRANSMITTED" subtitle="SYS_VAULT // OK" glow>
+        <Card variant="primary" title="Feedback enviado" glow>
           <div className="flex flex-col items-center py-5 text-center">
-            
+
             <div className="p-4 rounded-full bg-cyber-success/10 border border-cyber-success text-cyber-success mb-4 animate-float">
               <CheckCircle2 size={40} />
             </div>
 
             <h3 className="text-lg font-orbitron font-extrabold uppercase tracking-wider text-white">
-              SUBMISSION RECEIVED
+              Missão cumprida!
             </h3>
-            
+
             <p className="text-[10px] font-mono text-cyber-muted uppercase tracking-widest mt-1">
-              ENCRYPTED DATA SECURELY SENT
+              Suas respostas foram registradas
             </p>
 
             <div className="w-full bg-cyber-accent/15 border border-cyber-accent/40 rounded p-4 mt-5 flex items-center justify-center gap-2.5 animate-pulse-glow">
               <span className="font-orbitron font-black text-sm tracking-widest text-cyber-accent uppercase">
-                CREDITS DISPATCHED: +{rewardAmount} TKTS
+                +{rewardAmount} cupons ganhos
               </span>
             </div>
 
             <p className="text-xs text-cyber-muted mt-5 leading-relaxed max-w-xs">
-              Thank you for contributing your insights. The operators have updated your account balance with the allocated reward.
+              Obrigado por compartilhar sua opinião. Seus cupons já foram creditados na sua conta.
             </p>
 
             <Button
@@ -236,7 +251,7 @@ export const FeedbackPage: React.FC = () => {
               className="w-full mt-6 glow-primary"
               icon={<ArrowLeft size={14} />}
             >
-              Back to Dashboard
+              Voltar ao Dashboard
             </Button>
           </div>
         </Card>
@@ -247,11 +262,11 @@ export const FeedbackPage: React.FC = () => {
   if (!form || questions.length === 0) {
     return (
       <div className="max-w-md mx-auto my-10 select-none">
-        <Card title="NO FEEDBACK CONFIGURED">
+        <Card title="Nenhum formulário disponível">
           <div className="text-center py-4 flex flex-col gap-4">
             <FileText size={40} className="text-cyber-muted mx-auto" />
             <p className="text-sm text-cyber-muted">
-              There is no feedback form configured for this campaign.
+              Não há formulário de feedback configurado para esta missão.
             </p>
             <Button variant="primary" size="md" onClick={() => navigate('/dashboard')}>
               Dashboard
@@ -267,9 +282,9 @@ export const FeedbackPage: React.FC = () => {
       {/* Header Info */}
       <div className="flex flex-col gap-1 mb-4 select-none">
         <span className="text-[10px] font-mono tracking-widest text-cyber-accent uppercase">
-          // CUSTOMER SATISFACTION INDEX
+          Formulário de feedback
         </span>
-        <h2 className="text-lg font-orbitron font-extrabold text-white uppercase tracking-wider">
+        <h2 className="text-lg font-orbitron font-extrabold text-white uppercase tracking-wider break-words">
           {form.title}
         </h2>
       </div>
@@ -286,7 +301,7 @@ export const FeedbackPage: React.FC = () => {
               key={q.id} 
               variant={error ? "danger" : "default"}
               title={q.text}
-              subtitle={q.required ? "REQUIRED_FIELD" : "OPTIONAL_FIELD"}
+              subtitle={q.required ? "Obrigatória" : "Opcional"}
               clipCorner={false}
             >
               {/* Question UI rendering based on type */}
@@ -298,7 +313,7 @@ export const FeedbackPage: React.FC = () => {
                     rows={4}
                     value={(answers[q.id] as string) || ''}
                     onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                    placeholder="ENTER DETAILED OBSERVATIONS..."
+                    placeholder="Escreva sua resposta..."
                     className="w-full bg-cyber-bg border border-cyber-border/80 focus:border-cyber-accent rounded p-3 text-sm font-rajdhani font-semibold text-white tracking-wide placeholder-cyber-muted/60 transition-all outline-none"
                   />
                 )}
@@ -371,8 +386,8 @@ export const FeedbackPage: React.FC = () => {
                 {q.type === 'SCALE' && (
                   <div className="flex flex-col gap-3">
                     <div className="flex justify-between text-[10px] font-mono text-cyber-muted select-none uppercase tracking-widest px-1">
-                      <span>[DISAGREE / COMPAT_FAIL]</span>
-                      <span>[AGREE / COMPAT_OK]</span>
+                      <span>Discordo</span>
+                      <span>Concordo</span>
                     </div>
                     
                     <div className="grid grid-cols-5 gap-2.5">
@@ -401,7 +416,7 @@ export const FeedbackPage: React.FC = () => {
                 {error && (
                   <div className="flex items-center gap-1.5 mt-3 text-cyber-danger text-xs font-rajdhani font-bold uppercase tracking-wider">
                     <AlertTriangle size={14} className="shrink-0" />
-                    <span>VAL_ERR // {error}</span>
+                    <span>{error}</span>
                   </div>
                 )}
 
@@ -418,7 +433,7 @@ export const FeedbackPage: React.FC = () => {
             size="md"
             onClick={() => navigate('/dashboard')}
           >
-            Cancel
+            Cancelar
           </Button>
           <Button
             type="submit"
@@ -427,7 +442,7 @@ export const FeedbackPage: React.FC = () => {
             isLoading={submitting}
             icon={<Send size={14} />}
           >
-            Transmit Feedback
+            Enviar Feedback
           </Button>
         </div>
       </form>

@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import { adminService } from '../../services/admin.service';
 import type { DashboardStats } from '../../services/admin.service';
 import { campaignService } from '../../services/campaign.service';
+import { getCampaignStatusLabel } from '../../utils/campaignStatus';
 import { useSocket } from '../../hooks/useSocket';
 import { useDrawStore } from '../../store/drawStore';
 import type { Campaign } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
-import { 
-  Users, Ticket, CheckSquare, AlertCircle, 
+import {
+  Users, Ticket, CheckSquare,
   Activity, Play, Plus, RefreshCw, Award
 } from 'lucide-react';
 
@@ -68,7 +69,6 @@ export const AdminDashboard: React.FC = () => {
           totalParticipants: 0,
           totalTickets: 0,
           completedMissions: 0,
-          pendingProofs: 0,
         });
       } finally {
         setIsLoadingStats(false);
@@ -89,7 +89,7 @@ export const AdminDashboard: React.FC = () => {
             PAINEL DE CONTROLE
           </h1>
           <p className="text-xs font-rajdhani font-bold text-cyber-secondary tracking-widest mt-1">
-            // STATUS GERAL DOS SORTEIOS E ENGAJAMENTO DE USUÁRIOS
+            Status geral dos sorteios e participantes
           </p>
         </div>
         <div className="flex gap-2">
@@ -124,7 +124,7 @@ export const AdminDashboard: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <h3 className="text-sm font-orbitron font-bold text-white tracking-wider uppercase">
-                FILTRO DE METRICAS
+                FILTRO DE MÉTRICAS
               </h3>
               <p className="text-[10px] font-mono text-cyber-muted uppercase mt-0.5">
                 Selecione uma campanha para visualizar o progresso
@@ -145,7 +145,7 @@ export const AdminDashboard: React.FC = () => {
                 ) : (
                   campaigns.map((c) => (
                     <option key={c.id} value={c.id}>
-                      {c.name} ({c.status})
+                      {c.name} ({getCampaignStatusLabel(c.status)})
                     </option>
                   ))
                 )}
@@ -183,12 +183,12 @@ export const AdminDashboard: React.FC = () => {
 
       {error && (
         <div className="p-3.5 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-semibold tracking-wider rounded uppercase">
-          ⚠ FALHA DO SISTEMA // {error}
+          ⚠ {error}
         </div>
       )}
 
       {/* Stats Dashboard Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Total Participants */}
         <Card variant="default">
           <div className="flex justify-between items-start">
@@ -248,31 +248,6 @@ export const AdminDashboard: React.FC = () => {
             TAREFAS ENVIADAS/VALIDADAS
           </div>
         </Card>
-
-        {/* Pending Proofs Audit */}
-        <Card variant={stats?.pendingProofs && stats.pendingProofs > 0 ? 'danger' : 'default'} glow={!!(stats?.pendingProofs && stats.pendingProofs > 0)}>
-          <div className="flex justify-between items-start">
-            <div>
-              <p className={`text-xs font-rajdhani font-bold tracking-wider uppercase ${stats?.pendingProofs && stats.pendingProofs > 0 ? 'text-cyber-danger' : 'text-cyber-muted'}`}>
-                PROVAS PENDENTES
-              </p>
-              <h2 className="text-2xl font-orbitron font-extrabold text-white mt-2">
-                {isLoadingStats ? '---' : stats?.pendingProofs ?? 0}
-              </h2>
-            </div>
-            <div className={`p-2 rounded border ${stats?.pendingProofs && stats.pendingProofs > 0 ? 'bg-cyber-danger/10 text-cyber-danger border-cyber-danger/30' : 'bg-cyber-border/40 text-cyber-muted border-transparent'}`}>
-              <AlertCircle size={20} />
-            </div>
-          </div>
-          <div className="mt-4 pt-3 border-t border-cyber-border/20 flex justify-between items-center text-[10px] font-mono text-cyber-muted">
-            <span>COMPROVANTES DE IMPRESSÃO</span>
-            {stats?.pendingProofs && stats.pendingProofs > 0 ? (
-              <Link to="/admin/participants" className="text-cyber-danger hover:underline">
-                AUDITAR &rarr;
-              </Link>
-            ) : null}
-          </div>
-        </Card>
       </div>
 
       {/* Main Panel Content - Quick Actions and Campaign Status */}
@@ -326,7 +301,7 @@ export const AdminDashboard: React.FC = () => {
                             c.status === 'FINISHED' ? 'bg-cyber-muted/15 border border-cyber-muted/40 text-cyber-muted' :
                             'bg-cyber-border/40 border border-cyber-border text-white'
                           }`}>
-                            {c.status}
+                            {getCampaignStatusLabel(c.status)}
                           </span>
                         </td>
                         <td className="p-4 font-mono text-[11px] text-cyber-text/80">
@@ -353,21 +328,21 @@ export const AdminDashboard: React.FC = () => {
           <div className="flex items-center gap-2">
             <Play size={18} className="text-cyber-accent" />
             <h2 className="text-base font-orbitron font-bold text-white tracking-widest uppercase">
-              OPERADOR RÁPIDO
+              AÇÕES RÁPIDAS
             </h2>
           </div>
 
           <Card variant="default">
             <div className="flex flex-col gap-4">
               <div className="text-xs font-mono text-cyber-muted leading-relaxed">
-                Opções rápidas de controle do terminal de sorteio da Rethink3D:
+                Atalhos rápidos para o controle de sorteio da Rethink3D:
               </div>
 
               {activeCampaign ? (
                 <div className="bg-black/35 rounded border border-cyber-border/60 p-3 flex flex-col gap-1 text-xs">
                   <span className="font-mono text-cyber-muted uppercase text-[10px]">CAMPANHA EM FOCO</span>
                   <span className="font-orbitron text-white text-sm uppercase truncate">{activeCampaign.name}</span>
-                  <span className="font-mono text-cyber-secondary mt-1">Status: {activeCampaign.status}</span>
+                  <span className="font-mono text-cyber-secondary mt-1">Status: {getCampaignStatusLabel(activeCampaign.status)}</span>
                 </div>
               ) : (
                 <div className="text-xs text-cyber-danger font-mono bg-cyber-danger/5 border border-cyber-danger/25 p-3 rounded">
@@ -391,7 +366,7 @@ export const AdminDashboard: React.FC = () => {
               <div className="grid grid-cols-2 gap-2">
                 <Link to="/admin/missions" className="w-full">
                   <Button variant="primary" size="sm" fullWidth className="text-[11px]">
-                    Editar Quests
+                    Editar Missões
                   </Button>
                 </Link>
                 <Link to="/admin/prizes" className="w-full">
@@ -403,7 +378,7 @@ export const AdminDashboard: React.FC = () => {
 
               <Link to="/admin/participants" className="w-full">
                 <Button variant="secondary" size="sm" fullWidth className="text-[11px]">
-                  Auditar Participantes
+                  Ver Participantes
                 </Button>
               </Link>
             </div>

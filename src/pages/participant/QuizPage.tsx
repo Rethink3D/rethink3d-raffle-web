@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { HelpCircle, ChevronRight, XCircle, ArrowLeft, Award, Zap } from 'lucide-react';
+import { HelpCircle, ChevronRight, XCircle, ArrowLeft, Zap } from 'lucide-react';
 import { quizService } from '../../services/quiz.service';
 import { questService } from '../../services/quest.service';
+import { getApiErrorMessage } from '../../utils/apiError';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
-import type { Quiz, QuizQuestion, QuizOption, QuizAnswer } from '../../types';
+import { useTicketRefreshStore } from '../../store/ticketRefreshStore';
+import type { Quiz, QuizQuestion, QuizOption, QuizSubmitResult } from '../../types';
+import agree from '../../assets/agree.gif';
+import random3 from '../../assets/random3.gif';
 
 export const QuizPage: React.FC = () => {
-  const { campaignId } = useParams<{ campaignId: string }>();
+  const { missionId } = useParams<{ missionId: string }>();
   const navigate = useNavigate();
 
   const [quiz, setQuiz] = useState<Quiz | null>(null);
@@ -20,44 +24,46 @@ export const QuizPage: React.FC = () => {
   const [answers, setAnswers] = useState<{ questionId: string; optionId: string }[]>([]);
   
   const [submitting, setSubmitting] = useState<boolean>(false);
-  const [quizResult, setQuizResult] = useState<QuizAnswer | null>(null);
+  const [quizResult, setQuizResult] = useState<QuizSubmitResult | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchQuizData = async () => {
-      if (!campaignId) return;
+      if (!missionId) return;
       try {
         setLoading(true);
         setError(null);
 
-        // 1. Fetch Quiz for active campaign
-        const quizData = await quizService.getQuizByCampaign(campaignId);
+        // 1. Fetch Quiz da missão específica
+        const quizData = await quizService.getQuizByMission(missionId);
         setQuiz(quizData);
 
         if (quizData && quizData.questions) {
-          // Sort questions by order ascending
-          const sortedQuestions = [...quizData.questions].sort((a, b) => a.order - b.order);
-          setQuestions(sortedQuestions);
+          // Embaralha a ordem das perguntas a cada tentativa (evita "cola" entre participantes)
+          const shuffledQuestions = [...quizData.questions].sort(() => Math.random() - 0.5);
+          setQuestions(shuffledQuestions);
         }
 
-        // 2. Fetch quests to display exact ticket reward
-        try {
-          const quests = await questService.getCampaignQuests(campaignId);
-          const quizQuest = quests.find(q => q.type === 'QUIZ');
-          if (quizQuest) {
-            setRewardAmount(quizQuest.reward);
+        // 2. Fetch quests para exibir a recompensa exata desta missão de quiz
+        if (quizData.campaignId) {
+          try {
+            const quests = await questService.getCampaignQuests(quizData.campaignId);
+            const quizQuest = quests.find(q => q.id === missionId);
+            if (quizQuest) {
+              setRewardAmount(quizQuest.reward);
+            }
+          } catch (e) {
+            console.warn('Failed to load quest reward amount', e);
           }
-        } catch (e) {
-          console.warn('Failed to load quest reward amount', e);
         }
 
       } catch (err: any) {
         console.error('Error fetching quiz data:', err);
         if (err?.response?.status === 404) {
-          setError('Nenhum desafio de quiz está configurado para esta campanha.');
+          setError('Nenhum desafio de quiz está configurado para esta missão.');
         } else {
-          setError('Falha ao baixar as perguntas do quiz do servidor seguro R3D.');
+          setError('Falha ao baixar as perguntas do quiz.');
         }
       } finally {
         setLoading(false);
@@ -65,31 +71,62 @@ export const QuizPage: React.FC = () => {
     };
 
     fetchQuizData();
-  }, [campaignId]);
+  }, [missionId]);
 
   const handleOptionSelect = (optionId: string) => {
     setSelectedOptionId(optionId);
+  };
+
+  // Atualiza a resposta de uma pergunta específica, sem duplicar entradas —
+  // necessário porque agora o usuário pode voltar e trocar uma escolha já feita.
+  const upsertAnswer = (
+    list: { questionId: string; optionId: string }[],
+    questionId: string,
+    optionId: string,
+  ) => {
+    const index = list.findIndex((a) => a.questionId === questionId);
+    if (index === -1) return [...list, { questionId, optionId }];
+    const copy = [...list];
+    copy[index] = { questionId, optionId };
+    return copy;
+  };
+
+  // Navega para uma pergunta e já pré-seleciona a alternativa escolhida antes,
+  // caso o usuário esteja voltando para revisar/trocar uma resposta.
+  const goToQuestion = (index: number, currentAnswers: { questionId: string; optionId: string }[]) => {
+    setCurrentQuestionIndex(index);
+    const existing = currentAnswers.find((a) => a.questionId === questions[index].id);
+    setSelectedOptionId(existing ? existing.optionId : null);
   };
 
   const handleNext = () => {
     if (!selectedOptionId) return;
 
     const currentQuestion = questions[currentQuestionIndex];
-    const newAnswer = {
-      questionId: currentQuestion.id,
-      optionId: selectedOptionId,
-    };
-
-    const newAnswers = [...answers, newAnswer];
+    const newAnswers = upsertAnswer(answers, currentQuestion.id, selectedOptionId);
     setAnswers(newAnswers);
-    setSelectedOptionId(null);
 
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+      goToQuestion(currentQuestionIndex + 1, newAnswers);
     } else {
       // Last question completed, trigger submit
       submitQuizAnswers(newAnswers);
     }
+  };
+
+  const handleBack = () => {
+    if (currentQuestionIndex === 0) return;
+
+    // Salva a seleção atual (se houver) antes de voltar, pra não perder a
+    // resposta desta pergunta caso o usuário volte e volte de novo depois.
+    let updatedAnswers = answers;
+    if (selectedOptionId) {
+      const currentQuestion = questions[currentQuestionIndex];
+      updatedAnswers = upsertAnswer(answers, currentQuestion.id, selectedOptionId);
+      setAnswers(updatedAnswers);
+    }
+
+    goToQuestion(currentQuestionIndex - 1, updatedAnswers);
   };
 
   const submitQuizAnswers = async (finalAnswers: { questionId: string; optionId: string }[]) => {
@@ -98,9 +135,10 @@ export const QuizPage: React.FC = () => {
       setSubmitting(true);
       const result = await quizService.submitQuiz(quiz.id, finalAnswers);
       setQuizResult(result);
+      useTicketRefreshStore.getState().trigger();
     } catch (err: any) {
       console.error('Error submitting quiz answers:', err);
-      setError(err?.response?.data?.message || 'Falha ao enviar as respostas do quiz. Por favor, tente novamente.');
+      setError(getApiErrorMessage(err, 'Falha ao enviar as respostas do quiz. Por favor, tente novamente.'));
     } finally {
       setSubmitting(false);
     }
@@ -108,12 +146,22 @@ export const QuizPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] font-mono select-none">
-        <div className="text-cyber-secondary animate-pulse text-lg font-bold tracking-widest">
-          [SYS_BAIXANDO_INTEGRIDADE_DO_QUIZ...]
-        </div>
-        <div className="w-56 h-1 bg-cyber-border rounded overflow-hidden mt-4">
-          <div className="h-full bg-cyber-secondary animate-pulse-glow" style={{ width: '40%' }} />
+      <div className="flex flex-col items-center justify-center min-h-[60vh] select-none">
+        <div
+          style={{ width: 120, height: 120 }}
+          dangerouslySetInnerHTML={{
+            __html: `<lottie-player
+              src="/Pokeball Loading.json"
+              background="transparent"
+              speed="1.2"
+              style="width: 100%; height: 100%;"
+              loop
+              autoplay
+            ></lottie-player>`
+          }}
+        />
+        <div className="text-cyber-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
+          Carregando o quiz...
         </div>
       </div>
     );
@@ -122,7 +170,7 @@ export const QuizPage: React.FC = () => {
   if (error) {
     return (
       <div className="max-w-md mx-auto my-10 select-none">
-        <Card variant="danger" title="EXCEÇÃO DO SISTEMA DE QUIZ" glow>
+        <Card variant="danger" title="Ops, algo deu errado" glow>
           <div className="flex flex-col items-center gap-4 text-center">
             <XCircle size={48} className="text-cyber-danger" />
             <p className="text-sm font-rajdhani font-bold text-white tracking-wider">
@@ -140,11 +188,11 @@ export const QuizPage: React.FC = () => {
   if (!quiz || questions.length === 0) {
     return (
       <div className="max-w-md mx-auto my-10 select-none">
-        <Card title="NENHUM QUIZ CONFIGURADO">
+        <Card title="Nenhum quiz disponível">
           <div className="text-center py-4 flex flex-col gap-4">
             <HelpCircle size={40} className="text-cyber-muted mx-auto" />
             <p className="text-sm text-cyber-muted">
-              Não há perguntas configuradas para o quiz desta campanha.
+              Não há perguntas configuradas para este quiz.
             </p>
             <Button variant="primary" size="md" onClick={() => navigate('/dashboard')}>
               Painel
@@ -158,12 +206,22 @@ export const QuizPage: React.FC = () => {
   // ─── SUBMITTING SCREEN ───
   if (submitting) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] font-mono select-none">
-        <div className="text-cyber-accent animate-pulse text-lg font-bold tracking-widest">
-          [ENVIANDO_DADOS_DO_QUIZ...]
-        </div>
-        <div className="w-56 h-1 bg-cyber-border rounded overflow-hidden mt-4">
-          <div className="h-full bg-cyber-accent animate-pulse-glow" style={{ width: '80%' }} />
+      <div className="flex flex-col items-center justify-center min-h-[60vh] select-none">
+        <div
+          style={{ width: 120, height: 120 }}
+          dangerouslySetInnerHTML={{
+            __html: `<lottie-player
+              src="/Pokeball Loading.json"
+              background="transparent"
+              speed="1.2"
+              style="width: 100%; height: 100%;"
+              loop
+              autoplay
+            ></lottie-player>`
+          }}
+        />
+        <div className="text-cyber-accent animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
+          Enviando suas respostas...
         </div>
       </div>
     );
@@ -179,47 +237,40 @@ export const QuizPage: React.FC = () => {
 
     return (
       <div className="max-w-lg mx-auto my-6 select-none font-inter">
-        <Card 
-          variant={isPassing ? "primary" : "secondary"} 
-          title="DESAFIO DE QUIZ CONCLUÍDO" 
-          subtitle="ÍNDICE_DE_TRANSAÇÃO // SUCESSO"
+        <Card
+          variant={isPassing ? "primary" : "secondary"}
+          title={isPassing ? "Mandou bem!" : "Quiz concluído!"}
           glow={isPassing}
         >
           <div className="flex flex-col items-center py-4">
-            
-            {/* Success icon */}
-            <div className={`p-4 rounded-full border mb-4 animate-float
-              ${isPassing 
-                ? 'bg-cyber-primary/10 border-cyber-primary text-cyber-primary text-glow-primary' 
-                : 'bg-cyber-secondary/10 border-cyber-secondary text-cyber-secondary text-glow-secondary'}`}
-            >
-              <Award size={40} />
-            </div>
 
-            <h3 className="text-xl font-orbitron font-extrabold uppercase tracking-widest text-white text-center">
-              {isPassing ? 'DESAFIO VENCIDO' : 'DESAFIO ENVIADO'}
-            </h3>
-            
-            <p className="text-[10px] font-mono text-cyber-muted uppercase tracking-widest mt-1">
-              RESULTADOS REGISTRADOS COM SEGURANÇA NO BANCO DE DADOS DE CUPONS
+            <img
+              src={isPassing ? agree : random3}
+              alt={isPassing ? "Mandou bem" : "Quiz concluído"}
+              className="w-24 h-auto animate-float"
+              draggable={false}
+            />
+
+            <p className="text-xs text-cyber-muted text-center mt-3">
+              Suas respostas foram registradas.
             </p>
 
             {/* Stats Block */}
             <div className="grid grid-cols-3 gap-3 w-full mt-6 text-center">
               <div className="bg-cyber-surface border border-cyber-border p-3 rounded">
-                <span className="text-[9px] font-mono text-cyber-muted block uppercase">PRECISÃO</span>
+                <span className="text-[9px] font-mono text-cyber-muted block uppercase">Acertos</span>
                 <span className="font-orbitron font-bold text-lg text-white mt-1 block">
                   {accuracy}%
                 </span>
               </div>
               <div className="bg-cyber-surface border border-cyber-border p-3 rounded">
-                <span className="text-[9px] font-mono text-cyber-muted block uppercase">CORRETAS</span>
+                <span className="text-[9px] font-mono text-cyber-muted block uppercase">Certas</span>
                 <span className="font-orbitron font-bold text-lg text-cyber-success mt-1 block">
                   {score}
                 </span>
               </div>
               <div className="bg-cyber-surface border border-cyber-border p-3 rounded">
-                <span className="text-[9px] font-mono text-cyber-muted block uppercase">ERROS</span>
+                <span className="text-[9px] font-mono text-cyber-muted block uppercase">Erradas</span>
                 <span className="font-orbitron font-bold text-lg text-cyber-danger mt-1 block">
                   {errors}
                 </span>
@@ -230,12 +281,12 @@ export const QuizPage: React.FC = () => {
             <div className="w-full bg-cyber-accent/10 border border-cyber-accent/30 rounded p-4 mt-5 text-center flex items-center justify-center gap-3 animate-pulse-glow">
               <Zap size={18} className="text-cyber-accent animate-bounce" />
               <div className="font-rajdhani font-bold text-sm tracking-widest text-cyber-accent uppercase">
-                CUPONS CONCEDIDOS: +{rewardAmount} CUPONS
+                +{quizResult.ticketsEarned} cupons ganhos
               </div>
             </div>
 
             <p className="text-xs text-cyber-muted text-center mt-5 leading-relaxed">
-              Seu cartão de pontuação foi registrado. Suas credenciais participarão do protocolo de sorteio ao vivo automaticamente.
+              Seus cupons já foram creditados e você já está concorrendo no sorteio.
             </p>
 
             <Button
@@ -262,12 +313,14 @@ export const QuizPage: React.FC = () => {
     <div className="max-w-2xl mx-auto my-6 font-inter">
       {/* Quiz Title Header */}
       <div className="flex flex-col gap-1 mb-4 select-none">
-        <span className="text-[10px] font-mono tracking-widest text-cyber-secondary uppercase">
-          // MÓDULO DE DESAFIO INTERATIVO
-        </span>
-        <h2 className="text-lg font-orbitron font-extrabold text-white uppercase tracking-wider">
+        <h2 className="text-lg font-orbitron font-extrabold text-white uppercase tracking-wider break-words">
           {quiz.title}
         </h2>
+        {rewardAmount > 0 && (
+          <span className="text-xs text-cyber-muted">
+            Cada resposta certa vale {rewardAmount} cupom{rewardAmount === 1 ? '' : 's'}.
+          </span>
+        )}
       </div>
 
       <Card variant="secondary" glow>
@@ -277,7 +330,7 @@ export const QuizPage: React.FC = () => {
             PERGUNTA {currentQuestionIndex + 1} DE {questions.length}
           </span>
           <span className="text-[10px] font-mono text-cyber-muted tracking-widest uppercase">
-            ÍNDICE_DE_CONCLUSÃO: {progressPercent}%
+            {progressPercent}% concluído
           </span>
         </div>
 
@@ -291,7 +344,7 @@ export const QuizPage: React.FC = () => {
 
         {/* Question Text */}
         <div className="mb-6">
-          <h3 className="text-base font-orbitron font-bold text-white uppercase tracking-wide leading-relaxed">
+          <h3 className="text-base font-orbitron font-bold text-white uppercase tracking-wide leading-relaxed break-words">
             {currentQuestion.text}
           </h3>
           {currentQuestion.imageUrl && (
@@ -330,7 +383,16 @@ export const QuizPage: React.FC = () => {
         </div>
 
         {/* Action Button Footer */}
-        <div className="flex justify-end mt-8 border-t border-cyber-border/40 pt-4">
+        <div className="flex justify-between mt-8 border-t border-cyber-border/40 pt-4">
+          <Button
+            variant="secondary"
+            size="md"
+            onClick={handleBack}
+            disabled={currentQuestionIndex === 0}
+            icon={<ArrowLeft size={14} />}
+          >
+            Voltar
+          </Button>
           <Button
             variant="secondary"
             size="md"

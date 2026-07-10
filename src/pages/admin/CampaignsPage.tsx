@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { campaignService } from '../../services/campaign.service';
+import { getCampaignStatusLabel } from '../../utils/campaignStatus';
+import { getApiErrorMessage } from '../../utils/apiError';
+import { confirmDialog } from '../../utils/confirm';
 import type { Campaign } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
+import { ImageUploadField } from '../../components/ui/ImageUploadField';
 import { Modal } from '../../components/ui/Modal';
 import { 
   Edit2, Trash2, Calendar, 
@@ -21,12 +25,18 @@ export const CampaignsPage: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
+    coverImageUrl: '',
     startDate: '',
     drawDate: '',
   });
 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [campaignToDelete, setCampaignToDelete] = useState<Campaign | null>(null);
+
+  const [isFinishOpen, setIsFinishOpen] = useState(false);
+  const [campaignToFinish, setCampaignToFinish] = useState<Campaign | null>(null);
+  const [finishPassword, setFinishPassword] = useState('');
+  const [finishError, setFinishError] = useState<string | null>(null);
 
   const [isActionLoading, setIsActionLoading] = useState(false);
 
@@ -62,6 +72,7 @@ export const CampaignsPage: React.FC = () => {
     setFormData({
       name: '',
       description: '',
+      coverImageUrl: '',
       startDate: '',
       drawDate: '',
     });
@@ -73,6 +84,7 @@ export const CampaignsPage: React.FC = () => {
     setFormData({
       name: campaign.name,
       description: campaign.description || '',
+      coverImageUrl: campaign.coverImageUrl || '',
       startDate: formatDatetimeForInput(campaign.startDate),
       drawDate: formatDatetimeForInput(campaign.drawDate),
     });
@@ -89,6 +101,7 @@ export const CampaignsPage: React.FC = () => {
       const payload = {
         name: formData.name,
         description: formData.description || null,
+        coverImageUrl: formData.coverImageUrl || null,
         startDate: formData.startDate ? new Date(formData.startDate).toISOString() : null,
         drawDate: formData.drawDate ? new Date(formData.drawDate).toISOString() : null,
       };
@@ -129,28 +142,41 @@ export const CampaignsPage: React.FC = () => {
   };
 
   const handleActivate = async (id: string) => {
-    if (!window.confirm('Deseja ativar esta campanha? Isso a tornará elegível para participação.')) return;
-    setIsActionLoading(true);
+    const confirmed = await confirmDialog(
+      'Deseja ativar esta campanha? Isso a tornará elegível para participação.',
+      { title: 'Ativar Campanha', confirmLabel: 'Ativar', variant: 'primary' }
+    );
+    if (!confirmed) return;
+setIsActionLoading(true);
     try {
       await campaignService.activateCampaign(id);
       loadCampaigns();
     } catch (err: any) {
       console.error('Activation error:', err);
-      setError('Falha ao ativar campanha.');
+      setError(getApiErrorMessage(err, 'Falha ao ativar campanha.'));
     } finally {
       setIsActionLoading(false);
     }
   };
 
-  const handleFinish = async (id: string) => {
-    if (!window.confirm('Deseja encerrar esta campanha? Esta operação impede novos tickets e participações.')) return;
+  const handleOpenFinish = (campaign: Campaign) => {
+    setCampaignToFinish(campaign);
+    setFinishPassword('');
+    setFinishError(null);
+    setIsFinishOpen(true);
+  };
+
+  const handleFinishConfirm = async () => {
+    if (!campaignToFinish || !finishPassword) return;
     setIsActionLoading(true);
+    setFinishError(null);
     try {
-      await campaignService.finishCampaign(id);
+      await campaignService.finishCampaign(campaignToFinish.id, finishPassword);
+      setIsFinishOpen(false);
       loadCampaigns();
     } catch (err: any) {
       console.error('Finish error:', err);
-      setError('Falha ao encerrar campanha.');
+      setFinishError(getApiErrorMessage(err, 'Falha ao encerrar campanha.'));
     } finally {
       setIsActionLoading(false);
     }
@@ -165,7 +191,7 @@ export const CampaignsPage: React.FC = () => {
             GESTOR DE CAMPANHAS
           </h1>
           <p className="text-xs font-rajdhani font-bold text-cyber-secondary tracking-widest mt-1">
-            // LISTA E CONFIGURAÇÃO DOS EVENTOS DE SORTEIO RETHINK3D
+            Lista e configuração das campanhas de sorteio Rethink3D
           </p>
         </div>
         <div className="flex gap-2">
@@ -180,7 +206,7 @@ export const CampaignsPage: React.FC = () => {
 
       {error && (
         <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider">
-          ⚠ TERMINAL_ERR // {error}
+          ⚠ {error}
         </div>
       )}
 
@@ -188,12 +214,12 @@ export const CampaignsPage: React.FC = () => {
       {isLoading ? (
         <div className="flex flex-col items-center justify-center p-20 text-cyber-muted font-mono space-y-4">
           <RefreshCw size={24} className="animate-spin text-cyber-primary" />
-          <span>SYS_LOADING // BUSCANDO BANCO DE DADOS...</span>
+          <span>CARREGANDO CAMPANHAS...</span>
         </div>
       ) : campaigns.length === 0 ? (
         <Card variant="default">
           <div className="text-center py-10 font-mono text-cyber-muted">
-            [SISTEMA LIMPO] NENHUMA CAMPANHA CADASTRADA NO MOMENTO. CLIQUE EM "CRIAR CAMPANHA" PARA INICIAR.
+            NENHUMA CAMPANHA CADASTRADA NO MOMENTO. CLIQUE EM "CRIAR CAMPANHA" PARA INICIAR.
           </div>
         </Card>
       ) : (
@@ -210,7 +236,7 @@ export const CampaignsPage: React.FC = () => {
                 variant={isActive ? 'secondary' : isDrawing ? 'accent' : isFinished ? 'default' : 'primary'}
                 glow={isActive || isDrawing}
                 title={campaign.name}
-                subtitle={`STATUS: ${campaign.status}`}
+                subtitle={`STATUS: ${getCampaignStatusLabel(campaign.status)}`}
                 headerExtra={
                   <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${
                     isActive ? 'bg-cyber-success/10 border-cyber-success text-cyber-success' :
@@ -218,11 +244,24 @@ export const CampaignsPage: React.FC = () => {
                     isFinished ? 'bg-cyber-muted/10 border-cyber-muted text-cyber-muted' :
                     'bg-cyber-primary/10 border-cyber-primary text-cyber-primary'
                   }`}>
-                    {campaign.status}
+                    {getCampaignStatusLabel(campaign.status)}
                   </span>
                 }
               >
                 <div className="flex flex-col h-full gap-4 mt-2">
+                  {campaign.coverImageUrl && (
+                    <div className="aspect-video relative rounded-md border border-cyber-border overflow-hidden bg-black/55">
+                      <img
+                        src={campaign.coverImageUrl}
+                        alt={campaign.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none';
+                        }}
+                      />
+                    </div>
+                  )}
+
                   <p className="text-xs text-cyber-text/80 line-clamp-3 min-h-[48px] font-inter">
                     {campaign.description || 'Nenhuma descrição fornecida.'}
                   </p>
@@ -260,7 +299,7 @@ export const CampaignsPage: React.FC = () => {
                         variant="accent"
                         size="sm"
                         icon={<ToggleLeft size={13} />}
-                        onClick={() => handleFinish(campaign.id)}
+                        onClick={() => handleOpenFinish(campaign)}
                         disabled={isActionLoading}
                       >
                         Encerrar
@@ -304,7 +343,6 @@ export const CampaignsPage: React.FC = () => {
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             required
-            statusIndicator="[STR_NAME]"
           />
 
           <div className="flex flex-col gap-1.5 font-inter">
@@ -320,20 +358,25 @@ export const CampaignsPage: React.FC = () => {
             />
           </div>
 
+          <ImageUploadField
+            label="Foto de Capa (Opcional)"
+            placeholder="Cole uma URL ou envie um arquivo"
+            value={formData.coverImageUrl}
+            onChange={(url) => setFormData({ ...formData, coverImageUrl: url })}
+          />
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label="Data de Início"
               type="datetime-local"
               value={formData.startDate}
               onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-              statusIndicator="[SYS_START_DATE]"
             />
             <Input
               label="Data de Sorteio"
               type="datetime-local"
               value={formData.drawDate}
               onChange={(e) => setFormData({ ...formData, drawDate: e.target.value })}
-              statusIndicator="[SYS_DRAW_DATE]"
             />
           </div>
 
@@ -392,6 +435,56 @@ export const CampaignsPage: React.FC = () => {
               onClick={handleDeleteConfirm}
             >
               Excluir Definitivamente
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Finish Confirmation Modal (exige senha do admin) */}
+      <Modal
+        isOpen={isFinishOpen}
+        onClose={() => setIsFinishOpen(false)}
+        title="Encerrar Campanha"
+        size="sm"
+      >
+        <div className="space-y-4">
+          <div className="flex items-center gap-3 p-3 bg-cyber-accent/10 border border-cyber-accent/30 rounded text-cyber-accent text-xs font-rajdhani font-bold tracking-wider uppercase">
+            <AlertTriangle size={20} className="shrink-0" />
+            <span>ESTA AÇÃO NÃO PODE SER DESFEITA</span>
+          </div>
+
+          <p className="text-sm font-inter text-cyber-text">
+            Encerrar <strong className="text-white font-semibold">"{campaignToFinish?.name}"</strong> impede
+            novos cupons e participações. Digite sua senha para confirmar.
+          </p>
+
+          <Input
+            label="Sua Senha"
+            type="password"
+            value={finishPassword}
+            onChange={(e) => setFinishPassword(e.target.value)}
+            error={finishError || undefined}
+            autoFocus
+            required
+          />
+
+          <div className="flex justify-end gap-3 pt-4 border-t border-cyber-border/40">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setIsFinishOpen(false)}
+              disabled={isActionLoading}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="button"
+              variant="accent"
+              isLoading={isActionLoading}
+              disabled={!finishPassword}
+              onClick={handleFinishConfirm}
+            >
+              Confirmar Encerramento
             </Button>
           </div>
         </div>

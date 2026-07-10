@@ -72,6 +72,14 @@
 }
 .animate-pulse-glow { animation: pulse-glow 2.2s infinite ease-in-out; }
 
+/* Pulse glow (tickets) — mesma ideia, porém bem mais sutil: a opacidade e o
+   box-shadow variam pouco, pra não "acender e apagar" o contador com força. */
+@keyframes pulse-glow-ticket {
+  0%, 100% { opacity: 0.8; box-shadow: 0 0 6px rgba(16, 185, 129, 0.15); }
+  50%       { opacity: 1;   box-shadow: 0 0 10px rgba(16, 185, 129, 0.3); }
+}
+.animate-pulse-glow-ticket { animation: pulse-glow-ticket 2.2s infinite ease-in-out; }
+
 /* Float — para ícones/coins */
 @keyframes float {
   0%, 100% { transform: translateY(0);    }
@@ -85,6 +93,31 @@
   to   { transform: rotate(0deg);   }
 }
 .animate-spin-reverse { animation: spin-reverse 1.5s linear infinite; }
+
+/* Ticket bump — "pisca" o contador de cupons quando ele sobe */
+@keyframes ticket-bump {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.28); }
+  55%  { transform: scale(0.94); }
+  100% { transform: scale(1); }
+}
+.animate-ticket-bump { animation: ticket-bump 0.6s ease-out; }
+
+/* Ticket shine — brilho "shiny" varrendo o badge quando ganha cupons */
+@keyframes ticket-shine {
+  0%   { transform: translateX(-150%) skewX(-20deg); opacity: 0; }
+  15%  { opacity: 1; }
+  100% { transform: translateX(420%) skewX(-20deg); opacity: 0; }
+}
+.animate-ticket-shine { animation: ticket-shine 0.9s ease-out; }
+
+/* Float up + fade — usado no "+N" flutuante de cupons ganhos */
+@keyframes float-up-fade {
+  0%   { opacity: 0; transform: translateY(4px) scale(0.85); }
+  15%  { opacity: 1; transform: translateY(0)    scale(1);    }
+  100% { opacity: 0; transform: translateY(-20px) scale(1);   }
+}
+.animate-float-up-fade { animation: float-up-fade 1.3s ease-out forwards; }
 
 /* Slot machine — para roleta do sorteio */
 @keyframes spin-slot {

@@ -18,14 +18,14 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const isAdmin = role === 'admin';
 
-  // Admin Sidebar navigation links
+  // Links de navegação do menu administrativo
   const adminLinks = [
-    { name: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={18} /> },
-    { name: 'Campaigns', path: '/admin/campaigns', icon: <Award size={18} /> },
-    { name: 'Quests', path: '/admin/missions', icon: <Target size={18} /> },
-    { name: 'Participants', path: '/admin/participants', icon: <Users size={18} /> },
-    { name: 'Prizes', path: '/admin/prizes', icon: <Gift size={18} /> },
-    { name: 'Draw Control', path: '/admin/draw-control', icon: <PlayCircle size={18} /> },
+    { name: 'Painel', path: '/admin', icon: <LayoutDashboard size={18} /> },
+    { name: 'Campanhas', path: '/admin/campaigns', icon: <Award size={18} /> },
+    { name: 'Missões', path: '/admin/missions', icon: <Target size={18} /> },
+    { name: 'Participantes', path: '/admin/participants', icon: <Users size={18} /> },
+    { name: 'Prêmios', path: '/admin/prizes', icon: <Gift size={18} /> },
+    { name: 'Sorteio', path: '/admin/draw-control', icon: <PlayCircle size={18} /> },
   ];
 
   const isActive = (path: string) => {
@@ -48,9 +48,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         {isAdmin && user && (
           <aside className="hidden md:flex flex-col w-64 bg-cyber-surface/90 border-r border-cyber-border/80 p-5 shrink-0">
             <div className="text-[10px] font-mono tracking-widest text-cyber-accent uppercase mb-5">
-              // ADMIN CONTROL CENTER
+              Menu Administrativo
             </div>
-            
+
             <nav className="flex-1 flex flex-col gap-2">
               {adminLinks.map((link) => {
                 const active = isActive(link.path);
@@ -72,12 +72,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               })}
             </nav>
 
-            <div className="border-t border-cyber-border/40 pt-4 mt-auto">
-              <div className="p-3 bg-black/35 rounded border border-cyber-border/40 text-[10px] font-mono text-cyber-muted select-none">
-                <div>SYS: ONLINE</div>
-                <div>SEC_LEVEL: OPERATOR</div>
-              </div>
-            </div>
           </aside>
         )}
 
@@ -105,7 +99,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             {/* Sidebar drawer content */}
             <aside className="relative flex flex-col w-64 max-w-xs bg-cyber-surface border-r border-cyber-border h-full p-5 z-50">
               <div className="text-[10px] font-mono tracking-widest text-cyber-accent uppercase mb-6">
-                // ADMIN CONTROL CENTER
+                Menu Administrativo
               </div>
 
               <nav className="flex-1 flex flex-col gap-2">
@@ -130,12 +124,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 })}
               </nav>
 
-              <div className="border-t border-cyber-border/40 pt-4 mt-auto">
-                <div className="p-3 bg-black/35 rounded border border-cyber-border/40 text-[10px] font-mono text-cyber-muted select-none">
-                  <div>SYS: ONLINE</div>
-                  <div>SEC_LEVEL: OPERATOR</div>
-                </div>
-              </div>
             </aside>
           </div>
         )}

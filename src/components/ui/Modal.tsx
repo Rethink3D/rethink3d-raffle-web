@@ -42,7 +42,7 @@ export const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-24 sm:pt-28 pb-8 overflow-y-auto">
       {/* Backdrop — CSS transition via opacity */}
       <div
         onClick={onClose}
@@ -78,9 +78,6 @@ export const Modal: React.FC<ModalProps> = ({
             <h2 id="modal-title" className="text-lg font-orbitron font-extrabold tracking-widest text-white uppercase">
               {title}
             </h2>
-            <div className="text-[9px] font-mono text-cyber-secondary tracking-widest mt-0.5">
-              SISTEMA_MODAL_ATIVO // ONLINE
-            </div>
           </div>
 
           {/* Close Button */}

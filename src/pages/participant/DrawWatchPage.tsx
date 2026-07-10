@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Lock, Tv, Users, 
-  RefreshCw, Volume2, ShieldCheck, 
-  VolumeX, ArrowLeft, Trophy 
+import {
+  Lock, Tv, Users,
+  ArrowLeft, PartyPopper, Gift, Clock,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { useDrawStore } from '../../store/drawStore';
@@ -12,9 +11,10 @@ import { useCountdown } from '../../hooks/useCountdown';
 import { campaignService } from '../../services/campaign.service';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
+import { PrizeWheel } from '../../components/draw/PrizeWheel';
 import type { Campaign } from '../../types';
 
-// HTML5 Canvas Confetti Component
+// Confete simples em canvas — só entra quando o vencedor é revelado
 const ConfettiCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -48,17 +48,14 @@ const ConfettiCanvas: React.FC = () => {
 
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
-
       particles.forEach((p) => {
         p.x += p.speedX;
         p.y += p.speedY;
         p.rotation += p.rotationSpeed;
-
         if (p.y > height) {
           p.y = -20;
           p.x = Math.random() * width;
         }
-
         ctx.save();
         ctx.translate(p.x, p.y);
         ctx.rotate((p.rotation * Math.PI) / 180);
@@ -66,10 +63,8 @@ const ConfettiCanvas: React.FC = () => {
         ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
         ctx.restore();
       });
-
       animationFrameId = requestAnimationFrame(animate);
     };
-
     animate();
 
     return () => {
@@ -85,23 +80,20 @@ export const DrawWatchPage: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const [activeCampaign, setActiveCampaign] = useState<Campaign | null>(null);
-  
-  // Connect socket with active campaign ID
+
   useSocket(activeCampaign?.id);
 
-  // Retrieve drawing state from stores
-  const { 
-    prize, 
-    winner, 
-    isSpinning, 
-    participantCount, 
-    onlineCount 
-  } = useDrawStore();
+  const { winner, isSpinning, participants, totalTickets, othersTickets, othersCount, onlineCount, sessionEndedReason } = useDrawStore();
 
-  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
-  const [spinningName, setSpinningName] = useState<string>('SYS_LOCK');
+  // A roleta avisa quando termina de frear de verdade na fatia do vencedor —
+  // só aí trocamos pro card de resultado, senão o card do vencedor aparece
+  // assim que o servidor responde e a freada nunca chega a ser vista.
+  const [wheelSettled, setWheelSettled] = useState(false);
 
-  // Fetch active campaign details on mount to obtain drawDate and fallback details
+  useEffect(() => {
+    if (isSpinning) setWheelSettled(false);
+  }, [isSpinning]);
+
   useEffect(() => {
     const fetchActiveCampaign = async () => {
       try {
@@ -114,51 +106,22 @@ export const DrawWatchPage: React.FC = () => {
     fetchActiveCampaign();
   }, []);
 
-  // Use countdown hook for countdown timer in pre-draw locked state
   const countdown = useCountdown(activeCampaign?.drawDate);
 
-  // Running slot machine usernames simulator when spinning
-  useEffect(() => {
-    if (!isSpinning) return;
-
-    // Ambient usernames list to simulate slot machine spin
-    const simulatedNames = [
-      'Maker_3D', 'PrintFrenzy', 'CypherRider', 'LayerMaster', 
-      'ZeroCool', 'NeoMaker', 'VoltPrint', 'MeshWeaver', 
-      'MeshForge', 'AdminConsole', 'GigaCore', 'VoxelCraft', 
-      'Polymaker', 'OctoNode', 'ThermalBed', 'FilamentKing'
-    ];
-
-    if (user?.name) {
-      simulatedNames.push(user.name.toUpperCase());
-    }
-
-    const interval = setInterval(() => {
-      const randomIndex = Math.floor(Math.random() * simulatedNames.length);
-      setSpinningName(simulatedNames[randomIndex]);
-    }, 85);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [isSpinning, user]);
-
-  // Determine current screen state
-  // 1. COMPLETED: Winner is chosen and isSpinning has stopped
-  // 2. SPINNING: isSpinning is active or status is IN_PROGRESS and spinning
-  // 3. WAITING: Default pre-draw countdown/lockdown page
-  const isWinnerState = winner !== null && !isSpinning;
-  const isSpinningState = isSpinning;
+  const isWinnerState = winner !== null && wheelSettled;
+  const isSpinningState = isSpinning || (winner !== null && !wheelSettled);
+  const vaultPrizes = (activeCampaign?.vault?.prizes ?? []).filter(
+    (p) => (p.available ?? p.quantity - p.claimed) > 0,
+  );
 
   return (
     <div className="flex flex-col gap-6 font-inter text-cyber-text">
-      {/* ─── Confetti canvas for Winner State ─── */}
       {isWinnerState && <ConfettiCanvas />}
 
-      {/* ─── LIVE HUD TOP HEADER ─── */}
+      {/* ─── Cabeçalho ao vivo ─── */}
       <div className="flex items-center justify-between bg-cyber-surface/60 border border-cyber-border rounded-lg p-4 select-none relative overflow-hidden">
         <div className="absolute top-0 right-0 w-24 h-24 pointer-events-none opacity-5 bg-cyber-grid" />
-        
+
         <div className="flex items-center gap-3">
           <div className="relative w-8 h-8 rounded border border-cyber-primary bg-cyber-primary/10 flex items-center justify-center animate-pulse">
             <Tv size={16} className="text-cyber-primary" />
@@ -166,171 +129,126 @@ export const DrawWatchPage: React.FC = () => {
           </div>
           <div>
             <h2 className="text-base font-orbitron font-extrabold uppercase text-white tracking-widest leading-none">
-              SALA DE TRANSMISSÃO AO VIVO
+              Sorteio Ao Vivo
             </h2>
             <div className="text-[9px] font-mono text-cyber-secondary tracking-widest mt-1">
-              CANAL_SYS // TRANSMISSÃO_SEGURA
+              Fique de olho, pode começar a qualquer momento
             </div>
           </div>
         </div>
 
-        {/* Stats overlay */}
         <div className="flex items-center gap-4 text-right">
           <div className="hidden sm:flex items-center gap-2">
             <Users size={14} className="text-cyber-secondary" />
             <div className="flex flex-col">
-              <span className="text-[9px] font-mono text-cyber-muted uppercase">TERMINAIS_ONLINE</span>
-              <span className="font-orbitron font-bold text-xs text-white">
-                {onlineCount || 1}
-              </span>
+              <span className="text-[9px] font-mono text-cyber-muted uppercase">Assistindo</span>
+              <span className="font-orbitron font-bold text-xs text-white">{onlineCount || 1}</span>
             </div>
           </div>
-          <button
-            onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-2 border border-cyber-border hover:border-cyber-secondary rounded text-cyber-muted hover:text-cyber-secondary transition-colors cursor-pointer"
-          >
-            {soundEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
-          </button>
         </div>
       </div>
 
-      {/* ─── MAIN WATCH SCREEN CONTENT ─── */}
-      <div className="max-w-3xl mx-auto w-full">
-        
-        {/* State A: Winner Reveal Display */}
+      <div className="max-w-3xl mx-auto w-full flex flex-col gap-6">
+        {activeCampaign?.coverImageUrl && (
+          <div className="aspect-video relative rounded-lg border border-cyber-border overflow-hidden bg-black/55 select-none">
+            <img
+              src={activeCampaign.coverImageUrl}
+              alt={activeCampaign.name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+          </div>
+        )}
+
         {isWinnerState ? (
-          <Card 
-            variant="primary" 
-            title="SELEÇÃO DO SORTEIO CONCLUÍDA" 
-            subtitle="ID_AUDITORIA // VERIFICADO"
-            glow
-          >
+          <Card variant="primary" title="Temos um vencedor! 🎉" subtitle="Parabéns pra quem levou" glow>
             <div className="flex flex-col items-center py-6 text-center select-none">
-              
               <div className="relative w-28 h-28 mx-auto mb-6 flex items-center justify-center rounded-full bg-cyber-primary/15 border-2 border-cyber-primary glow-primary animate-float">
-                <Trophy size={48} className="text-cyber-primary animate-pulse" />
+                <PartyPopper size={48} className="text-cyber-primary animate-pulse" />
               </div>
 
               <span className="text-[11px] font-mono text-cyber-secondary tracking-widest uppercase font-bold">
-                SISTEMA DECLARA O VENCEDOR
+                O sorteado foi
               </span>
-              
+
               <h3 className="text-3xl font-orbitron font-black text-white uppercase mt-2 tracking-wide text-glow-primary">
-                {winner.name}
+                {winner.winnerName}
               </h3>
 
               <div className="w-full max-w-sm border-t border-b border-cyber-border/40 py-3.5 my-5">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <span className="text-[9px] font-mono text-cyber-muted uppercase block">PRÊMIO REIVINDICADO</span>
-                    <span className="font-rajdhani font-bold text-sm text-white uppercase mt-0.5 block">
-                      {prize?.name || 'Grande Prêmio'}
+                    <span className="text-[9px] font-mono text-cyber-muted uppercase block">Prêmio</span>
+                    <span className="font-rajdhani font-bold text-sm text-white mt-0.5 block">
+                      {winner.prize?.name || 'Grande Prêmio'}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[9px] font-mono text-cyber-muted uppercase block">CRÉDITOS DE CHANCES DE GANHAR</span>
-                    <span className="font-rajdhani font-bold text-sm text-cyber-accent uppercase mt-0.5 block">
-                      {winner.tickets} CUPONS
+                    <span className="text-[9px] font-mono text-cyber-muted uppercase block">Tickets acumulados</span>
+                    <span className="font-rajdhani font-bold text-sm text-cyber-accent mt-0.5 block">
+                      {winner.totalTickets}
                     </span>
                   </div>
                 </div>
               </div>
 
               <p className="text-xs text-cyber-muted max-w-md leading-relaxed px-4">
-                Parabéns ao vencedor! Os operadores entrarão em contato em breve. Esta transação foi bloqueada e arquivada no registro de histórico da campanha.
+                {winner.sessionId && !sessionEndedReason
+                  ? 'Fica ligado, o sorteio em cadeia continua — mais um prêmio pode sair a qualquer momento!'
+                  : 'Nossa equipe vai entrar em contato com o vencedor em breve. Obrigado por participar e fica de olho na próxima campanha!'}
               </p>
 
               <div className="flex gap-3 w-full mt-6 justify-center">
-                <Button
-                  variant="primary"
-                  size="md"
-                  onClick={() => navigate(user ? '/dashboard' : '/')}
-                  icon={<ArrowLeft size={14} />}
-                >
+                <Button variant="primary" size="md" onClick={() => navigate(user ? '/dashboard' : '/')} icon={<ArrowLeft size={14} />}>
                   {user ? 'Painel' : 'Início'}
                 </Button>
               </div>
-
             </div>
           </Card>
         ) : isSpinningState ? (
-          /* State B: Slot Machine Spinning Display */
-          <Card 
-            variant="secondary" 
-            title="PROCESSO DE SELEÇÃO EM ANDAMENTO" 
-            subtitle="BLOQUEIO_SYS // NÃO DESCONECTE"
-            glow
-          >
-            <div className="flex flex-col items-center py-10 text-center select-none">
-              
-              {/* Spinning visual cue */}
-              <div className="relative w-24 h-24 flex items-center justify-center rounded-full border border-cyber-secondary/30 mb-8">
-                <div className="absolute inset-0 rounded-full border-2 border-t-cyber-secondary border-r-transparent border-b-cyber-secondary border-l-transparent animate-spin" />
-                <div className="absolute inset-2 rounded-full border border-dotted border-cyber-secondary/20 animate-spin" style={{ animationDirection: 'reverse', animationDuration: '3s' }} />
-                <RefreshCw size={24} className="text-cyber-secondary animate-pulse" />
-              </div>
+          <Card variant="secondary" title="Girando a roleta..." subtitle="Não saia daqui, tá quase saindo o resultado!" glow>
+            <div className="flex flex-col items-center py-8 text-center select-none gap-6">
+              <PrizeWheel
+                participants={participants}
+                othersTickets={othersTickets}
+                othersCount={othersCount}
+                isSpinning={isSpinning}
+                winnerId={winner?.winnerId ?? null}
+                onSettled={() => setWheelSettled(true)}
+              />
 
-              <div className="w-full max-w-md bg-black/40 border border-cyber-secondary/40 rounded-lg p-6 relative overflow-hidden clip-cyber-card">
-                {/* Yellow cyberpunk hazard stripes background banner */}
-                <div 
-                  className="absolute inset-x-0 top-0 h-1" 
-                  style={{
-                    backgroundImage: 'repeating-linear-gradient(45deg, #06b6d4, #06b6d4 10px, transparent 10px, transparent 20px)'
-                  }}
-                />
-
-                <span className="text-[10px] font-mono text-cyber-secondary tracking-widest uppercase block mb-3">
-                  VARRENDO COFRES DE REGISTROS...
-                </span>
-
-                <div className="bg-cyber-surface/90 border border-cyber-border rounded-lg p-5 font-orbitron font-black text-2xl tracking-widest text-cyber-secondary text-glow-secondary uppercase animate-pulse">
-                  {spinningName}
-                </div>
-
-                <div 
-                  className="absolute inset-x-0 bottom-0 h-1" 
-                  style={{
-                    backgroundImage: 'repeating-linear-gradient(45deg, #06b6d4, #06b6d4 10px, transparent 10px, transparent 20px)'
-                  }}
-                />
-              </div>
-
-              <div className="mt-8 flex flex-col gap-1 items-center">
+              <div className="flex flex-col gap-1 items-center">
                 <span className="text-xs font-rajdhani font-bold text-white uppercase tracking-wider">
-                  SORTEANDO PRÊMIO: {prize?.name || 'Grande Prêmio'}
+                  Cada fatia é uma chance real — quanto mais tickets, maior o pedaço
                 </span>
                 <span className="text-[10px] font-mono text-cyber-muted uppercase tracking-widest">
-                  PARTICIPANTES REGISTRADOS: {participantCount || 0}
+                  {participants.length + (othersCount > 0 ? othersCount : 0)} participante(s) concorrendo · {totalTickets + othersTickets} tickets no total
                 </span>
               </div>
-
             </div>
           </Card>
         ) : (
-          /* State C: Pre-Draw Waiting / Locked Screen */
           <div className="flex flex-col gap-6">
-            
-            {/* Lockdown HUD Block */}
-            <Card variant="danger" title="BLOQUEIO PRÉ-SORTEIO ATIVO" subtitle="PROTOCOLO_BLOQUEIO_SEGURO">
+            <Card variant="danger" title="O sorteio ainda não começou" subtitle="Prepare-se, tá quase!">
               <div className="flex flex-col items-center py-6 text-center select-none">
-                
                 <div className="w-16 h-16 rounded border border-cyber-danger bg-cyber-danger/10 flex items-center justify-center mb-5 animate-pulse text-cyber-danger">
                   <Lock size={28} />
                 </div>
 
                 <h3 className="text-lg font-orbitron font-extrabold uppercase text-white tracking-widest">
-                  SUBMISSÕES DE MISSÕES CRIPTOGRAFADAS
+                  Missões congeladas por enquanto
                 </h3>
-                
+
                 <p className="text-[10px] font-mono text-cyber-muted uppercase tracking-widest mt-1">
-                  STATUS DA CAMPANHA // BLOQUEIO
+                  Inscrições encerradas pra esta campanha
                 </p>
 
-                {/* Countdown display */}
                 {!countdown.isExpired ? (
-                  <div className="mt-6 flex flex-col gap-2">
-                    <span className="text-[10px] font-mono text-cyber-danger tracking-widest uppercase">
-                      TEMPO RESTANTE ATÉ A SELEÇÃO
+                  <div className="mt-6 flex flex-col gap-2 items-center">
+                    <span className="text-[10px] font-mono text-cyber-danger tracking-widest uppercase flex items-center gap-1.5">
+                      <Clock size={12} /> Falta pouco pro sorteio
                     </span>
                     <div className="font-orbitron font-black text-3xl text-white tracking-widest">
                       {countdown.hudDisplay}
@@ -339,39 +257,40 @@ export const DrawWatchPage: React.FC = () => {
                 ) : (
                   <div className="mt-6 flex flex-col items-center gap-2">
                     <span className="text-[10px] font-mono text-cyber-primary tracking-widest uppercase animate-pulse">
-                      AGUARDANDO OPERADORES DO SISTEMA...
+                      Já já a organização começa o sorteio...
                     </span>
                     <div className="text-xs font-rajdhani font-bold text-white uppercase tracking-wider bg-cyber-border rounded px-4 py-1.5 mt-1 border border-cyber-border/80">
-                      EM ESPERA PELO DISPARO DO SORTEIO ALEATÓRIO
+                      Fica ligado nesta tela
                     </div>
                   </div>
                 )}
 
                 <p className="text-xs text-cyber-muted mt-5 leading-relaxed max-w-sm">
-                  A janela do sorteio está bloqueada. Os participantes não podem mais enviar impressões ou responder a tarefas. Seu índice de cupons atual está seguro. Mantenha esta conexão de terminal ativa.
+                  Ninguém mais pode enviar comprovantes ou responder tarefas agora — mas seus tickets estão seguros e prontos pra concorrer. Mantenha essa página aberta.
                 </p>
-
               </div>
             </Card>
 
-            {/* Campaign Prizes overview */}
-            {activeCampaign?.prizes && activeCampaign.prizes.length > 0 && (
-              <Card title="COFRE DE RECOMPENSAS RETHINK3D" subtitle="PRÊMIOS_ALOCADOS_PELO_SISTEMA">
+            {vaultPrizes.length > 0 && (
+              <Card title="O Que Está no Cofre" subtitle="Prêmios que podem ser seus">
                 <div className="flex flex-col gap-3.5 select-none font-inter text-cyber-text">
-                  {activeCampaign.prizes.map((p) => (
+                  {vaultPrizes.map((p) => (
                     <div key={p.id} className="flex justify-between items-center bg-cyber-surface/50 border border-cyber-border/40 rounded p-3">
-                      <div>
-                        <h4 className="font-orbitron font-bold text-xs text-white uppercase tracking-wider">
-                          {p.name}
-                        </h4>
-                        <p className="text-[10px] text-cyber-muted mt-0.5 normal-case font-inter">
-                          {p.description || 'Recompensa Exclusiva da Campanha'}
-                        </p>
+                      <div className="flex items-center gap-3">
+                        <div className="p-1.5 rounded bg-cyber-secondary/10 border border-cyber-secondary/30 text-cyber-secondary shrink-0">
+                          <Gift size={14} />
+                        </div>
+                        <div>
+                          <h4 className="font-orbitron font-bold text-xs text-white uppercase tracking-wider">{p.name}</h4>
+                          <p className="text-[10px] text-cyber-muted mt-0.5 normal-case font-inter">
+                            {p.description || 'Recompensa exclusiva da campanha'}
+                          </p>
+                        </div>
                       </div>
                       <div className="text-right shrink-0">
-                        <span className="text-[9px] font-mono text-cyber-muted block uppercase">QUANTIDADE</span>
+                        <span className="text-[9px] font-mono text-cyber-muted block uppercase">Disponível</span>
                         <span className="font-orbitron font-bold text-xs text-cyber-secondary">
-                          {p.quantity} UNIDADE{p.quantity > 1 ? 'S' : ''}
+                          {p.available ?? p.quantity - p.claimed} un.
                         </span>
                       </div>
                     </div>
@@ -380,17 +299,14 @@ export const DrawWatchPage: React.FC = () => {
               </Card>
             )}
 
-            {/* Security warning accent bar */}
             <div className="bg-cyber-surface/30 border border-cyber-border/40 rounded-lg p-4 flex gap-3 select-none">
-              <ShieldCheck size={16} className="text-cyber-secondary shrink-0 mt-0.5" />
+              <PartyPopper size={16} className="text-cyber-secondary shrink-0 mt-0.5" />
               <div className="font-mono text-[10px] text-cyber-muted uppercase tracking-wider leading-relaxed">
-                PROT_SEGURANÇA_R3D: Todos os sorteios usam sementes criptograficamente verificadas para a geração de números aleatórios. Os registros de auditoria são publicados publicamente no livro de histórico após a conclusão.
+                Sorteio transparente: cada ticket é uma chance real, e o resultado sai na hora, ao vivo — sem enrolação.
               </div>
             </div>
-
           </div>
         )}
-
       </div>
     </div>
   );

@@ -32,5 +32,11 @@ export default defineConfig({
   // Otimizações de dev server
   server: {
     port: 5173,
+    // Escuta em todas as interfaces de rede (não só localhost), permitindo
+    // acessar o dev server a partir de outros dispositivos na mesma rede local.
+    host: true,
+    // Libera qualquer hostname (ex: subdomínio aleatório do ngrok) — o Vite
+    // bloqueia hosts desconhecidos por padrão. Uso temporário/dev apenas.
+    allowedHosts: true,
   },
 })

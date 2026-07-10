@@ -1,75 +1,102 @@
 import { create } from 'zustand';
-import type { DrawStatus, Prize } from '../types';
+import type { DrawStatus } from '../types';
 
-export interface DrawWinner {
+export interface DrawParticipantPreview {
   userId: string;
   name: string;
-  winnerName?: string;
   tickets: number;
 }
 
-export interface DrawDetails {
-  drawId: string | null;
-  campaignName: string | null;
-  prize: Prize | null;
+export interface DrawWinnerPrize {
+  id: string;
+  name: string;
+  imageUrl?: string | null;
+}
+
+export interface DrawWinner {
+  winnerId: string;
+  winnerName: string;
+  prize: DrawWinnerPrize | null;
+  totalTickets: number;
+  totalParticipants: number;
+  sessionId?: string;
 }
 
 export interface DrawState {
-  // State
-  status: DrawStatus | null;
   drawId: string | null;
-  campaignName: string | null;
-  prize: Prize | null;
-  winner: DrawWinner | null;
+  status: DrawStatus | null;
+  sessionId: string | null;
+
+  participants: DrawParticipantPreview[];
+  totalTickets: number;
+  othersTickets: number;
+  othersCount: number;
+
   isSpinning: boolean;
-  participantCount: number;
+  winner: DrawWinner | null;
   onlineCount: number;
 
-  // Actions
-  setStatus: (status: DrawStatus | null) => void;
-  setDrawDetails: (details: DrawDetails) => void;
-  setWinner: (winner: DrawWinner | null) => void;
-  setIsSpinning: (isSpinning: boolean) => void;
-  setStats: (stats: { participantCount?: number; onlineCount?: number }) => void;
+  // Preenchido quando a sessão termina sozinha (cofre esgotado ou ordem
+  // concluída) — distingue de um encerramento manual pelo admin.
+  sessionEndedReason: 'exhausted' | 'manual' | null;
+
+  setDrawStarted: (data: { drawId: string; sessionId?: string }) => void;
+  setParticipants: (data: { participants: DrawParticipantPreview[]; totalTickets: number; othersTickets: number; othersCount: number }) => void;
+  setWinner: (winner: DrawWinner) => void;
+  setSessionEnded: (reason: 'exhausted' | 'manual') => void;
+  setOnlineCount: (count: number) => void;
   clearDraw: () => void;
 }
 
-export const useDrawStore = create<DrawState>((set) => ({
-  // Initial State
-  status: null,
+const initialDrawFields = {
   drawId: null,
-  campaignName: null,
-  prize: null,
-  winner: null,
+  status: null,
+  sessionId: null,
+  participants: [],
+  totalTickets: 0,
+  othersTickets: 0,
+  othersCount: 0,
   isSpinning: false,
-  participantCount: 0,
+  winner: null,
+  sessionEndedReason: null,
+};
+
+export const useDrawStore = create<DrawState>((set) => ({
+  ...initialDrawFields,
   onlineCount: 0,
 
-  // Actions
-  setStatus: (status) => set({ status }),
-  setDrawDetails: (details) =>
+  setDrawStarted: (data) =>
     set({
-      drawId: details.drawId,
-      campaignName: details.campaignName,
-      prize: details.prize,
-    }),
-  setWinner: (winner) => set({ winner }),
-  setIsSpinning: (isSpinning) => set({ isSpinning }),
-  setStats: (stats) =>
-    set((state) => ({
-      participantCount:
-        stats.participantCount !== undefined ? stats.participantCount : state.participantCount,
-      onlineCount: stats.onlineCount !== undefined ? stats.onlineCount : state.onlineCount,
-    })),
-  clearDraw: () =>
-    set({
-      status: null,
-      drawId: null,
-      campaignName: null,
-      prize: null,
+      drawId: data.drawId,
+      sessionId: data.sessionId ?? null,
+      status: 'IN_PROGRESS',
+      isSpinning: true,
       winner: null,
-      isSpinning: false,
-      participantCount: 0,
-      onlineCount: 0,
+      participants: [],
+      totalTickets: 0,
+      othersTickets: 0,
+      othersCount: 0,
+      sessionEndedReason: null,
     }),
+
+  setParticipants: (data) =>
+    set({
+      participants: data.participants,
+      totalTickets: data.totalTickets,
+      othersTickets: data.othersTickets,
+      othersCount: data.othersCount,
+    }),
+
+  setWinner: (winner) =>
+    set({
+      winner,
+      isSpinning: false,
+      status: 'COMPLETED',
+    }),
+
+  setSessionEnded: (reason) => set({ sessionEndedReason: reason }),
+
+  setOnlineCount: (onlineCount) => set({ onlineCount }),
+
+  clearDraw: () => set({ ...initialDrawFields }),
 }));

@@ -1,23 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { adminService } from '../../services/admin.service';
+import { useNavigate } from 'react-router-dom';
+import { adminService, type AdminParticipant } from '../../services/admin.service';
 import { campaignService } from '../../services/campaign.service';
-import type { Campaign, User, MissionProof } from '../../types';
+import { getCampaignStatusLabel } from '../../utils/campaignStatus';
+import { confirmDialog } from '../../utils/confirm';
+import type { Campaign } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Modal } from '../../components/ui/Modal';
-import { 
-  Key, Image, Search, ShieldAlert, 
-  ExternalLink, Calendar, Phone, Mail, RefreshCw, Globe 
+import {
+  Key, Image, Search, ShieldAlert, ChevronLeft, ChevronRight,
+  ExternalLink, Phone, Mail, RefreshCw, Globe
 } from 'lucide-react';
 
+const PAGE_SIZE = 20;
+const SEARCH_DEBOUNCE_MS = 400;
+
 export const ParticipantsPage: React.FC = () => {
+  const navigate = useNavigate();
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [selectedCampaignId, setSelectedCampaignId] = useState<string>('');
-  
-  const [participants, setParticipants] = useState<User[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  
+
+  const [participants, setParticipants] = useState<AdminParticipant[]>([]);
+  const [searchInput, setSearchInput] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
+
   const [isLoadingCampaigns, setIsLoadingCampaigns] = useState(true);
   const [isLoadingParticipants, setIsLoadingParticipants] = useState(false);
   const [isActionLoading, setIsActionLoading] = useState(false);
@@ -26,12 +38,7 @@ export const ParticipantsPage: React.FC = () => {
   // Modals state
   const [tempPin, setTempPin] = useState<string | null>(null);
   const [isPinModalOpen, setIsPinModalOpen] = useState(false);
-  const [selectedUserForPin, setSelectedUserForPin] = useState<User | null>(null);
-
-  const [proofs, setProofs] = useState<MissionProof[]>([]);
-  const [isProofsModalOpen, setIsProofsModalOpen] = useState(false);
-  const [selectedUserForProofs, setSelectedUserForProofs] = useState<User | null>(null);
-  const [isLoadingProofs, setIsLoadingProofs] = useState(false);
+  const [selectedUserForPin, setSelectedUserForPin] = useState<AdminParticipant | null>(null);
 
   // Load campaigns first
   const loadCampaigns = async () => {
@@ -48,7 +55,6 @@ export const ParticipantsPage: React.FC = () => {
       } else {
         // No campaigns in database, fetch participants globally
         setSelectedCampaignId('');
-        loadParticipants('');
       }
     } catch (err) {
       console.error('Failed to load campaigns:', err);
@@ -58,12 +64,19 @@ export const ParticipantsPage: React.FC = () => {
     }
   };
 
-  const loadParticipants = async (campaignId?: string) => {
+  const loadParticipants = async (campaignId: string, search: string, targetPage: number) => {
     try {
       setIsLoadingParticipants(true);
       setError(null);
-      const list = await adminService.getParticipants(campaignId || undefined);
-      setParticipants(list);
+      const result = await adminService.getParticipants({
+        campaignId: campaignId || undefined,
+        search: search || undefined,
+        page: targetPage,
+        pageSize: PAGE_SIZE,
+      });
+      setParticipants(result.data);
+      setTotal(result.total);
+      setTotalPages(result.totalPages);
     } catch (err: any) {
       console.error('Failed to load participants:', err);
       setError('Falha ao obter lista de participantes.');
@@ -76,14 +89,31 @@ export const ParticipantsPage: React.FC = () => {
     loadCampaigns();
   }, []);
 
+  // Debounce: só dispara a busca ao backend 400ms após o usuário parar de digitar,
+  // evitando uma requisição a cada tecla pressionada.
   useEffect(() => {
-    // Whenever campaign filter changes, reload list
-    loadParticipants(selectedCampaignId);
-  }, [selectedCampaignId]);
+    const timeout = setTimeout(() => setDebouncedSearch(searchInput.trim()), SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(timeout);
+  }, [searchInput]);
 
-  const handleResetPin = async (user: User) => {
-    if (!window.confirm(`Deseja resetar o PIN de acesso de ${user.name}?`)) return;
-    
+  // Campanha ou busca mudou: volta para a página 1
+  useEffect(() => {
+    setPage(1);
+  }, [selectedCampaignId, debouncedSearch]);
+
+  useEffect(() => {
+    loadParticipants(selectedCampaignId, debouncedSearch, page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCampaignId, debouncedSearch, page]);
+
+  const handleResetPin = async (user: AdminParticipant) => {
+    const confirmed = await confirmDialog(`Deseja resetar o PIN de acesso de ${user.name}?`, {
+      title: 'Resetar PIN',
+      confirmLabel: 'Resetar PIN',
+      variant: 'primary',
+    });
+    if (!confirmed) return;
+
     setIsActionLoading(true);
     setError(null);
     try {
@@ -102,33 +132,9 @@ export const ParticipantsPage: React.FC = () => {
     }
   };
 
-  const handleViewProofs = async (user: User) => {
-    setSelectedUserForProofs(user);
-    setIsProofsModalOpen(true);
-    setIsLoadingProofs(true);
-    setProofs([]);
-    
-    try {
-      const data = await adminService.getParticipantProofs(user.id);
-      setProofs(data);
-    } catch (err) {
-      console.error('Failed to load participant proofs:', err);
-      setError('Erro ao obter os comprovantes de impressão deste participante.');
-    } finally {
-      setIsLoadingProofs(false);
-    }
+  const handleViewProofs = (user: AdminParticipant) => {
+    navigate(`/admin/participants/${user.id}/proofs`, { state: { participantName: user.name } });
   };
-
-  // Client side search logic
-  const filteredParticipants = participants.filter((user) => {
-    const q = searchQuery.toLowerCase();
-    return (
-      user.name.toLowerCase().includes(q) ||
-      user.phone.includes(q) ||
-      (user.email && user.email.toLowerCase().includes(q)) ||
-      (user.instagram && user.instagram.toLowerCase().includes(q))
-    );
-  });
 
   return (
     <div className="space-y-6 font-inter">
@@ -136,14 +142,14 @@ export const ParticipantsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-cyber-border/40 pb-5">
         <div>
           <h1 className="text-2xl font-orbitron font-extrabold text-white tracking-widest uppercase">
-            AUDITORIA DE PARTICIPANTES
+            PARTICIPANTES
           </h1>
           <p className="text-xs font-rajdhani font-bold text-cyber-secondary tracking-widest mt-1">
-            // LISTAGEM, CONSULTA DE IMPRESSÕES E RESET DE CREDENCIAIS
+            Listagem, consulta de comprovantes e redefinição de PIN
           </p>
         </div>
         <div>
-          <Button variant="secondary" size="sm" icon={<RefreshCw size={14} />} onClick={() => loadParticipants(selectedCampaignId)}>
+          <Button variant="secondary" size="sm" icon={<RefreshCw size={14} />} onClick={() => loadParticipants(selectedCampaignId, debouncedSearch, page)}>
             Sincronizar Lista
           </Button>
         </div>
@@ -151,7 +157,7 @@ export const ParticipantsPage: React.FC = () => {
 
       {error && (
         <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider">
-          ⚠ TERMINAL_ERR // {error}
+          ⚠ {error}
         </div>
       )}
 
@@ -172,14 +178,14 @@ export const ParticipantsPage: React.FC = () => {
               <option value="">-- Todos (Geral, Sem dados de cupons) --</option>
               {campaigns.map((c) => (
                 <option key={c.id} value={c.id}>
-                  {c.name} ({c.status})
+                  {c.name} ({getCampaignStatusLabel(c.status)})
                 </option>
               ))}
             </select>
           </div>
         </Card>
 
-        {/* Client side Search Bar */}
+        {/* Search Bar (server-side, com debounce) */}
         <Card variant="default" className="md:col-span-2">
           <div className="flex flex-col gap-2">
             <label className="text-xs font-rajdhani font-bold text-cyber-muted uppercase tracking-wider">
@@ -187,10 +193,9 @@ export const ParticipantsPage: React.FC = () => {
             </label>
             <Input
               placeholder="Pesquise por nome, telefone, email ou instagram..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               icon={<Search size={16} className="text-cyber-muted" />}
-              statusIndicator="[SYS_QUERY]"
             />
           </div>
         </Card>
@@ -200,12 +205,12 @@ export const ParticipantsPage: React.FC = () => {
       {isLoadingParticipants ? (
         <div className="flex flex-col items-center justify-center p-20 text-cyber-muted font-mono space-y-4">
           <RefreshCw size={24} className="animate-spin text-cyber-primary" />
-          <span>SYS_LOADING // CARREGANDO BASE DE DADOS DOS USUÁRIOS...</span>
+          <span>CARREGANDO PARTICIPANTES...</span>
         </div>
-      ) : filteredParticipants.length === 0 ? (
+      ) : participants.length === 0 ? (
         <Card variant="default">
           <div className="text-center py-10 font-mono text-cyber-muted">
-            [SISTEMA VAZIO] NENHUM PARTICIPANTE LOCALIZADO COM OS FILTROS SELECIONADOS.
+            NENHUM PARTICIPANTE ENCONTRADO COM OS FILTROS SELECIONADOS.
           </div>
         </Card>
       ) : (
@@ -223,7 +228,7 @@ export const ParticipantsPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-cyber-border/40 text-xs font-rajdhani font-bold text-white tracking-wider">
-                {filteredParticipants.map((user) => (
+                {participants.map((user) => (
                   <tr key={user.id} className="hover:bg-cyber-surface/30 transition-colors">
                     <td className="p-4">
                       <div className="flex flex-col">
@@ -253,17 +258,17 @@ export const ParticipantsPage: React.FC = () => {
                     </td>
                     {selectedCampaignId && (
                       <td className="p-4 text-center font-mono text-cyber-secondary text-sm">
-                        {(user as any).tickets ?? 0}
+                        {user.tickets ?? 0}
                       </td>
                     )}
                     <td className="p-4 text-center">
                       {user.mustChangePinOnNextLogin ? (
                         <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-cyber-accent/15 border border-cyber-accent/40 text-cyber-accent">
-                          EXPIRADO (PENDENTE)
+                          TROCA PENDENTE
                         </span>
                       ) : (
                         <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-cyber-success/15 border border-cyber-success/40 text-cyber-success">
-                          DEFINIDO (SEGURO)
+                          PIN DEFINIDO
                         </span>
                       )}
                     </td>
@@ -275,7 +280,7 @@ export const ParticipantsPage: React.FC = () => {
                           icon={<Image size={13} />}
                           onClick={() => handleViewProofs(user)}
                         >
-                          Prints
+                          Fotos
                         </Button>
                         <Button
                           variant="primary"
@@ -292,6 +297,35 @@ export const ParticipantsPage: React.FC = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Paginação */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-cyber-border/40 px-4 py-3">
+            <span className="text-[11px] font-mono text-cyber-muted uppercase tracking-wider">
+              {total} participante{total === 1 ? '' : 's'} · página {page} de {totalPages}
+            </span>
+            <div className="flex gap-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                icon={<ChevronLeft size={14} />}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page <= 1 || isLoadingParticipants}
+              >
+                Anterior
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page >= totalPages || isLoadingParticipants}
+              >
+                <span className="flex items-center gap-2">
+                  Próxima
+                  <ChevronRight size={14} />
+                </span>
+              </Button>
+            </div>
           </div>
         </div>
       )}
@@ -337,90 +371,6 @@ export const ParticipantsPage: React.FC = () => {
         </div>
       </Modal>
 
-      {/* View Prints Gallery Modal */}
-      <Modal
-        isOpen={isProofsModalOpen}
-        onClose={() => setIsProofsModalOpen(false)}
-        title={`Comprovantes de ${selectedUserForProofs?.name || 'Participante'}`}
-        size="lg"
-      >
-        <div className="space-y-4">
-          <div className="text-xs font-mono text-cyber-muted pb-3 border-b border-cyber-border/40">
-            Comprovantes de impressão 3D enviados para validação de recompensas S3.
-          </div>
-
-          {isLoadingProofs ? (
-            <div className="flex flex-col items-center justify-center p-12 text-cyber-muted font-mono space-y-3">
-              <RefreshCw size={20} className="animate-spin text-cyber-primary" />
-              <span>SYS_DECRYPT // CARREGANDO ASSINATURAS S3 SECURE...</span>
-            </div>
-          ) : proofs.length === 0 ? (
-            <div className="text-center py-10 font-mono text-cyber-muted bg-black/25 rounded border border-cyber-border/40">
-              NENHUM PROJETO OU COMPROVANTE FOI ENVIADO POR ESTE USUÁRIO AINDA.
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {proofs.map((proof) => (
-                <div 
-                  key={proof.id}
-                  className="border border-cyber-border/80 bg-black/35 rounded overflow-hidden flex flex-col group hover:border-cyber-primary/60 transition-all duration-300"
-                >
-                  {/* Photo container */}
-                  <div className="aspect-video relative overflow-hidden bg-black/60 flex items-center justify-center border-b border-cyber-border/60">
-                    {proof.mimeType.startsWith('image/') ? (
-                      <img 
-                        src={(proof as any).signedUrl} 
-                        alt={proof.mission?.title || 'Print Upload'}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    ) : (
-                      <div className="p-4 text-center font-mono text-xs text-cyber-muted">
-                        Arquivo: {proof.mimeType}
-                      </div>
-                    )}
-                    <a 
-                      href={(proof as any).signedUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="absolute top-2 right-2 p-1.5 rounded bg-black/70 border border-cyber-border hover:border-cyber-secondary text-white transition-colors cursor-pointer"
-                      title="Abrir imagem original"
-                    >
-                      <ExternalLink size={12} />
-                    </a>
-                  </div>
-
-                  {/* Meta details */}
-                  <div className="p-3 space-y-1.5 text-[11px] font-rajdhani font-semibold text-cyber-muted">
-                    <div className="text-white font-bold truncate text-xs">
-                      {proof.mission?.title || 'Missão Desconhecida'}
-                    </div>
-                    <div className="flex justify-between font-mono text-[9px]">
-                      <span>FORMATO: {proof.mimeType.replace('image/', '').toUpperCase()}</span>
-                      <span>TAMANHO: {(proof.fileSize / 1024).toFixed(1)} KB</span>
-                    </div>
-                    <div className="flex justify-between items-center pt-1.5 border-t border-cyber-border/30">
-                      <span className="flex items-center gap-1"><Calendar size={11} /> {new Date(proof.uploadedAt).toLocaleDateString('pt-BR')}</span>
-                      <span className="px-1.5 py-0.5 rounded text-[8px] font-mono bg-cyber-success/15 border border-cyber-success/40 text-cyber-success">
-                        {proof.status}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="flex justify-end pt-4 border-t border-cyber-border/40">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => setIsProofsModalOpen(false)}
-            >
-              Fechar
-            </Button>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 };

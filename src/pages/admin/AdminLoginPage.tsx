@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import { authService } from '../../services/auth.service';
+import { getApiErrorMessage } from '../../utils/apiError';
 import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
@@ -32,8 +33,7 @@ export const AdminLoginPage: React.FC = () => {
       navigate('/admin');
     } catch (err: any) {
       console.error('Admin login error:', err);
-      const msg = err.response?.data?.message || 'Falha na autenticação do painel administrativo.';
-      setError(Array.isArray(msg) ? msg[0] : msg);
+      setError(getApiErrorMessage(err, 'Falha na autenticação do painel administrativo.'));
     } finally {
       setIsLoading(false);
     }
@@ -45,8 +45,8 @@ export const AdminLoginPage: React.FC = () => {
         <Card
           variant="primary"
           glow={true}
-          title="ACESSO RESTRITO"
-          subtitle="AUTENTICAÇÃO DE OPERADOR"
+          title="Login Administrativo"
+          subtitle="Painel Rethink3D"
           headerExtra={
             <div className="p-1 rounded bg-cyber-primary/10 text-cyber-primary border border-cyber-primary/30">
               <Shield size={16} />
@@ -57,7 +57,7 @@ export const AdminLoginPage: React.FC = () => {
 
             {error && (
               <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/50 text-cyber-danger text-xs font-rajdhani font-semibold tracking-wider uppercase rounded">
-                ⚠ ACCESS_DENIED // {error}
+                ⚠ {error}
               </div>
             )}
 
@@ -70,7 +70,6 @@ export const AdminLoginPage: React.FC = () => {
               icon={<Mail size={16} className="text-cyber-primary" />}
               required
               disabled={isLoading}
-              statusIndicator="[SYS_EMAIL]"
             />
 
             <Input
@@ -82,7 +81,6 @@ export const AdminLoginPage: React.FC = () => {
               icon={<Lock size={16} className="text-cyber-primary" />}
               required
               disabled={isLoading}
-              statusIndicator="[SYS_PASSKEY]"
             />
 
             <Button

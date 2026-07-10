@@ -30,19 +30,15 @@ export const questService = {
     return response.data;
   },
 
-  // Desatribuir missão de campanha (tornar global)
-  async unassignMission(missionId: string): Promise<Mission> {
-    const response = await api.patch<Mission>(`/missions/${missionId}/unassign`);
-    return response.data;
-  },
-
   async createQuest(data: {
     campaignId?: string;
     title: string;
     description: string;
     reward: number;
+    referrerReward?: number;
     type: MissionType;
     imageUrl?: string | null;
+    links?: string[];
     order?: number;
     active?: boolean;
   }): Promise<Mission> {
@@ -57,8 +53,10 @@ export const questService = {
       title: string;
       description: string;
       reward: number;
+      referrerReward: number;
       type: MissionType;
       imageUrl: string | null;
+      links: string[];
       order: number;
       active: boolean;
     }>
@@ -88,6 +86,17 @@ export const questService = {
         'Content-Type': 'multipart/form-data',
       },
     });
+    return response.data;
+  },
+
+  // Usa o código de 6 dígitos de um amigo pra cumprir a missão REFERRAL
+  async redeemReferral(missionId: string, friendCode: string): Promise<{
+    message: string;
+    ticketsEarned: number;
+    totalTickets: number;
+    missionCompleted: boolean;
+  }> {
+    const response = await api.post(`/missions/${missionId}/referral`, { friendCode });
     return response.data;
   },
 };

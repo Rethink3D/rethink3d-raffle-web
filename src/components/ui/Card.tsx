@@ -70,15 +70,15 @@ export const Card: React.FC<CardProps> = ({
       {/* Card Header */}
       {(title || subtitle || headerExtra) && (
         <div className="border-b border-cyber-border/40 pb-3 mb-4 flex justify-between items-start gap-4">
-          <div>
+          <div className="min-w-0">
             {title && (
-              <h3 className="text-base font-orbitron font-bold tracking-widest text-white uppercase">
+              <h3 className="text-base font-orbitron font-bold tracking-widest text-white uppercase break-words">
                 {title}
               </h3>
             )}
             {subtitle && (
-              <p className="text-xs font-rajdhani font-semibold text-cyber-muted tracking-wider mt-0.5 uppercase">
-                // {subtitle}
+              <p className="text-xs font-rajdhani font-semibold text-cyber-muted tracking-wider mt-0.5 uppercase break-words">
+                {subtitle}
               </p>
             )}
           </div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { campaignService } from "../../services/campaign.service";
+import { getCampaignStatusLabel } from "../../utils/campaignStatus";
 import type { Campaign } from "../../types";
 import { useCountdown } from "../../hooks/useCountdown";
 import { Button } from "../../components/ui/Button";
@@ -241,9 +242,22 @@ export const LandingPage: React.FC = () => {
             <Card
               className="lg:col-span-7 flex flex-col justify-between"
               title={activeCampaign.name}
-              subtitle={`STATUS: ${activeCampaign.status}`}
+              subtitle={`STATUS: ${getCampaignStatusLabel(activeCampaign.status)}`}
             >
               <div className="flex flex-col gap-4 mt-2">
+                {activeCampaign.coverImageUrl && (
+                  <div className="aspect-video relative rounded-md border border-cyber-border overflow-hidden bg-black/55">
+                    <img
+                      src={activeCampaign.coverImageUrl}
+                      alt={activeCampaign.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = "none";
+                      }}
+                    />
+                  </div>
+                )}
+
                 <p className="text-sm leading-relaxed text-cyber-text/90">
                   {activeCampaign.description ||
                     "Nenhuma descrição fornecida para esta campanha."}
@@ -373,12 +387,8 @@ export const LandingPage: React.FC = () => {
           </div>
         ) : (
           <Card className="border-cyber-danger/40 bg-cyber-surface/40 py-12 flex flex-col items-center text-center">
-            <ShieldAlert
-              className="text-cyber-danger mb-4 animate-bounce"
-              size={40}
-            />
             <h3 className="font-orbitron font-bold text-white text-lg uppercase tracking-wider">
-              Sistema Offline
+              Nenhuma campanha ativa
             </h3>
             <p className="font-inter text-xs text-cyber-muted mt-2 max-w-sm">
               No momento, não há nenhuma campanha de recompensas ativa. Por

@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Target, Lock, AlertTriangle, ShieldCheck, HelpCircle } from 'lucide-react';
+import { Lock, HelpCircle, ArrowLeft, PartyPopper } from 'lucide-react';
 import { campaignService } from '../../services/campaign.service';
 import { questService } from '../../services/quest.service';
 import { Card } from '../../components/ui/Card';
+import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { QuestCard } from '../../components/quest/QuestCard';
 import { PrintUpload } from '../../components/quest/PrintUpload';
+import { ReferralRedeem } from '../../components/quest/ReferralRedeem';
+import { useTicketRefreshStore } from '../../store/ticketRefreshStore';
 import type { Campaign, Mission } from '../../types';
+import nika from '../../assets/nika.gif';
+import agree from '../../assets/agree.gif';
 
 export const QuestsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +20,8 @@ export const QuestsPage: React.FC = () => {
   const [quests, setQuests] = useState<Mission[]>([]);
   const [selectedMission, setSelectedMission] = useState<Mission | null>(null);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState<boolean>(false);
+  const [isReferralModalOpen, setIsReferralModalOpen] = useState<boolean>(false);
+  const [justEarnedTickets, setJustEarnedTickets] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,7 +29,7 @@ export const QuestsPage: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const campaign = await campaignService.getActiveCampaign();
       if (campaign) {
         setActiveCampaign(campaign);
@@ -34,11 +41,7 @@ export const QuestsPage: React.FC = () => {
       }
     } catch (err: any) {
       console.error('Error fetching campaign quests:', err);
-      if (err?.response?.status === 404) {
-        setActiveCampaign(null);
-      } else {
-        setError('Falha ao carregar as missões da campanha da grade do sistema.');
-      }
+      setError('Não conseguimos carregar suas missões agora. Tente de novo.');
     } finally {
       setLoading(false);
     }
@@ -50,15 +53,17 @@ export const QuestsPage: React.FC = () => {
 
   const handleQuestAction = (mission: Mission) => {
     if (!activeCampaign) return;
-    
-    // Determine path based on quest type
+
     if (mission.type === 'QUIZ') {
-      navigate(`/quiz/${activeCampaign.id}`);
+      navigate(`/quiz/${mission.id}`);
     } else if (mission.type === 'FEEDBACK_FORM') {
-      navigate(`/feedback/${activeCampaign.id}`);
+      navigate(`/feedback/${mission.id}`);
     } else if (mission.type === 'PROOF_UPLOAD') {
       setSelectedMission(mission);
       setIsUploadModalOpen(true);
+    } else if (mission.type === 'REFERRAL') {
+      setSelectedMission(mission);
+      setIsReferralModalOpen(true);
     }
   };
 
@@ -66,28 +71,54 @@ export const QuestsPage: React.FC = () => {
     if (!selectedMission || !activeCampaign) return;
     try {
       await questService.uploadProof(selectedMission.id, file);
-      // Refresh the quests to show status as PENDING
       const campaignQuests = await questService.getCampaignQuests(activeCampaign.id);
       setQuests(campaignQuests);
+      setJustEarnedTickets(true);
     } catch (err) {
       console.error('Failed upload proof submission:', err);
       throw err;
     }
   };
 
+  const handleReferralRedeem = async (friendCode: string) => {
+    if (!selectedMission || !activeCampaign) return;
+    await questService.redeemReferral(selectedMission.id, friendCode);
+    const campaignQuests = await questService.getCampaignQuests(activeCampaign.id);
+    setQuests(campaignQuests);
+    setJustEarnedTickets(true);
+  };
+
   const handleModalClose = () => {
     setIsUploadModalOpen(false);
+    setIsReferralModalOpen(false);
     setSelectedMission(null);
+    // Só dispara a animação do contador de tickets ao fechar o modal — o
+    // modal cobre o Header enquanto aberto, então animar antes disso faria o
+    // participante nunca ver o efeito.
+    if (justEarnedTickets) {
+      useTicketRefreshStore.getState().trigger();
+      setJustEarnedTickets(false);
+    }
   };
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] font-mono select-none">
-        <div className="text-cyber-secondary animate-pulse text-lg font-bold tracking-widest">
-          [SYS_ANALISANDO_MISSÕES...]
-        </div>
-        <div className="w-56 h-1 bg-cyber-border rounded overflow-hidden mt-4">
-          <div className="h-full bg-cyber-secondary animate-pulse-glow" style={{ width: '50%' }} />
+      <div className="flex flex-col items-center justify-center min-h-[60vh] select-none pointer-events-none">
+        <div
+          style={{ width: 120, height: 120 }}
+          dangerouslySetInnerHTML={{
+            __html: `<lottie-player
+              src="/Pokeball Loading.json"
+              background="transparent"
+              speed="1.2"
+              style="width: 100%; height: 100%;"
+              loop
+              autoplay
+            ></lottie-player>`
+          }}
+        />
+        <div className="text-cyber-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
+          Carregando suas missões...
         </div>
       </div>
     );
@@ -96,18 +127,14 @@ export const QuestsPage: React.FC = () => {
   if (error) {
     return (
       <div className="max-w-md mx-auto my-10 select-none">
-        <Card variant="danger" title="ERRO DE RECUPERAÇÃO DE DADOS" glow>
+        <Card variant="danger" title="Ops, algo deu errado" glow>
           <div className="flex flex-col items-center gap-4 text-center">
-            <AlertTriangle size={48} className="text-cyber-danger" />
             <p className="text-sm font-rajdhani font-bold text-white tracking-wider">
               {error}
             </p>
-            <button
-              onClick={fetchQuests}
-              className="px-4 py-2 bg-cyber-danger/25 border border-cyber-danger text-white rounded font-orbitron uppercase text-xs tracking-wider cursor-pointer"
-            >
-              Atualizar Sistema
-            </button>
+            <Button variant="danger" size="md" onClick={fetchQuests}>
+              Tentar Novamente
+            </Button>
           </div>
         </Card>
       </div>
@@ -117,85 +144,101 @@ export const QuestsPage: React.FC = () => {
   if (!activeCampaign) {
     return (
       <div className="max-w-xl mx-auto my-10 select-none">
-        <Card variant="default" title="R3D_CONTROLE_DE_MISSÕES" glow>
-          <div className="flex flex-col items-center gap-6 text-center py-4">
-            <div className="w-16 h-16 rounded border border-cyber-border flex items-center justify-center bg-cyber-border/10">
-              <Target size={28} className="text-cyber-muted" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <h3 className="text-lg font-orbitron font-extrabold text-white tracking-widest uppercase">
-                NENHUMA MISSÃO ATIVA
-              </h3>
-              <p className="text-xs font-mono text-cyber-muted uppercase tracking-wider">
-                BANCO_DE_DADOS // OFFLINE
-              </p>
-              <p className="text-xs text-cyber-muted mt-2 leading-relaxed max-w-sm">
-                A Rethink3D não tem campanhas ou missões ativas disponíveis no momento. Por favor, consulte novamente mais tarde.
-              </p>
-            </div>
+        <Card variant="default" title="Nenhuma missão disponível" glow>
+          <div className="flex flex-col items-center gap-4 text-center py-4">
+            <img src={nika} alt="Aguardando" className="w-24 h-auto" draggable={false} />
+            <p className="text-sm font-inter text-cyber-muted max-w-sm">
+              Ainda não temos uma campanha ativa. Assim que uma nova começar, suas missões aparecem aqui.
+            </p>
           </div>
         </Card>
       </div>
     );
   }
 
-  // Quests are read-only if campaign status is DRAWING or FINISHED
+  // Missões ficam somente leitura durante e depois do sorteio
   const isLocked = activeCampaign.status === 'DRAWING' || activeCampaign.status === 'FINISHED';
+  const allCompleted = quests.length > 0 && quests.every((q) => q.isCompleted);
 
   return (
     <div className="flex flex-col gap-6">
-      {/* ─── PAGE HEADER HUD ─── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-cyber-surface/40 border border-cyber-border/60 rounded-lg p-5 relative overflow-hidden select-none">
+      <Button
+        variant="secondary"
+        size="sm"
+        icon={<ArrowLeft size={14} />}
+        onClick={() => navigate('/dashboard')}
+        className="self-start"
+      >
+        Voltar
+      </Button>
+
+      {/* ─── HEADER ─── */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-cyber-surface/90 border border-cyber-border/80 rounded-lg p-5 relative overflow-hidden select-none">
         <div className="absolute top-0 right-0 w-24 h-24 pointer-events-none opacity-5 bg-cyber-grid" />
-        
+
         <div className="flex flex-col">
-          <span className="text-[10px] font-mono tracking-widest text-cyber-secondary uppercase font-bold">
-            // BANCO_DE_DADOS_DE_MISSÕES
-          </span>
-          <h2 className="text-xl font-orbitron font-extrabold text-white uppercase tracking-wider mt-0.5">
-            MISSÕES DE CAMPANHA DISPONÍVEIS
+          <h2 className="text-xl font-orbitron font-extrabold text-white uppercase tracking-wider">
+            Suas Missões
           </h2>
           <p className="text-xs text-cyber-muted mt-1 leading-relaxed max-w-2xl">
-            Verifique e realize as tarefas abaixo para ganhar créditos de entrada no sorteio. As missões que exigem comprovação de verificação são revisadas pelos operadores do sistema.
+            Complete as missões abaixo para ganhar cupons e aumentar suas chances no sorteio.
           </p>
         </div>
 
-        {/* Quest Summary Badge */}
-        <div className="shrink-0 flex items-center gap-3">
-          <div className="flex flex-col items-end">
-            <span className="text-[9px] font-mono text-cyber-muted uppercase tracking-widest">
-              STATUS_DO_BANCO_DE_DADOS
+        <div className="shrink-0">
+          {allCompleted ? (
+            <span className="inline-flex items-center gap-1.5 text-xs font-rajdhani font-bold text-cyber-success uppercase bg-cyber-success/15 border border-cyber-success/50 px-3 py-1.5 rounded">
+              <PartyPopper size={14} />
+              Todas concluídas!
             </span>
-            <span className="text-xs font-rajdhani font-bold text-white uppercase mt-0.5">
-              {quests.length} DESAFIOS ATIVOS
+          ) : (
+            <span className="text-xs font-rajdhani font-bold text-white uppercase bg-cyber-border/80 border border-cyber-border/90 px-3 py-1.5 rounded">
+              {quests.length} missõe{quests.length === 1 ? '' : 's'} disponíve{quests.length === 1 ? 'l' : 'is'}
             </span>
-          </div>
+          )}
         </div>
       </div>
 
-      {/* ─── LOCKED SYSTEM BANNER ─── */}
+      {/* ─── PARABÉNS: TODAS AS MISSÕES CONCLUÍDAS ─── */}
+      {allCompleted && (
+        <Card variant="secondary" glow className="text-center">
+          <div className="flex flex-col items-center gap-3 py-4 select-none">
+            <img src={agree} alt="Parabéns" className="w-20 h-auto" draggable={false} />
+            <h3 className="text-lg font-orbitron font-extrabold text-white uppercase tracking-wider">
+              Parabéns, você completou todas as missões!
+            </h3>
+            <p className="text-sm text-cyber-muted max-w-md">
+              Seus cupons já estão garantidos. Agora é só aguardar o sorteio — boa sorte!
+            </p>
+          </div>
+        </Card>
+      )}
+
+      {/* ─── AVISO DE BLOQUEIO ─── */}
       {isLocked && (
-        <div className="flex items-center gap-3.5 bg-cyber-danger/10 border border-cyber-danger/40 rounded-lg p-4 select-none font-rajdhani font-bold uppercase tracking-wider text-cyber-danger">
-          <Lock size={18} className="shrink-0 animate-pulse" />
+        <div className="flex items-center gap-3.5 bg-cyber-danger/10 border border-cyber-danger/40 rounded-lg p-4 select-none">
+          <Lock size={18} className="shrink-0 text-cyber-danger" />
           <div className="flex-1">
-            <div className="text-sm font-black">BLOQUEIO DE SISTEMA ATIVO // MISSÕES SUSPENSAS</div>
-            <div className="text-[11px] text-cyber-muted mt-0.5 normal-case font-inter leading-relaxed">
-              O processo de seleção do sorteio foi iniciado ou concluído. O envio de missões está bloqueado. Participe da transmissão ao vivo para acompanhar o anúncio dos vencedores.
+            <div className="text-sm font-rajdhani font-bold uppercase tracking-wider text-cyber-danger">
+              Missões encerradas
+            </div>
+            <div className="text-[11px] text-cyber-muted mt-0.5 font-inter leading-relaxed">
+              O sorteio já começou, então não dá mais pra enviar missões. Acompanhe a transmissão ao vivo para saber o resultado!
             </div>
           </div>
         </div>
       )}
 
-      {/* ─── QUESTS LIST ─── */}
+      {/* ─── LISTA DE MISSÕES ─── */}
       <div className="flex flex-col gap-4">
         {quests.length === 0 ? (
           <Card className="text-center py-10 select-none">
-            <HelpCircle size={36} className="text-cyber-muted mx-auto mb-2 animate-bounce" />
+            <HelpCircle size={36} className="text-cyber-muted mx-auto mb-2" />
             <p className="text-sm font-rajdhani font-bold text-white uppercase tracking-wider">
-              Nenhuma missão configurada para esta campanha.
+              Nenhuma missão cadastrada ainda
             </p>
             <p className="text-xs text-cyber-muted mt-1">
-              Volte em breve para novas operações agendadas.
+              Volte em breve, novas missões podem aparecer a qualquer momento.
             </p>
           </Card>
         ) : (
@@ -209,19 +252,11 @@ export const QuestsPage: React.FC = () => {
         )}
       </div>
 
-      {/* ─── INSTRUCTION ACCENT CARD ─── */}
-      <div className="bg-cyber-surface/30 border border-cyber-border/40 rounded-lg p-4 flex gap-3 select-none">
-        <ShieldCheck size={16} className="text-cyber-secondary shrink-0 mt-0.5" />
-        <div className="font-mono text-[10px] text-cyber-muted uppercase tracking-wider leading-relaxed">
-          Protocolo de Segurança: As comprovações enviadas são verificadas contra manipulação do sistema. Qualquer comprovação falsificada ou reivindicação duplicada resultará em desclassificação imediata e bloqueio de PIN.
-        </div>
-      </div>
-
-      {/* ─── PROOF UPLOAD MODAL ─── */}
+      {/* ─── MODAL DE ENVIO DE COMPROVANTE ─── */}
       <Modal
         isOpen={isUploadModalOpen}
         onClose={handleModalClose}
-        title="Enviar Comprovação de Verificação"
+        title="Enviar Comprovante"
         size="md"
       >
         {selectedMission && (
@@ -229,6 +264,23 @@ export const QuestsPage: React.FC = () => {
             missionId={selectedMission.id}
             missionTitle={selectedMission.title}
             onUpload={handleUploadSubmit}
+            onCancel={handleModalClose}
+          />
+        )}
+      </Modal>
+
+      {/* ─── MODAL DE INDICAR UM AMIGO ─── */}
+      <Modal
+        isOpen={isReferralModalOpen}
+        onClose={handleModalClose}
+        title="Indique um Amigo"
+        size="md"
+      >
+        {selectedMission && (
+          <ReferralRedeem
+            missionId={selectedMission.id}
+            missionTitle={selectedMission.title}
+            onRedeem={handleReferralRedeem}
             onCancel={handleModalClose}
           />
         )}

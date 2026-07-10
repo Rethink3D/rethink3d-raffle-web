@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { campaignService } from '../../services/campaign.service';
 import { prizeService } from '../../services/prize.service';
-import type { Campaign, Prize } from '../../types';
+import { vaultService } from '../../services/vault.service';
+import { getCampaignStatusLabel } from '../../utils/campaignStatus';
+import { getApiErrorMessage } from '../../utils/apiError';
+import type { Campaign, Prize, Vault } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
+import { ImageUploadField } from '../../components/ui/ImageUploadField';
 import { Modal } from '../../components/ui/Modal';
-import { 
-  Plus, Edit2, Trash2, Gift, Image, 
-  AlertTriangle, RefreshCw 
+import {
+  Plus, Edit2, Trash2, Gift, Image,
+  AlertTriangle, RefreshCw, Lock, Vault as VaultIcon,
 } from 'lucide-react';
 
 export const PrizesPage: React.FC = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [selectedCampaignId, setSelectedCampaignId] = useState<string>('');
-  
-  const [prizes, setPrizes] = useState<Prize[]>([]);
-  
+
+  const [vault, setVault] = useState<Vault | null>(null);
+  const prizes: Prize[] = vault?.prizes ?? [];
+
   const [isLoadingCampaigns, setIsLoadingCampaigns] = useState(true);
-  const [isLoadingPrizes, setIsLoadingPrizes] = useState(false);
+  const [isLoadingVault, setIsLoadingVault] = useState(false);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,7 +55,7 @@ export const PrizesPage: React.FC = () => {
         setSelectedCampaignId(list[0].id);
       } else {
         setSelectedCampaignId('');
-        setPrizes([]);
+        setVault(null);
       }
     } catch (err) {
       console.error('Failed to load campaigns:', err);
@@ -60,20 +65,34 @@ export const PrizesPage: React.FC = () => {
     }
   };
 
-  // Load prizes for selected campaign
-  const loadPrizes = async (campaignId: string) => {
+  // Carrega o cofre da campanha selecionada (null se ainda não foi criado)
+  const loadVault = async (campaignId: string) => {
     if (!campaignId) return;
     try {
-      setIsLoadingPrizes(true);
+      setIsLoadingVault(true);
       setError(null);
-      const list = await prizeService.getCampaignPrizes(campaignId);
-      setPrizes(list);
+      const result = await vaultService.getByCampaign(campaignId);
+      setVault(result);
     } catch (err) {
-      console.error('Failed to load prizes:', err);
-      setPrizes([]);
-      setError('Erro ao buscar prêmios da campanha.');
+      console.error('Failed to load vault:', err);
+      setVault(null);
+      setError('Erro ao buscar o cofre da campanha.');
     } finally {
-      setIsLoadingPrizes(false);
+      setIsLoadingVault(false);
+    }
+  };
+
+  const handleCreateVault = async () => {
+    if (!selectedCampaignId) return;
+    setIsActionLoading(true);
+    setError(null);
+    try {
+      await vaultService.createVault(selectedCampaignId);
+      loadVault(selectedCampaignId);
+    } catch (err: any) {
+      setError(getApiErrorMessage(err, 'Erro ao criar o cofre desta campanha.'));
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
@@ -83,9 +102,9 @@ export const PrizesPage: React.FC = () => {
 
   useEffect(() => {
     if (selectedCampaignId) {
-      loadPrizes(selectedCampaignId);
+      loadVault(selectedCampaignId);
     } else {
-      setPrizes([]);
+      setVault(null);
     }
   }, [selectedCampaignId]);
 
@@ -113,7 +132,7 @@ export const PrizesPage: React.FC = () => {
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedCampaignId || !formData.name) return;
+    if (!selectedCampaignId || !vault || !formData.name) return;
 
     setIsActionLoading(true);
     setError(null);
@@ -128,13 +147,13 @@ export const PrizesPage: React.FC = () => {
       if (editingPrize) {
         await prizeService.updatePrize(selectedCampaignId, editingPrize.id, payload);
       } else {
-        await prizeService.createPrize(selectedCampaignId, payload);
+        await prizeService.createPrize(selectedCampaignId, vault.id, payload);
       }
       setIsFormOpen(false);
-      loadPrizes(selectedCampaignId);
+      loadVault(selectedCampaignId);
     } catch (err: any) {
       console.error('Prize form error:', err);
-      setError('Erro ao salvar configurações do prêmio.');
+      setError(getApiErrorMessage(err, 'Erro ao salvar configurações do prêmio.'));
     } finally {
       setIsActionLoading(false);
     }
@@ -151,7 +170,7 @@ export const PrizesPage: React.FC = () => {
     try {
       await prizeService.deletePrize(selectedCampaignId, prizeToDelete.id);
       setIsDeleteOpen(false);
-      loadPrizes(selectedCampaignId);
+      loadVault(selectedCampaignId);
     } catch (err) {
       console.error('Failed to delete prize:', err);
       setError('Erro ao excluir prêmio do banco.');
@@ -166,19 +185,19 @@ export const PrizesPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-cyber-border/40 pb-5">
         <div>
           <h1 className="text-2xl font-orbitron font-extrabold text-white tracking-widest uppercase">
-            GESTOR DE PRÊMIOS
+            COFRE DE PRÊMIOS
           </h1>
           <p className="text-xs font-rajdhani font-bold text-cyber-secondary tracking-widest mt-1">
-            // CADASTRO E CONTROLE DOS PRÊMIOS DA CAMPANHA
+            Cadastro e controle dos prêmios guardados no cofre da campanha
           </p>
         </div>
         <div className="flex gap-2">
-          <Button 
-            variant="primary" 
-            size="sm" 
-            icon={<Plus size={14} />} 
+          <Button
+            variant="primary"
+            size="sm"
+            icon={<Plus size={14} />}
             onClick={handleOpenCreate}
-            disabled={!selectedCampaignId}
+            disabled={!vault}
           >
             Adicionar Prêmio
           </Button>
@@ -190,7 +209,7 @@ export const PrizesPage: React.FC = () => {
 
       {error && (
         <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider">
-          ⚠ TERMINAL_ERR // {error}
+          ⚠ {error}
         </div>
       )}
 
@@ -220,7 +239,7 @@ export const PrizesPage: React.FC = () => {
               ) : (
                 campaigns.map((c) => (
                   <option key={c.id} value={c.id}>
-                    {c.name} ({c.status})
+                    {c.name} ({getCampaignStatusLabel(c.status)})
                   </option>
                 ))
               )}
@@ -230,21 +249,40 @@ export const PrizesPage: React.FC = () => {
       </Card>
 
       {/* Prizes Listing */}
-      {isLoadingPrizes ? (
+      {isLoadingVault ? (
         <div className="flex flex-col items-center justify-center p-20 text-cyber-muted font-mono space-y-4">
           <RefreshCw size={24} className="animate-spin text-cyber-primary" />
-          <span>SYS_LOADING // CARREGANDO PRÊMIOS DA CAMPANHA...</span>
+          <span>CARREGANDO COFRE...</span>
         </div>
       ) : !selectedCampaignId ? (
         <Card variant="default">
           <div className="text-center py-10 font-mono text-cyber-muted">
-            SELECIONE OU CRIE UMA CAMPANHA PRIMEIRO PARA GERENCIAR PRÊMIOS.
+            SELECIONE OU CRIE UMA CAMPANHA PRIMEIRO PARA GERENCIAR O COFRE.
+          </div>
+        </Card>
+      ) : !vault ? (
+        <Card variant="accent" glow>
+          <div className="flex flex-col items-center gap-4 py-10 text-center">
+            <div className="w-16 h-16 rounded-full bg-cyber-accent/10 border-2 border-cyber-accent flex items-center justify-center text-cyber-accent">
+              <VaultIcon size={28} />
+            </div>
+            <div>
+              <h3 className="text-base font-orbitron font-bold text-white uppercase tracking-wider">
+                Esta campanha ainda não tem um cofre
+              </h3>
+              <p className="text-xs text-cyber-muted mt-1 max-w-sm">
+                Crie o cofre pra começar a guardar os prêmios que serão sorteados nesta campanha.
+              </p>
+            </div>
+            <Button variant="accent" icon={<VaultIcon size={15} />} isLoading={isActionLoading} onClick={handleCreateVault}>
+              Criar Cofre da Campanha
+            </Button>
           </div>
         </Card>
       ) : prizes.length === 0 ? (
         <Card variant="default">
           <div className="text-center py-10 font-mono text-cyber-muted">
-            [SISTEMA VAZIO] NENHUM PRÊMIO CONTEXTUALIZADO NESTA CAMPANHA. ADICIONE UM PRÊMIO PARA SORTEAR.
+            O COFRE ESTÁ VAZIO. ADICIONE UM PRÊMIO PARA SORTEAR.
           </div>
         </Card>
       ) : (
@@ -254,7 +292,7 @@ export const PrizesPage: React.FC = () => {
               key={prize.id}
               variant="default"
               title={prize.name}
-              subtitle={`QUANTIDADE: ${prize.quantity} UN`}
+              subtitle={`DISPONÍVEL: ${prize.available ?? prize.quantity - prize.claimed}/${prize.quantity}`}
               headerExtra={
                 <div className="p-1 rounded bg-cyber-secondary/15 text-cyber-secondary border border-cyber-secondary/30">
                   <Gift size={16} />
@@ -287,8 +325,12 @@ export const PrizesPage: React.FC = () => {
                 </p>
 
                 <div className="flex justify-between items-center border-t border-cyber-border/40 pt-3 text-[11px] font-mono text-cyber-muted">
-                  <span>QTD EM ESTOQUE: <strong className="text-white font-bold">{prize.quantity}</strong></span>
-                  <span className="truncate max-w-[150px] lowercase text-[9px]">ID: {prize.id}</span>
+                  <span>ENTREGUES: <strong className="text-white font-bold">{prize.claimed}</strong> / {prize.quantity}</span>
+                  {prize.claimed >= prize.quantity && (
+                    <span className="flex items-center gap-1 text-cyber-danger text-[9px] uppercase font-bold">
+                      <Lock size={11} /> Esgotado
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex gap-2 justify-end pt-2 border-t border-cyber-border/20">
@@ -329,7 +371,6 @@ export const PrizesPage: React.FC = () => {
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             required
-            statusIndicator="[STR_NAME]"
           />
 
           <div className="flex flex-col gap-1.5 font-inter">
@@ -345,43 +386,21 @@ export const PrizesPage: React.FC = () => {
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="sm:col-span-1">
-              <Input
-                label="Quantidade"
-                type="number"
-                min={1}
-                value={formData.quantity}
-                onChange={(e) => setFormData({ ...formData, quantity: Number(e.target.value) })}
-                required
-                statusIndicator="[NUM_QTY]"
-              />
-            </div>
-            <div className="sm:col-span-2">
-              <Input
-                label="URL da Imagem do Prêmio (Opcional)"
-                placeholder="Ex: https://imgur.com/premio.png"
-                value={formData.imageUrl}
-                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                statusIndicator="[URL_IMG]"
-              />
-            </div>
-          </div>
+          <Input
+            label="Quantidade"
+            type="number"
+            min={1}
+            value={formData.quantity}
+            onChange={(e) => setFormData({ ...formData, quantity: Number(e.target.value) })}
+            required
+          />
 
-          {/* Simple Image URL Preview */}
-          {formData.imageUrl && (
-            <div className="rounded border border-cyber-border p-2 bg-black/45 flex flex-col gap-2">
-              <span className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider">Pré-visualização do Link:</span>
-              <img 
-                src={formData.imageUrl} 
-                alt="Preview" 
-                className="max-h-40 object-contain rounded"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = 'https://placehold.co/400x200?text=Link+Invalido';
-                }}
-              />
-            </div>
-          )}
+          <ImageUploadField
+            label="Imagem do Prêmio (Opcional)"
+            placeholder="Cole uma URL ou envie um arquivo"
+            value={formData.imageUrl}
+            onChange={(url) => setFormData({ ...formData, imageUrl: url })}
+          />
 
           <div className="flex justify-end gap-3 mt-4 border-t border-cyber-border/40 pt-4">
             <Button

@@ -15,6 +15,7 @@ export const campaignService = {
   async createCampaign(data: {
     name: string;
     description?: string | null;
+    coverImageUrl?: string | null;
     startDate?: string | null;
     drawDate?: string | null;
   }): Promise<Campaign> {
@@ -27,6 +28,7 @@ export const campaignService = {
     data: Partial<{
       name: string;
       description: string | null;
+      coverImageUrl: string | null;
       startDate: string | null;
       drawDate: string | null;
     }>
@@ -44,8 +46,8 @@ export const campaignService = {
     return response.data;
   },
 
-  async finishCampaign(id: string): Promise<Campaign> {
-    const response = await api.patch<Campaign>(`/campaigns/${id}/finish`);
+  async finishCampaign(id: string, password: string): Promise<Campaign> {
+    const response = await api.patch<Campaign>(`/campaigns/${id}/finish`, { password });
     return response.data;
   },
 };

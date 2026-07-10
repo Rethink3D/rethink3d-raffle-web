@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '../../services/auth.service';
 import { useAuthStore } from '../../store/authStore';
+import { getApiErrorMessage } from '../../utils/apiError';
 import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
@@ -68,13 +69,13 @@ export const LoginPage: React.FC = () => {
       
       // Store credentials and login type
       loginStore(response.token, response.user, 'participant');
-      
-      // Redirect to dashboard
-      navigate('/dashboard');
+
+      // Se o admin resetou o PIN do participante, força a troca antes de liberar o resto do app
+      const mustChangePin = (response.user as { mustChangePinOnNextLogin?: boolean }).mustChangePinOnNextLogin;
+      navigate(mustChangePin ? '/change-pin' : '/dashboard');
     } catch (err: any) {
       console.error('Login failed:', err);
-      const backendMessage = err.response?.data?.message || 'Acesso Negado: Telefone ou PIN inválido.';
-      setServerError(Array.isArray(backendMessage) ? backendMessage[0] : backendMessage);
+      setServerError(getApiErrorMessage(err, 'Acesso Negado: Telefone ou PIN inválido.'));
     } finally {
       setIsLoading(false);
     }

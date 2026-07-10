@@ -7,6 +7,10 @@ export const api = axios.create({
   baseURL: VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
+    // Sem isso, o ngrok free tier intercepta a 1ª requisição de cada origem
+    // com uma página HTML de aviso (sem headers de CORS) em vez de deixar
+    // passar pro backend — quebra tanto o axios quanto o socket.io.
+    'ngrok-skip-browser-warning': 'true',
   },
 });
 

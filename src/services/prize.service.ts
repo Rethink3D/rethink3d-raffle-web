@@ -7,13 +7,13 @@ export const prizeService = {
     return response.data;
   },
 
-  async createPrize(campaignId: string, data: {
+  async createPrize(campaignId: string, vaultId: string, data: {
     name: string;
     description?: string | null;
     imageUrl?: string | null;
     quantity: number;
   }): Promise<Prize> {
-    const response = await api.post<Prize>(`/campaigns/${campaignId}/prizes`, { ...data, campaignId });
+    const response = await api.post<Prize>(`/campaigns/${campaignId}/prizes`, { ...data, vaultId });
     return response.data;
   },
 

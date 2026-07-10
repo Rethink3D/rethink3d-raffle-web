@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Upload, FileImage, CheckCircle, AlertTriangle, X } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { getApiErrorMessage } from '../../utils/apiError';
 
 interface PrintUploadProps {
   missionId: string;
@@ -88,7 +89,7 @@ export const PrintUpload: React.FC<PrintUploadProps> = ({
       setUploadSuccess(true);
     } catch (err: any) {
       console.error(err);
-      setError(err?.response?.data?.message || 'Falha ao enviar comprovação. Por favor, tente novamente.');
+      setError(getApiErrorMessage(err, 'Falha ao enviar comprovação. Por favor, tente novamente.'));
     } finally {
       setUploading(false);
     }
@@ -249,10 +250,10 @@ export const PrintUpload: React.FC<PrintUploadProps> = ({
               ENVIO REALIZADO COM SUCESSO
             </h4>
             <p className="text-xs font-mono text-cyber-success tracking-widest uppercase">
-              STATUS // AGUARDANDO_VERIFICAÇÃO
+              MISSÃO CUMPRIDA
             </p>
             <p className="text-xs text-cyber-muted max-w-sm mt-1 leading-relaxed">
-              Sua comprovação de impressão 3D foi despachada com segurança para os operadores da rethink3D. Você receberá seus cupons assim que for verificada.
+              Seu comprovante foi enviado e seus tickets já foram creditados na sua conta.
             </p>
           </div>
 
