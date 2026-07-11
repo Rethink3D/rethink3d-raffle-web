@@ -12,6 +12,7 @@ import agree from '../../assets/agree.gif';
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const loginStore = useAuthStore((state) => state.login);
+  const setSignupBonusPopup = useAuthStore((state) => state.setSignupBonusPopup);
 
   // Form states
   const [name, setName] = useState('');
@@ -87,7 +88,13 @@ export const RegisterPage: React.FC = () => {
 
       // Login using zustand store
       loginStore(response.token, response.user, 'participant');
-      
+
+      // Se veio bônus de cadastro, sinaliza pro dashboard mostrar o popup de
+      // boas-vindas assim que carregar.
+      if (response.signupBonus) {
+        setSignupBonusPopup(response.signupBonus);
+      }
+
       // Redirect to participant dashboard
       navigate('/dashboard');
     } catch (err: any) {

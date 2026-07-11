@@ -86,6 +86,9 @@ export interface Mission {
   campaign?: Campaign;
   completions?: MissionCompletion[];
   proofs?: MissionProof[];
+  // Quantos participantes já concluíram esta missão — só vem preenchido nos
+  // endpoints de admin (GET /campaigns/:id/missions/all, /missions/global, /missions).
+  completionsCount?: number;
 
   // Custom UI helper attributes
   isCompleted?: boolean;
@@ -353,6 +356,8 @@ export interface TicketHistoryEntry {
   missionType: MissionType | null;
   // true só no ticket de bônus creditado a quem é DONO do código usado.
   isReferralBonus: boolean;
+  // true no ticket de bônus de boas-vindas creditado no cadastro.
+  isSignupBonus: boolean;
   // Pra tickets de missão REFERRAL: nome da pessoa do outro lado da indicação.
   relatedUserName: string | null;
 }

@@ -21,26 +21,32 @@ export interface AuthResponse {
   token: string;
   user: User | Admin;
   role: 'participant' | 'admin';
+  // Só presente na resposta de registro: quantos cupons de bônus de cadastro
+  // foram creditados na hora (0 se não havia campanha em andamento).
+  signupBonus?: number;
 }
 
 export const authService = {
   async register(data: RegisterDto): Promise<AuthResponse> {
-    const response = await api.post<{ access_token: string }>('/auth/register', data);
-    
-    // Como a API de registro do backend só retorna { access_token }, nós pegamos o token
-    // e fazemos uma chamada subsequente para buscar os dados do usuário atual em /auth/me
+    const response = await api.post<{ access_token: string; signupBonus: number }>('/auth/register', data);
+
+    // Como a API de registro do backend só retorna { access_token, signupBonus }, nós
+    // pegamos o token e fazemos uma chamada subsequente para buscar os dados do
+    // usuário atual em /auth/me
     const token = response.data.access_token;
-    
+    const signupBonus = response.data.signupBonus;
+
     // Temporariamente setamos o token nas requisições do axios para buscar o usuário logado
     const originalAuthorization = api.defaults.headers.common['Authorization'];
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    
+
     try {
       const userResponse = await api.get<User>('/auth/me');
       return {
         token,
         user: userResponse.data,
         role: 'participant',
+        signupBonus,
       };
     } finally {
       // Restauramos o header original (será sobrescrito pelo store depois)

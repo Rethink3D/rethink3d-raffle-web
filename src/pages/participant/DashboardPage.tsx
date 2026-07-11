@@ -10,6 +10,7 @@ import { prizeService } from '../../services/prize.service';
 import { ticketService } from '../../services/ticket.service';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
+import { Modal } from '../../components/ui/Modal';
 import { getCampaignStatusLabel } from '../../utils/campaignStatus';
 import { getNextDrawTarget, getUpcomingSchedules } from '../../utils/drawSchedule';
 import type { Campaign, Mission, Prize, TicketHistoryEntry, User } from '../../types';
@@ -88,6 +89,51 @@ const ReferralCodeCard: React.FC<{ code: string }> = ({ code }) => {
         e digite o código dele pra ganhar cupons também.
       </p>
     </Card>
+  );
+};
+
+// Popup de boas-vindas exibido uma única vez, assim que o participante recém-
+// cadastrado chega no dashboard — lê o próprio estado do store (em vez de
+// receber props) pra poder ser inserido em qualquer um dos `return`s abaixo
+// (loading/erro/sem campanha/painel completo) sem precisar prop-drilling.
+const SignupBonusModal: React.FC = () => {
+  const signupBonusPopup = useAuthStore((state) => state.signupBonusPopup);
+  const setSignupBonusPopup = useAuthStore((state) => state.setSignupBonusPopup);
+  const navigate = useNavigate();
+
+  if (!signupBonusPopup) return null;
+
+  return (
+    <Modal isOpen title="Bônus de Boas-vindas" onClose={() => setSignupBonusPopup(null)} size="sm">
+      <div className="flex flex-col items-center text-center gap-4 py-2">
+        <div className="p-3 rounded-full bg-cyber-success/10 border border-cyber-success/40 text-cyber-success">
+          <Gift size={32} />
+        </div>
+        <div>
+          <p className="font-orbitron font-black text-3xl text-cyber-success text-glow-secondary">
+            +{signupBonusPopup} cupons
+          </p>
+          <p className="text-sm font-rajdhani font-bold text-white mt-1 uppercase tracking-wide">
+            Só por se cadastrar!
+          </p>
+        </div>
+        <p className="text-xs text-cyber-muted leading-relaxed max-w-xs">
+          Quer ganhar ainda mais cupons e aumentar suas chances de ganhar? Complete as missões disponíveis.
+        </p>
+        <Button
+          variant="primary"
+          size="md"
+          fullWidth
+          icon={<ArrowRight size={16} />}
+          onClick={() => {
+            setSignupBonusPopup(null);
+            navigate('/quests');
+          }}
+        >
+          Ver Missões
+        </Button>
+      </div>
+    </Modal>
   );
 };
 
@@ -195,6 +241,7 @@ export const DashboardPage: React.FC = () => {
   if (error) {
     return (
       <div className="max-w-md mx-auto my-10 select-none">
+        <SignupBonusModal />
         <Card variant="danger" title="Ops, algo deu errado" glow>
           <div className="flex flex-col items-center gap-4 text-center">
             <p className="text-sm font-rajdhani font-bold text-white tracking-wider">
@@ -212,6 +259,7 @@ export const DashboardPage: React.FC = () => {
   if (!activeCampaign) {
     return (
       <div className="max-w-xl mx-auto my-10 flex flex-col gap-6">
+        <SignupBonusModal />
         <Card variant="default" title="Nenhum sorteio rolando agora" glow className="select-none">
           <div className="flex flex-col items-center gap-4 text-center py-4">
             <img src={nika} alt="Aguardando" className="w-24 h-auto" draggable={false} />
@@ -227,6 +275,7 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-6 font-inter text-cyber-text">
+      <SignupBonusModal />
       {/* ─── HEADER ─── */}
       <div className="relative rounded-lg border border-cyber-border/80 overflow-hidden select-none bg-cyber-surface/90">
         {/* Capa da campanha ao fundo (se houver), esmaecida atrás de um gradiente
@@ -505,7 +554,10 @@ export const DashboardPage: React.FC = () => {
           <div className="flex flex-col divide-y divide-cyber-border/40">
             {ticketHistory.map((entry) => {
               const isReferral = entry.missionType === 'REFERRAL';
-              const label = isReferral
+              const isSignup = entry.isSignupBonus;
+              const label = isSignup
+                ? 'Bônus de boas-vindas (cadastro)'
+                : isReferral
                 ? entry.isReferralBonus
                   ? `${entry.relatedUserName ?? 'Um amigo'} usou seu código`
                   : `Você usou o código de ${entry.relatedUserName ?? 'um amigo'}`
@@ -514,8 +566,8 @@ export const DashboardPage: React.FC = () => {
               return (
                 <div key={entry.id} className="flex items-center justify-between gap-3 py-3 first:pt-1 last:pb-1">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className={`p-1.5 rounded shrink-0 ${isReferral ? 'bg-cyber-success/10 border border-cyber-success/30 text-cyber-success' : 'bg-cyber-secondary/10 border border-cyber-secondary/30 text-cyber-secondary'}`}>
-                      {isReferral ? <Users size={14} /> : <TicketIcon size={14} />}
+                    <div className={`p-1.5 rounded shrink-0 ${isSignup ? 'bg-cyber-accent/10 border border-cyber-accent/30 text-cyber-accent' : isReferral ? 'bg-cyber-success/10 border border-cyber-success/30 text-cyber-success' : 'bg-cyber-secondary/10 border border-cyber-secondary/30 text-cyber-secondary'}`}>
+                      {isSignup ? <Gift size={14} /> : isReferral ? <Users size={14} /> : <TicketIcon size={14} />}
                     </div>
                     <div className="min-w-0">
                       <p className="text-sm font-rajdhani font-bold text-white truncate">{label}</p>
