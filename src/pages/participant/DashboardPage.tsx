@@ -555,7 +555,9 @@ export const DashboardPage: React.FC = () => {
             {ticketHistory.map((entry) => {
               const isReferral = entry.missionType === 'REFERRAL';
               const isSignup = entry.isSignupBonus;
-              const label = isSignup
+              const label = entry.note
+                ? entry.note
+                : isSignup
                 ? 'Bônus de boas-vindas (cadastro)'
                 : isReferral
                 ? entry.isReferralBonus

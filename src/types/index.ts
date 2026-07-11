@@ -358,6 +358,9 @@ export interface TicketHistoryEntry {
   isReferralBonus: boolean;
   // true no ticket de bônus de boas-vindas creditado no cadastro.
   isSignupBonus: boolean;
+  // Rótulo livre de tickets creditados manualmente pelo admin (ex: "Bônus de
+  // divulgação") — null nos tickets gerados pelos fluxos automáticos.
+  note: string | null;
   // Pra tickets de missão REFERRAL: nome da pessoa do outro lado da indicação.
   relatedUserName: string | null;
 }
