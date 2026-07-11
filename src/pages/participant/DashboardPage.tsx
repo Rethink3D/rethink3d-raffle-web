@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Calendar, ArrowRight, Award, Gift, Copy, Share2, Check, Users, Ticket as TicketIcon } from 'lucide-react';
+import { Calendar, ArrowRight, Award, Gift, Copy, Share2, Check, Users, Ticket as TicketIcon, Sparkles } from 'lucide-react';
 import { useCountdown } from '../../hooks/useCountdown';
 import { useSocket } from '../../hooks/useSocket';
 import { useAuthStore } from '../../store/authStore';
@@ -10,8 +10,18 @@ import { prizeService } from '../../services/prize.service';
 import { ticketService } from '../../services/ticket.service';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
+import { getCampaignStatusLabel } from '../../utils/campaignStatus';
 import type { Campaign, Mission, Prize, TicketHistoryEntry, User } from '../../types';
 import nika from '../../assets/nika.gif';
+
+// Cores do badge de status — mesma paleta usada nos outros indicadores da
+// campanha, pra reforçar visualmente ACTIVE (verde) vs DRAWING (roxo/aviso).
+const STATUS_BADGE_CLASSES: Record<Campaign['status'], string> = {
+  DRAFT: 'text-cyber-muted border-cyber-muted/40 bg-cyber-muted/5',
+  ACTIVE: 'text-cyber-success border-cyber-success/50 bg-cyber-success/10',
+  DRAWING: 'text-cyber-primary border-cyber-primary/50 bg-cyber-primary/10 animate-pulse',
+  FINISHED: 'text-cyber-muted border-cyber-muted/40 bg-cyber-muted/5',
+};
 
 // Mostra o código de indicação do participante, com botões de copiar e
 // compartilhar — aparece sempre, mesmo sem campanha ativa, já que o código é
@@ -63,6 +73,10 @@ const ReferralCodeCard: React.FC<{ code: string }> = ({ code }) => {
       </div>
       <p className="text-[11px] text-cyber-muted leading-relaxed mt-1">
         Passe esse código pra um amigo cumprir a missão "Indique um Amigo" — assim que ele usar, vocês dois ganham cupons na hora.
+      </p>
+      <p className="text-[11px] text-cyber-accent/90 leading-relaxed mt-1.5 flex items-center gap-1.5">
+        <Users size={12} className="shrink-0" />
+        Seu código vale só pra até 2 amigos por campanha — capriche em quem você indica!
       </p>
     </Card>
   );
@@ -203,28 +217,58 @@ export const DashboardPage: React.FC = () => {
   return (
     <div className="flex flex-col gap-6 font-inter text-cyber-text">
       {/* ─── HEADER ─── */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-cyber-surface/90 border border-cyber-border/80 rounded-lg p-5 relative overflow-hidden select-none">
-        <div className="absolute top-0 right-0 w-24 h-24 pointer-events-none opacity-5 bg-cyber-grid" />
-
-        <div className="flex flex-col min-w-0">
-          <h2 className="text-2xl font-orbitron font-extrabold text-white uppercase tracking-wider text-glow-primary break-words">
-            {activeCampaign.name}
-          </h2>
-          <p className="text-xs text-cyber-muted mt-1 leading-relaxed max-w-2xl break-words">
-            {activeCampaign.description || 'Cumpra missões, junte cupons e concorra a prêmios incríveis!'}
-          </p>
-        </div>
-
-        {activeCampaign.status === 'DRAWING' && (
-          <Button
-            variant="accent"
-            size="sm"
-            onClick={() => navigate(`/watch/${activeCampaign.id}`)}
-            className="glow-accent shrink-0"
-          >
-            Assistir Sorteio ao Vivo
-          </Button>
+      <div className="relative rounded-lg border border-cyber-border/80 overflow-hidden select-none bg-cyber-surface/90">
+        {/* Capa da campanha ao fundo (se houver), esmaecida atrás de um gradiente
+            pra manter o texto legível — antes essa área não usava a capa nem tinha
+            nenhum destaque visual além do texto puro. */}
+        {activeCampaign.coverImageUrl && (
+          <div className="absolute inset-0">
+            <img
+              src={activeCampaign.coverImageUrl}
+              alt=""
+              className="w-full h-full object-cover opacity-20"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-cyber-surface via-cyber-surface/90 to-cyber-surface/50" />
+          </div>
         )}
+        <div className="absolute top-0 right-0 w-32 h-32 pointer-events-none opacity-5 bg-cyber-grid" />
+        <div className="absolute top-0 left-0 bottom-0 w-1 bg-gradient-to-b from-cyber-primary to-cyber-secondary" />
+
+        <div className="relative flex flex-col lg:flex-row lg:items-center justify-between gap-5 p-6">
+          <div className="flex flex-col min-w-0 gap-2.5">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-mono tracking-[0.2em] text-cyber-secondary uppercase">
+                <Sparkles size={12} />
+                Campanha
+              </span>
+              <span className={`inline-flex items-center gap-1 text-[10px] font-mono tracking-widest uppercase px-2 py-0.5 rounded border ${STATUS_BADGE_CLASSES[activeCampaign.status]}`}>
+                {getCampaignStatusLabel(activeCampaign.status)}
+              </span>
+            </div>
+
+            <h2 className="text-3xl sm:text-4xl font-orbitron font-black text-white uppercase tracking-wide text-glow-primary break-words leading-tight">
+              {activeCampaign.name}
+            </h2>
+
+            <p className="text-sm text-cyber-text/80 font-inter leading-relaxed max-w-2xl break-words border-l-2 border-cyber-primary/40 pl-3">
+              {activeCampaign.description || 'Cumpra missões, junte cupons e concorra a prêmios incríveis!'}
+            </p>
+          </div>
+
+          {activeCampaign.status === 'DRAWING' && (
+            <Button
+              variant="accent"
+              size="sm"
+              onClick={() => navigate(`/watch/${activeCampaign.id}`)}
+              className="glow-accent shrink-0"
+            >
+              Assistir Sorteio ao Vivo
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* ─── SEU CÓDIGO DE AMIGO ─── */}

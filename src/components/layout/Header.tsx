@@ -10,6 +10,7 @@ import { useAuthStore } from "../../store/authStore";
 import { useTicketRefreshStore } from "../../store/ticketRefreshStore";
 import api from "../../services/api";
 import { campaignService } from "../../services/campaign.service";
+import { socket } from "../../hooks/useSocket";
 import logo from "../../assets/Logo.webp";
 
 export const Header: React.FC = () => {
@@ -194,6 +195,11 @@ export const Header: React.FC = () => {
 
   const handleLogout = () => {
     logout();
+    // A instância do socket é um singleton fora do ciclo de vida do React —
+    // se o usuário sair de uma página sem o hook de socket montado (ex: fora
+    // do Dashboard/transmissão do sorteio), nada mais reagiria à mudança de
+    // token e a conexão ficaria aberta com as credenciais antigas.
+    if (socket.connected) socket.disconnect();
     if (role === "admin") {
       navigate("/admin/login");
     } else {

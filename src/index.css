@@ -126,6 +126,15 @@
 }
 .animate-spin-slot { animation: spin-slot 4s cubic-bezier(0.1, 0.8, 0.3, 1) forwards; }
 
+/* Upload indeterminado — não temos progresso real (%) do envio, só um trecho
+   de barra correndo de um lado a outro pra mostrar atividade sem fingir uma
+   porcentagem exata. */
+@keyframes upload-indeterminate {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+.animate-upload-indeterminate { animation: upload-indeterminate 1.1s ease-in-out infinite; }
+
 /* Modal in — substitui framer-motion scale+opacity */
 @keyframes modal-in {
   from { opacity: 0; transform: scale(0.94) translateY(10px); }

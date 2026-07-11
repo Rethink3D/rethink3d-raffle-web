@@ -197,8 +197,11 @@ export const PrintUpload: React.FC<PrintUploadProps> = ({
                       <span>ENVIANDO_DADOS...</span>
                       <span className="animate-pulse">SYS_OCUPADO</span>
                     </div>
+                    {/* Barra indeterminada (não temos progresso real de upload) —
+                        antes ficava travada numa largura fixa de 60%, o que parecia
+                        que o envio tinha travado em vez de estar em andamento. */}
                     <div className="w-full h-1.5 bg-cyber-border rounded overflow-hidden">
-                      <div className="h-full bg-cyber-secondary animate-pulse-glow" style={{ width: '60%' }} />
+                      <div className="h-full w-1/3 bg-cyber-secondary rounded animate-upload-indeterminate" />
                     </div>
                   </div>
                 )}

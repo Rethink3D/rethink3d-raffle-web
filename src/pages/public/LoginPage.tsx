@@ -27,6 +27,8 @@ export const LoginPage: React.FC = () => {
 
     if (!phone.trim()) {
       errors.phone = 'Número de telefone é obrigatório';
+    } else if (phone.replace(/\D/g, '').length !== 11) {
+      errors.phone = 'Informe o telefone completo, com DDD (11 números)';
     }
 
     if (!pin) {

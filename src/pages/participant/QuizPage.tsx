@@ -307,7 +307,9 @@ export const QuizPage: React.FC = () => {
 
   // ─── ACTIVE QUIZ WORKFLOW ───
   const currentQuestion = questions[currentQuestionIndex];
-  const progressPercent = Math.round(((currentQuestionIndex) / questions.length) * 100);
+  // +1 pra refletir a pergunta atual, não só as já respondidas — senão a barra
+  // mostrava "80%" bem quando o cabeçalho já dizia "Pergunta 5 de 5".
+  const progressPercent = Math.round(((currentQuestionIndex + 1) / questions.length) * 100);
 
   return (
     <div className="max-w-2xl mx-auto my-6 font-inter">
@@ -336,9 +338,9 @@ export const QuizPage: React.FC = () => {
 
         {/* Progress indicator bar */}
         <div className="w-full h-1 bg-cyber-border rounded overflow-hidden mb-6">
-          <div 
+          <div
             className="h-full bg-cyber-secondary transition-all duration-300 ease-out"
-            style={{ width: `${((currentQuestionIndex) / questions.length) * 100}%` }}
+            style={{ width: `${progressPercent}%` }}
           />
         </div>
 
