@@ -1,0 +1,10 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# BrowserRouter (client-side routing) — sem isso, dar refresh numa rota como
+# /dashboard devolve 404 do Netlify em vez de deixar o React Router assumir.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
