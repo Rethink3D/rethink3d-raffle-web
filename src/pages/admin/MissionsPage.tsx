@@ -9,7 +9,7 @@ import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import {
   Plus, Edit2, Trash2, ArrowUp, ArrowDown, RefreshCw,
-  Globe, Link2, Layers, BarChart3
+  Globe, Link2, Layers, BarChart3, Users
 } from 'lucide-react';
 
 type Tab = 'campaign' | 'global';
@@ -244,6 +244,7 @@ export const MissionsPage: React.FC = () => {
                 <th className="p-4 font-normal">Título / Descrição</th>
                 <th className="p-4 font-normal">Tipo</th>
                 <th className="p-4 font-normal text-center">Tickets</th>
+                <th className="p-4 font-normal text-center">Concluída por</th>
                 <th className="p-4 font-normal text-center">Status</th>
                 <th className="p-4 font-normal text-right">Ações</th>
               </tr>
@@ -284,6 +285,15 @@ export const MissionsPage: React.FC = () => {
                     </span>
                   </td>
                   <td className="p-4 text-center font-mono text-cyber-secondary text-sm">+{mission.reward}</td>
+                  <td className="p-4 text-center">
+                    <span
+                      className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-mono bg-cyber-secondary/10 border border-cyber-secondary/30 text-cyber-secondary"
+                      title={isGlobal ? 'Missões globais (modelo) não são completadas diretamente' : 'Participantes que já concluíram esta missão'}
+                    >
+                      <Users size={12} />
+                      {mission.completionsCount ?? 0}
+                    </span>
+                  </td>
                   <td className="p-4 text-center">
                     {isGlobal ? (
                       <span
