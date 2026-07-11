@@ -2,18 +2,19 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Lock, Tv, Users,
-  ArrowLeft, PartyPopper, Gift, Clock,
+  ArrowLeft, PartyPopper, Gift, Clock, Trophy,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { useDrawStore } from '../../store/drawStore';
 import { useSocket } from '../../hooks/useSocket';
 import { useCountdown } from '../../hooks/useCountdown';
 import { campaignService } from '../../services/campaign.service';
+import { drawService } from '../../services/draw.service';
 import { getNextDrawTarget } from '../../utils/drawSchedule';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { PrizeWheel } from '../../components/draw/PrizeWheel';
-import type { Campaign } from '../../types';
+import type { Campaign, Draw } from '../../types';
 
 // Confete simples em canvas — só entra quando o vencedor é revelado
 const ConfettiCanvas: React.FC = () => {
@@ -84,7 +85,34 @@ export const DrawWatchPage: React.FC = () => {
 
   useSocket(activeCampaign?.id);
 
-  const { winner, isSpinning, participants, totalTickets, othersTickets, othersCount, onlineCount, sessionEndedReason } = useDrawStore();
+  const { winner, isSpinning, participants, totalTickets, othersTickets, othersCount, onlineCount, sessionEndedReason, sessionId } = useDrawStore();
+
+  // Lista de todas as rodadas já sorteadas nesta sessão em cadeia — reaproveita
+  // o mesmo endpoint que o admin já usa (GET /draws/sessions/:id), que devolve
+  // as rodadas em ordem com ganhador + prêmio de cada uma. Sem isso, a tela do
+  // participante só mostrava o resultado da rodada mais recente, perdendo o
+  // resultado das rodadas anteriores assim que uma nova começava.
+  const [sessionDraws, setSessionDraws] = useState<Draw[]>([]);
+
+  useEffect(() => {
+    if (!sessionId) {
+      setSessionDraws([]);
+      return;
+    }
+    let isMounted = true;
+    drawService
+      .getSession(sessionId)
+      .then((session) => {
+        if (isMounted) setSessionDraws(session.draws ?? []);
+      })
+      .catch((err) => console.warn('Failed to load draw session winners', err));
+    return () => {
+      isMounted = false;
+    };
+    // Refaz a busca a cada novo vencedor (mesma sessão, uma rodada a mais).
+  }, [sessionId, winner]);
+
+  const completedSessionDraws = sessionDraws.filter((d) => d.status === 'COMPLETED');
 
   // A roleta avisa quando termina de frear de verdade na fatia do vencedor —
   // só aí trocamos pro card de resultado, senão o card do vencedor aparece
@@ -345,6 +373,29 @@ export const DrawWatchPage: React.FC = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {/* ─── GANHADORES DA SESSÃO (sorteio em cadeia) ─── */}
+        {completedSessionDraws.length > 0 && (
+          <Card variant="secondary" title="Ganhadores desta Sessão" subtitle="Tudo que já saiu nesta rodada em cadeia, até agora">
+            <div className="flex flex-col divide-y divide-cyber-border/40">
+              {completedSessionDraws.map((draw, index) => (
+                <div key={draw.id} className="flex items-center gap-3 py-3 first:pt-1 last:pb-1">
+                  <div className="p-1.5 rounded shrink-0 bg-cyber-accent/10 border border-cyber-accent/30 text-cyber-accent">
+                    <Trophy size={14} />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-rajdhani font-bold text-white truncate">
+                      {draw.winnerName ?? 'Ganhador'}
+                    </p>
+                    <p className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider mt-0.5 truncate">
+                      Rodada {index + 1} · {draw.prize?.name ?? 'Prêmio'}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
         )}
       </div>
     </div>
