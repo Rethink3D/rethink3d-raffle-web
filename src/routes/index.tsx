@@ -14,6 +14,7 @@ const QuizPage       = lazy(() => import('../pages/participant/QuizPage'));
 const FeedbackPage   = lazy(() => import('../pages/participant/FeedbackPage'));
 const SurveyPage     = lazy(() => import('../pages/participant/SurveyPage'));
 const DrawWatchPage  = lazy(() => import('../pages/participant/DrawWatchPage'));
+const RankingPage    = lazy(() => import('../pages/participant/RankingPage'));
 
 // Admin Pages
 const AdminLoginPage  = lazy(() => import('../pages/admin/AdminLoginPage'));
@@ -27,6 +28,7 @@ const FeedbackResultsPage = lazy(() => import('../pages/admin/FeedbackResultsPag
 const SurveyResultsPage = lazy(() => import('../pages/admin/SurveyResultsPage'));
 const PrizesPage      = lazy(() => import('../pages/admin/PrizesPage'));
 const DrawControlPage = lazy(() => import('../pages/admin/DrawControlPage'));
+const AdminRankingPage = lazy(() => import('../pages/admin/RankingPage'));
 
 // ─── Loading Fallback ────────────────────────────────────────────────────────
 const PageLoader: React.FC = () => (
@@ -116,6 +118,7 @@ export const AppRouter: React.FC = () => {
           <Route path="/quiz/:missionId"        element={<QuizPage />} />
           <Route path="/feedback/:missionId"    element={<FeedbackPage />} />
           <Route path="/survey/:missionId"      element={<SurveyPage />} />
+          <Route path="/ranking"                element={<RankingPage />} />
         </Route>
 
         {/* Rotas protegidas — Admin */}
@@ -131,6 +134,7 @@ export const AppRouter: React.FC = () => {
           <Route path="/admin/participants/:userId/proofs" element={<ParticipantProofsPage />} />
           <Route path="/admin/prizes"           element={<PrizesPage />} />
           <Route path="/admin/draw-control"     element={<DrawControlPage />} />
+          <Route path="/admin/ranking"          element={<AdminRankingPage />} />
         </Route>
 
         {/* Fallback */}

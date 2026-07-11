@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { campaignService } from "../../services/campaign.service";
+import { ticketService } from "../../services/ticket.service";
 import { getCampaignStatusLabel } from "../../utils/campaignStatus";
 import { getNextDrawTarget } from "../../utils/drawSchedule";
-import type { Campaign } from "../../types";
+import type { Campaign, LeaderboardEntry } from "../../types";
 import { useCountdown } from "../../hooks/useCountdown";
 import { Button } from "../../components/ui/Button";
 import { Card } from "../../components/ui/Card";
+import { Leaderboard } from "../../components/ranking/Leaderboard";
 import { useAuthStore } from "../../store/authStore";
 import {
   HelpCircle,
@@ -16,6 +18,7 @@ import {
   ChevronDown,
   ChevronUp,
   Compass,
+  Trophy,
 } from "lucide-react";
 
 import step1 from "../../assets/Step1Icon.svg";
@@ -36,15 +39,24 @@ export const LandingPage: React.FC = () => {
   const [activeCampaign, setActiveCampaign] = useState<Campaign | null>(null);
   const [loading, setLoading] = useState(true);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [rankingEntries, setRankingEntries] = useState<LeaderboardEntry[]>([]);
 
   useEffect(() => {
     let isMounted = true;
     campaignService
       .getActiveCampaign()
       .then((data) => {
-        if (isMounted) {
-          setActiveCampaign(data);
-          setLoading(false);
+        if (!isMounted) return;
+        setActiveCampaign(data);
+        setLoading(false);
+
+        if (data) {
+          ticketService
+            .getPublicLeaderboard(data.id)
+            .then((leaderboard) => {
+              if (isMounted) setRankingEntries(leaderboard.top);
+            })
+            .catch((err) => console.warn("Failed to load public ranking:", err));
         }
       })
       .catch((err) => {
@@ -409,6 +421,36 @@ export const LandingPage: React.FC = () => {
           </Card>
         )}
       </section>
+
+      {/* 2.5 RANKING PÚBLICO */}
+      {activeCampaign && rankingEntries.length > 0 && (
+        <section className="flex flex-col gap-6">
+          <h2 className="font-orbitron text-base sm:text-xl font-bold text-white tracking-widest uppercase border-b border-cyber-border pb-2">
+            🏆 RANKING DE CUPONS
+          </h2>
+
+          <Card
+            variant="primary"
+            title="Top 10"
+            subtitle={activeCampaign.name}
+            glow
+            headerExtra={<Trophy size={20} className="text-cyber-primary" />}
+          >
+            <Leaderboard entries={rankingEntries} />
+            <div className="mt-4 pt-4 border-t border-cyber-border/40">
+              <Button
+                variant="secondary"
+                size="sm"
+                fullWidth
+                onClick={() => navigate(token ? "/dashboard" : "/register")}
+                icon={<Zap size={14} />}
+              >
+                {token ? "Ver Minhas Missões" : "Cadastre-se e Entre no Ranking"}
+              </Button>
+            </div>
+          </Card>
+        </section>
+      )}
 
       {/* 3. HOW TO EARN TICKETS */}
       <section className="flex flex-col gap-6">

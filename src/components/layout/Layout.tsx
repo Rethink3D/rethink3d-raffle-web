@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Header } from './Header';
 import { useAuthStore } from '../../store/authStore';
-import { 
-  Menu, X, LayoutDashboard, Award, 
-  Target, Users, Gift, PlayCircle 
+import {
+  Menu, X, LayoutDashboard, Award,
+  Target, Users, Gift, PlayCircle, Trophy
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -26,6 +26,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Participantes', path: '/admin/participants', icon: <Users size={18} /> },
     { name: 'Prêmios', path: '/admin/prizes', icon: <Gift size={18} /> },
     { name: 'Sorteio', path: '/admin/draw-control', icon: <PlayCircle size={18} /> },
+    { name: 'Ranking', path: '/admin/ranking', icon: <Trophy size={18} /> },
   ];
 
   const isActive = (path: string) => {

@@ -357,6 +357,21 @@ export interface TicketHistoryEntry {
   relatedUserName: string | null;
 }
 
+// ─── RANKING (LEADERBOARD) TYPES ──────────────────────────────────
+export interface LeaderboardEntry {
+  rank: number;
+  userId: string;
+  name: string;
+  tickets: number;
+}
+
+export interface LeaderboardResponse {
+  top: LeaderboardEntry[];
+  // Posição de quem fez a requisição, mesmo fora do top 10 — null se o
+  // participante ainda não tem cupons na campanha, ou se quem pediu é admin.
+  me: LeaderboardEntry | null;
+}
+
 // ─── COFRE (VAULT) & PRIZE TYPES ──────────────────────────────────
 export interface Vault {
   id: string;

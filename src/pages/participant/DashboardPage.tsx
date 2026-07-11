@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Calendar, ArrowRight, Award, Gift, Copy, Share2, Check, Users, Ticket as TicketIcon, Sparkles } from 'lucide-react';
+import { Calendar, ArrowRight, Award, Gift, Copy, Share2, Check, Users, Ticket as TicketIcon, Sparkles, Trophy } from 'lucide-react';
 import { useCountdown } from '../../hooks/useCountdown';
 import { useSocket } from '../../hooks/useSocket';
 import { useAuthStore } from '../../store/authStore';
@@ -269,16 +269,26 @@ export const DashboardPage: React.FC = () => {
             </p>
           </div>
 
-          {activeCampaign.status === 'DRAWING' && (
+          <div className="flex items-center gap-2 shrink-0">
             <Button
-              variant="accent"
+              variant="secondary"
               size="sm"
-              onClick={() => navigate(`/watch/${activeCampaign.id}`)}
-              className="glow-accent shrink-0"
+              icon={<Trophy size={14} />}
+              onClick={() => navigate('/ranking')}
             >
-              Assistir Sorteio ao Vivo
+              Ver Ranking
             </Button>
-          )}
+            {activeCampaign.status === 'DRAWING' && (
+              <Button
+                variant="accent"
+                size="sm"
+                onClick={() => navigate(`/watch/${activeCampaign.id}`)}
+                className="glow-accent"
+              >
+                Assistir Sorteio ao Vivo
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
