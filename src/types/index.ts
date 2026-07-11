@@ -14,8 +14,6 @@ export interface User {
   id: string;
   name: string;
   phone: string;
-  email?: string | null;
-  instagram?: string | null;
   // Código de 6 dígitos gerado no cadastro, usado por outros participantes
   // pra cumprir a missão de indicar um amigo.
   referralCode?: string;

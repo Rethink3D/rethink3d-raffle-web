@@ -6,7 +6,7 @@ import { getApiErrorMessage } from '../../utils/apiError';
 import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
-import { User, Phone, Mail, Globe, Lock } from 'lucide-react';
+import { User, Phone, Lock } from 'lucide-react';
 import agree from '../../assets/agree.gif';
 
 export const RegisterPage: React.FC = () => {
@@ -16,8 +16,6 @@ export const RegisterPage: React.FC = () => {
   // Form states
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [instagram, setInstagram] = useState('');
   const [pin, setPin] = useState('');
   const [confirmPin, setConfirmPin] = useState('');
 
@@ -40,10 +38,6 @@ export const RegisterPage: React.FC = () => {
       if (cleanPhone.length !== 11) {
         errors.phone = 'O telefone deve conter DDD + 9 dígitos (total de 11 números)';
       }
-    }
-
-    if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      errors.email = 'Insira um e-mail válido';
     }
 
     if (!pin) {
@@ -89,8 +83,6 @@ export const RegisterPage: React.FC = () => {
         name,
         phone: cleanPhone,
         pin,
-        email: email ? email : undefined,
-        instagram: instagram ? instagram : undefined,
       });
 
       // Login using zustand store
@@ -167,30 +159,6 @@ export const RegisterPage: React.FC = () => {
             icon={<Phone size={16} />}
             statusIndicator={phone.replace(/\D/g, '').length === 11 ? '[SYS_READY]' : '[SYS_WAITING]'}
             required
-          />
-
-          {/* Email Input (Optional) */}
-          <Input
-            label="E-MAIL"
-            type="email"
-            placeholder="ex: deckard@rethink3d.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            error={errorMap.email}
-            icon={<Mail size={16} />}
-            statusIndicator={!email.trim() ? '[SYS_OPTIONAL]' : (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? '[SYS_READY]' : '[SYS_WAITING]')}
-          />
-
-          {/* Instagram Input (Optional) */}
-          <Input
-            label="PERFIL DO INSTAGRAM"
-            type="text"
-            placeholder="ex: rethink3d_prints"
-            value={instagram}
-            onChange={(e) => setInstagram(e.target.value)}
-            error={errorMap.instagram}
-            icon={<Globe size={16} />}
-            statusIndicator={!instagram.trim() ? '[SYS_OPTIONAL]' : '[SYS_READY]'}
           />
 
           {/* PIN Input */}

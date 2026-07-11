@@ -11,7 +11,7 @@ import { Input } from '../../components/ui/Input';
 import { Modal } from '../../components/ui/Modal';
 import {
   Key, Image, Search, ShieldAlert, ChevronLeft, ChevronRight,
-  ExternalLink, Phone, Mail, RefreshCw, Globe
+  Phone, RefreshCw
 } from 'lucide-react';
 
 const PAGE_SIZE = 20;
@@ -192,7 +192,7 @@ export const ParticipantsPage: React.FC = () => {
               Pesquisar Registros
             </label>
             <Input
-              placeholder="Pesquise por nome, telefone, email ou instagram..."
+              placeholder="Pesquise por nome ou telefone..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               icon={<Search size={16} className="text-cyber-muted" />}
@@ -221,7 +221,6 @@ export const ParticipantsPage: React.FC = () => {
                 <tr className="border-b border-cyber-border bg-black/45 text-[11px] font-mono tracking-wider text-cyber-muted uppercase select-none">
                   <th className="p-4 font-normal">Participante</th>
                   <th className="p-4 font-normal">Contatos</th>
-                  <th className="p-4 font-normal">Mídias</th>
                   {selectedCampaignId && <th className="p-4 font-normal text-center">Cupons</th>}
                   <th className="p-4 font-normal text-center">PIN Estado</th>
                   <th className="p-4 font-normal text-right w-64">Ações</th>
@@ -239,22 +238,7 @@ export const ParticipantsPage: React.FC = () => {
                     <td className="p-4">
                       <div className="flex flex-col gap-1 text-[11px] font-mono text-cyber-text/80">
                         <span className="flex items-center gap-1.5"><Phone size={11} className="text-cyber-muted" /> {user.phone}</span>
-                        {user.email && <span className="flex items-center gap-1.5"><Mail size={11} className="text-cyber-muted" /> {user.email}</span>}
                       </div>
-                    </td>
-                    <td className="p-4 font-mono text-[11px] text-cyber-text/80">
-                      {user.instagram ? (
-                        <a 
-                          href={`https://instagram.com/${user.instagram.replace('@', '')}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="flex items-center gap-1 text-cyber-secondary hover:underline"
-                        >
-                          <Globe size={11} /> {user.instagram} <ExternalLink size={10} />
-                        </a>
-                      ) : (
-                        <span className="text-cyber-muted">Sem Instagram</span>
-                      )}
                     </td>
                     {selectedCampaignId && (
                       <td className="p-4 text-center font-mono text-cyber-secondary text-sm">

@@ -5,8 +5,6 @@ export interface RegisterDto {
   name: string;
   phone: string;
   pin: string;
-  email?: string;
-  instagram?: string;
 }
 
 export interface LoginDto {
