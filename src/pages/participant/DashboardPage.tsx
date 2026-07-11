@@ -78,7 +78,14 @@ const ReferralCodeCard: React.FC<{ code: string }> = ({ code }) => {
       </p>
       <p className="text-[11px] text-cyber-accent/90 leading-relaxed mt-1.5 flex items-center gap-1.5">
         <Users size={12} className="shrink-0" />
-        Seu código vale só pra até 2 amigos por campanha — capriche em quem você indica!
+        Compartilhe com quantos amigos quiser — cada indicação gera cupons pra vocês dois!
+      </p>
+      <p className="text-[11px] text-cyber-muted leading-relaxed mt-1.5">
+        Recebeu um código de amigo? Vá até a missão{' '}
+        <Link to="/quests" className="text-cyber-secondary hover:underline font-bold">
+          "Indique um Amigo"
+        </Link>{' '}
+        e digite o código dele pra ganhar cupons também.
       </p>
     </Card>
   );

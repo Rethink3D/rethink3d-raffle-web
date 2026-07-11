@@ -891,7 +891,7 @@ export const MissionFormPage: React.FC = () => {
             {formData.type === 'REFERRAL' && (
               <>
                 <p className="text-[11px] text-cyber-muted -mt-2 px-1">
-                  A recompensa acima vai pra quem usa o código de um amigo. Cada código só pode ser usado por 2 amigos diferentes nesta campanha.
+                  A recompensa acima vai pra quem usa o código de um amigo. Não há limite de quantas vezes um código pode ser usado nesta campanha.
                 </p>
                 <Input
                   label="Bônus pro Dono do Código (Opcional)"
