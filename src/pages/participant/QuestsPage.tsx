@@ -58,6 +58,8 @@ export const QuestsPage: React.FC = () => {
       navigate(`/quiz/${mission.id}`);
     } else if (mission.type === 'FEEDBACK_FORM') {
       navigate(`/feedback/${mission.id}`);
+    } else if (mission.type === 'SURVEY') {
+      navigate(`/survey/${mission.id}`);
     } else if (mission.type === 'PROOF_UPLOAD') {
       setSelectedMission(mission);
       setIsUploadModalOpen(true);
@@ -156,8 +158,13 @@ export const QuestsPage: React.FC = () => {
     );
   }
 
-  // Missões ficam somente leitura durante e depois do sorteio
-  const isLocked = activeCampaign.status === 'DRAWING' || activeCampaign.status === 'FINISHED';
+  // Missões ficam somente leitura enquanto um sorteio está rolando ou no
+  // intervalo entre rodadas — reabrem assim que o admin retoma a campanha
+  // pra Ativa, permitindo ganhar mais cupons antes da próxima rodada.
+  const isLocked =
+    activeCampaign.status === 'DRAWING' ||
+    activeCampaign.status === 'PAUSED' ||
+    activeCampaign.status === 'FINISHED';
   const allCompleted = quests.length > 0 && quests.every((q) => q.isCompleted);
 
   return (

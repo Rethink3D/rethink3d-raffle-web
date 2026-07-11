@@ -47,7 +47,7 @@ export const ParticipantsPage: React.FC = () => {
       const list = await campaignService.getCampaigns();
       setCampaigns(list);
       
-      const active = list.find(c => c.status === 'ACTIVE' || c.status === 'DRAWING');
+      const active = list.find(c => c.status === 'ACTIVE' || c.status === 'DRAWING' || c.status === 'PAUSED');
       if (active) {
         setSelectedCampaignId(active.id);
       } else if (list.length > 0) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CheckCircle2, Clock, Play, UploadCloud, HelpCircle, FileText, ExternalLink, Users } from 'lucide-react';
+import { CheckCircle2, Clock, Play, UploadCloud, HelpCircle, FileText, ExternalLink, Users, ClipboardList } from 'lucide-react';
 import type { Mission, MissionType } from '../../types';
 import { Button } from '../ui/Button';
 
@@ -42,6 +42,12 @@ export const QuestCard: React.FC<QuestCardProps> = ({
           label: 'Indicação',
           classes: 'text-cyber-success border-cyber-success/40 bg-cyber-success/5',
           icon: <Users size={12} />,
+        };
+      case 'SURVEY':
+        return {
+          label: 'Pesquisa',
+          classes: 'text-cyber-accent border-cyber-accent/40 bg-cyber-accent/5',
+          icon: <ClipboardList size={12} />,
         };
       default:
         return {
@@ -89,6 +95,9 @@ export const QuestCard: React.FC<QuestCardProps> = ({
     }
     if (type === 'REFERRAL') {
       return 'Usar Código de Amigo';
+    }
+    if (type === 'SURVEY') {
+      return 'Responder Pesquisa';
     }
     return null;
   };
@@ -152,7 +161,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({
           <div className="hidden md:flex flex-shrink-0 items-center">
             <Button
               onClick={() => onAction(mission)}
-              variant={type === 'QUIZ' ? 'secondary' : type === 'FEEDBACK_FORM' ? 'accent' : 'primary'}
+              variant={type === 'QUIZ' ? 'secondary' : type === 'FEEDBACK_FORM' || type === 'SURVEY' ? 'accent' : 'primary'}
               size="md"
               isLoading={isLoading}
               icon={type === 'PROOF_UPLOAD' ? <UploadCloud size={14} /> : <Play size={14} />}

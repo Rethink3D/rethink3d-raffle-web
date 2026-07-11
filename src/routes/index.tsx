@@ -12,6 +12,7 @@ import DashboardPage from '../pages/participant/DashboardPage';
 const QuestsPage     = lazy(() => import('../pages/participant/QuestsPage'));
 const QuizPage       = lazy(() => import('../pages/participant/QuizPage'));
 const FeedbackPage   = lazy(() => import('../pages/participant/FeedbackPage'));
+const SurveyPage     = lazy(() => import('../pages/participant/SurveyPage'));
 const DrawWatchPage  = lazy(() => import('../pages/participant/DrawWatchPage'));
 
 // Admin Pages
@@ -23,6 +24,7 @@ const MissionFormPage = lazy(() => import('../pages/admin/MissionFormPage'));
 const ParticipantsPage = lazy(() => import('../pages/admin/ParticipantsPage'));
 const ParticipantProofsPage = lazy(() => import('../pages/admin/ParticipantProofsPage'));
 const FeedbackResultsPage = lazy(() => import('../pages/admin/FeedbackResultsPage'));
+const SurveyResultsPage = lazy(() => import('../pages/admin/SurveyResultsPage'));
 const PrizesPage      = lazy(() => import('../pages/admin/PrizesPage'));
 const DrawControlPage = lazy(() => import('../pages/admin/DrawControlPage'));
 
@@ -113,6 +115,7 @@ export const AppRouter: React.FC = () => {
           <Route path="/quests"                 element={<QuestsPage />} />
           <Route path="/quiz/:missionId"        element={<QuizPage />} />
           <Route path="/feedback/:missionId"    element={<FeedbackPage />} />
+          <Route path="/survey/:missionId"      element={<SurveyPage />} />
         </Route>
 
         {/* Rotas protegidas — Admin */}
@@ -123,6 +126,7 @@ export const AppRouter: React.FC = () => {
           <Route path="/admin/missions/new"     element={<MissionFormPage />} />
           <Route path="/admin/missions/:missionId/edit" element={<MissionFormPage />} />
           <Route path="/admin/missions/:missionId/feedback-results" element={<FeedbackResultsPage />} />
+          <Route path="/admin/missions/:missionId/survey-results" element={<SurveyResultsPage />} />
           <Route path="/admin/participants"     element={<ParticipantsPage />} />
           <Route path="/admin/participants/:userId/proofs" element={<ParticipantProofsPage />} />
           <Route path="/admin/prizes"           element={<PrizesPage />} />

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { campaignService } from "../../services/campaign.service";
 import { getCampaignStatusLabel } from "../../utils/campaignStatus";
+import { getNextDrawTarget } from "../../utils/drawSchedule";
 import type { Campaign } from "../../types";
 import { useCountdown } from "../../hooks/useCountdown";
 import { Button } from "../../components/ui/Button";
@@ -58,8 +59,9 @@ export const LandingPage: React.FC = () => {
     };
   }, []);
 
-  // Use countdown hook for target date
-  const drawTarget = activeCampaign?.drawDate || "";
+  // Mira o próximo horário agendado (cai pro campo único `drawDate` só em
+  // campanhas antigas sem nenhum horário cadastrado ainda).
+  const drawTarget = getNextDrawTarget(activeCampaign) || "";
   const countdown = useCountdown(drawTarget);
 
   const toggleFaq = (index: number) => {
@@ -277,8 +279,8 @@ export const LandingPage: React.FC = () => {
                     <span className="block text-white font-bold mb-1">
                       DATA DO SORTEIO
                     </span>
-                    {activeCampaign.drawDate
-                      ? new Date(activeCampaign.drawDate).toLocaleString()
+                    {drawTarget
+                      ? new Date(drawTarget).toLocaleString()
                       : "N/D"}
                   </div>
                 </div>

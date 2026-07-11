@@ -12,7 +12,7 @@ import { ImageUploadField } from '../../components/ui/ImageUploadField';
 import { Modal } from '../../components/ui/Modal';
 import {
   Plus, Edit2, Trash2, Gift, Image,
-  AlertTriangle, RefreshCw, Lock, Vault as VaultIcon,
+  AlertTriangle, RefreshCw, Lock, Vault as VaultIcon, Award,
 } from 'lucide-react';
 
 export const PrizesPage: React.FC = () => {
@@ -48,7 +48,7 @@ export const PrizesPage: React.FC = () => {
       const list = await campaignService.getCampaigns();
       setCampaigns(list);
       
-      const active = list.find(c => c.status === 'ACTIVE' || c.status === 'DRAWING');
+      const active = list.find(c => c.status === 'ACTIVE' || c.status === 'DRAWING' || c.status === 'PAUSED');
       if (active) {
         setSelectedCampaignId(active.id);
       } else if (list.length > 0) {
@@ -173,10 +173,89 @@ export const PrizesPage: React.FC = () => {
       loadVault(selectedCampaignId);
     } catch (err) {
       console.error('Failed to delete prize:', err);
-      setError('Erro ao excluir prêmio do banco.');
+      setError(getApiErrorMessage(err, 'Erro ao excluir prêmio do banco.'));
     } finally {
       setIsActionLoading(false);
     }
+  };
+
+  // Prêmio com claimed > 0 já foi entregue em algum sorteio — o backend
+  // bloqueia a exclusão nesse caso pra preservar o histórico de quem ganhou o
+  // quê, então separamos visualmente em vez de deixar o admin descobrir isso
+  // só ao tentar excluir e receber um erro.
+  const availablePrizes = prizes.filter((p) => p.claimed === 0);
+  const drawnPrizes = prizes.filter((p) => p.claimed > 0);
+
+  const renderPrizeCard = (prize: Prize) => {
+    const alreadyDrawn = prize.claimed > 0;
+    return (
+      <Card
+        key={prize.id}
+        variant={alreadyDrawn ? 'accent' : 'default'}
+        title={prize.name}
+        subtitle={`DISPONÍVEL: ${prize.available ?? prize.quantity - prize.claimed}/${prize.quantity}`}
+        headerExtra={
+          <div className={`p-1 rounded border ${alreadyDrawn ? 'bg-cyber-accent/15 text-cyber-accent border-cyber-accent/30' : 'bg-cyber-secondary/15 text-cyber-secondary border-cyber-secondary/30'}`}>
+            {alreadyDrawn ? <Award size={16} /> : <Gift size={16} />}
+          </div>
+        }
+      >
+        <div className="flex flex-col gap-4 mt-2">
+          {/* Image Container */}
+          <div className="aspect-video relative rounded-md border border-cyber-border overflow-hidden bg-black/55 flex items-center justify-center">
+            {prize.imageUrl ? (
+              <img
+                src={prize.imageUrl}
+                alt={prize.name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  // Fallback on error
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center text-cyber-muted font-mono text-xs gap-2 select-none">
+                <Image size={24} />
+                <span>Sem Imagem Definida</span>
+              </div>
+            )}
+          </div>
+
+          <p className="text-xs text-cyber-text/80 line-clamp-3 min-h-[48px] font-inter">
+            {prize.description || 'Nenhuma descrição detalhada deste prêmio.'}
+          </p>
+
+          <div className="flex justify-between items-center border-t border-cyber-border/40 pt-3 text-[11px] font-mono text-cyber-muted">
+            <span>ENTREGUES: <strong className="text-white font-bold">{prize.claimed}</strong> / {prize.quantity}</span>
+            {prize.claimed >= prize.quantity && (
+              <span className="flex items-center gap-1 text-cyber-danger text-[9px] uppercase font-bold">
+                <Lock size={11} /> Esgotado
+              </span>
+            )}
+          </div>
+
+          <div className="flex gap-2 justify-end pt-2 border-t border-cyber-border/20">
+            <Button
+              variant="primary"
+              size="sm"
+              icon={<Edit2 size={13} />}
+              onClick={() => handleOpenEdit(prize)}
+              disabled={isActionLoading}
+            >
+              Editar
+            </Button>
+            <Button
+              variant="danger"
+              size="sm"
+              icon={<Trash2 size={13} />}
+              onClick={() => handleOpenDelete(prize)}
+              disabled={isActionLoading || alreadyDrawn}
+              title={alreadyDrawn ? 'Já foi sorteado — não pode ser excluído (preserva o histórico do sorteio)' : 'Excluir prêmio'}
+            />
+          </div>
+        </div>
+      </Card>
+    );
   };
 
   return (
@@ -286,74 +365,43 @@ export const PrizesPage: React.FC = () => {
           </div>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {prizes.map((prize) => (
-            <Card
-              key={prize.id}
-              variant="default"
-              title={prize.name}
-              subtitle={`DISPONÍVEL: ${prize.available ?? prize.quantity - prize.claimed}/${prize.quantity}`}
-              headerExtra={
-                <div className="p-1 rounded bg-cyber-secondary/15 text-cyber-secondary border border-cyber-secondary/30">
-                  <Gift size={16} />
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2 text-cyber-secondary">
+              <Gift size={15} />
+              <h3 className="text-xs font-orbitron font-bold uppercase tracking-widest">
+                Disponíveis pra Sorteio ({availablePrizes.length})
+              </h3>
+            </div>
+            {availablePrizes.length === 0 ? (
+              <Card variant="default">
+                <div className="text-center py-6 font-mono text-cyber-muted text-xs">
+                  NENHUM PRÊMIO DISPONÍVEL — TODOS JÁ FORAM SORTEADOS OU O COFRE ESTÁ VAZIO.
                 </div>
-              }
-            >
-              <div className="flex flex-col gap-4 mt-2">
-                {/* Image Container */}
-                <div className="aspect-video relative rounded-md border border-cyber-border overflow-hidden bg-black/55 flex items-center justify-center">
-                  {prize.imageUrl ? (
-                    <img 
-                      src={prize.imageUrl} 
-                      alt={prize.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        // Fallback on error
-                        (e.target as HTMLImageElement).style.display = 'none';
-                      }}
-                    />
-                  ) : (
-                    <div className="flex flex-col items-center justify-center text-cyber-muted font-mono text-xs gap-2 select-none">
-                      <Image size={24} />
-                      <span>Sem Imagem Definida</span>
-                    </div>
-                  )}
-                </div>
-
-                <p className="text-xs text-cyber-text/80 line-clamp-3 min-h-[48px] font-inter">
-                  {prize.description || 'Nenhuma descrição detalhada deste prêmio.'}
-                </p>
-
-                <div className="flex justify-between items-center border-t border-cyber-border/40 pt-3 text-[11px] font-mono text-cyber-muted">
-                  <span>ENTREGUES: <strong className="text-white font-bold">{prize.claimed}</strong> / {prize.quantity}</span>
-                  {prize.claimed >= prize.quantity && (
-                    <span className="flex items-center gap-1 text-cyber-danger text-[9px] uppercase font-bold">
-                      <Lock size={11} /> Esgotado
-                    </span>
-                  )}
-                </div>
-
-                <div className="flex gap-2 justify-end pt-2 border-t border-cyber-border/20">
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    icon={<Edit2 size={13} />}
-                    onClick={() => handleOpenEdit(prize)}
-                    disabled={isActionLoading}
-                  >
-                    Editar
-                  </Button>
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    icon={<Trash2 size={13} />}
-                    onClick={() => handleOpenDelete(prize)}
-                    disabled={isActionLoading}
-                  />
-                </div>
+              </Card>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {availablePrizes.map((prize) => renderPrizeCard(prize))}
               </div>
-            </Card>
-          ))}
+            )}
+          </div>
+
+          {drawnPrizes.length > 0 && (
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-2 text-cyber-accent">
+                <Award size={15} />
+                <h3 className="text-xs font-orbitron font-bold uppercase tracking-widest">
+                  Já Sorteados ({drawnPrizes.length})
+                </h3>
+              </div>
+              <p className="text-[10px] font-mono text-cyber-muted uppercase -mt-1">
+                Preservados pra manter o histórico dos sorteios — só podem ser editados, não excluídos.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {drawnPrizes.map((prize) => renderPrizeCard(prize))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -438,7 +486,7 @@ export const PrizesPage: React.FC = () => {
           <p className="text-sm font-inter text-cyber-text">
             Você tem certeza de que deseja excluir permanentemente o prêmio{' '}
             <strong className="text-white font-semibold">"{prizeToDelete?.name}"</strong>?
-            Esta ação removerá todos os registros e pode causar conflitos se houver sorteios programados para este item.
+            Essa ação não pode ser desfeita.
           </p>
 
           <div className="flex justify-end gap-3 pt-4 border-t border-cyber-border/40">

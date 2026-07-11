@@ -31,7 +31,7 @@ export interface User {
 }
 
 // ─── CAMPAIGN TYPES ──────────────────────────────────────────────
-export type CampaignStatus = 'DRAFT' | 'ACTIVE' | 'DRAWING' | 'FINISHED';
+export type CampaignStatus = 'DRAFT' | 'ACTIVE' | 'DRAWING' | 'PAUSED' | 'FINISHED';
 
 export interface Campaign {
   id: string;
@@ -50,10 +50,24 @@ export interface Campaign {
   tickets?: Ticket[];
   quiz?: Quiz | null;
   feedbackForm?: FeedbackForm | null;
+  drawSchedules?: DrawSchedule[];
+}
+
+// ─── HORÁRIOS DE SORTEIO ─────────────────────────────────────────
+// Só define QUANDO um sorteio deve acontecer — o que será sorteado continua
+// 100% manual, configurado pelo admin na hora de executar. Livremente
+// editável: uma campanha pode ter vários horários agendados.
+export interface DrawSchedule {
+  id: string;
+  campaignId: string;
+  scheduledAt: string;
+  label?: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // ─── MISSION TYPES ───────────────────────────────────────────────
-export type MissionType = 'PROOF_UPLOAD' | 'QUIZ' | 'FEEDBACK_FORM' | 'REFERRAL';
+export type MissionType = 'PROOF_UPLOAD' | 'QUIZ' | 'FEEDBACK_FORM' | 'REFERRAL' | 'SURVEY';
 
 export interface Mission {
   id: string;
@@ -155,7 +169,7 @@ export interface QuizAnswer {
 }
 
 // ─── FEEDBACK TYPES ──────────────────────────────────────────────
-export type QuestionType = 'TEXT' | 'MULTIPLE_CHOICE' | 'CHECKBOX' | 'SCALE';
+export type QuestionType = 'TEXT' | 'MULTIPLE_CHOICE' | 'CHECKBOX' | 'SCALE' | 'NUMBER';
 
 export interface FeedbackForm {
   id: string;
@@ -230,6 +244,94 @@ export interface FeedbackFormStats {
   title: string;
   totalResponses: number;
   questions: FeedbackQuestionStat[];
+}
+
+// ─── PESQUISA (SURVEY) TYPES ──────────────────────────────────────
+// Mesma estrutura do Formulário de Feedback, mas tipo de missão separado:
+// mostra um aviso de honestidade antes de começar e paga uma recompensa
+// fixa única ao concluir (sem pontuação por pergunta).
+export interface Survey {
+  id: string;
+  missionId: string;
+  campaignId?: string | null;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  campaign?: Campaign;
+  questions: SurveyQuestion[];
+  responses?: SurveyResponse[];
+}
+
+export interface SurveyQuestion {
+  id: string;
+  surveyId: string;
+  text: string;
+  type: QuestionType;
+  order: number;
+  required: boolean;
+  conditionKey?: string | null;
+  conditionValue?: string | null;
+  createdAt: string;
+  survey?: Survey;
+  options: SurveyOption[];
+}
+
+export interface SurveyOption {
+  id: string;
+  questionId: string;
+  text: string;
+  value: string;
+  question?: SurveyQuestion;
+}
+
+export interface SurveyResponse {
+  id: string;
+  userId: string;
+  surveyId: string;
+  answers: Record<string, string | string[]>;
+  createdAt: string;
+  user?: User;
+  survey?: Survey;
+}
+
+// ─── SURVEY STATS (central de resultados) ─────────────────────────
+export interface SurveyOptionStat {
+  value: string;
+  text: string;
+  count: number;
+  percentage: number;
+}
+
+export interface SurveyScaleStat {
+  average: number;
+  distribution: { value: number; count: number }[];
+}
+
+// Estatística de perguntas do tipo NUMBER (resposta numérica livre, sem o
+// range fixo de 1-5 do SCALE) — só disponível em Pesquisa, não em Feedback.
+export interface SurveyNumberStat {
+  average: number;
+  min: number;
+  max: number;
+}
+
+export interface SurveyQuestionStat {
+  id: string;
+  text: string;
+  type: QuestionType;
+  order: number;
+  answeredCount: number;
+  options?: SurveyOptionStat[];
+  scale?: SurveyScaleStat;
+  number?: SurveyNumberStat;
+  textAnswers?: string[];
+}
+
+export interface SurveyStats {
+  surveyId: string;
+  title: string;
+  totalResponses: number;
+  questions: SurveyQuestionStat[];
 }
 
 // ─── TICKET TYPES ────────────────────────────────────────────────

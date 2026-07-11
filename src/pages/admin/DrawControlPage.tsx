@@ -13,7 +13,7 @@ import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import {
   Play, RefreshCw, AlertTriangle, ShieldCheck,
-  Gift, Users, Ticket, Activity, Shuffle, Repeat, ListOrdered, Vault as VaultIcon, Square, X,
+  Gift, Users, Ticket, Activity, Shuffle, Repeat, ListOrdered, Vault as VaultIcon, Square, X, PauseCircle,
 } from 'lucide-react';
 
 export const DrawControlPage: React.FC = () => {
@@ -53,7 +53,7 @@ export const DrawControlPage: React.FC = () => {
       const activeOrDraft = list.filter((c) => c.status !== 'FINISHED');
       setCampaigns(activeOrDraft);
 
-      const active = activeOrDraft.find((c) => c.status === 'ACTIVE' || c.status === 'DRAWING');
+      const active = activeOrDraft.find((c) => c.status === 'ACTIVE' || c.status === 'DRAWING' || c.status === 'PAUSED');
       if (active) setSelectedCampaignId(active.id);
       else if (activeOrDraft.length > 0) setSelectedCampaignId(activeOrDraft[0].id);
     } catch (err) {
@@ -132,6 +132,22 @@ export const DrawControlPage: React.FC = () => {
       setActiveSession(null);
     }
   }, [selectedCampaignId]);
+
+  const selectedCampaign = campaigns.find((c) => c.id === selectedCampaignId) ?? null;
+
+  const handleResumeCampaign = async () => {
+    if (!selectedCampaignId) return;
+    setIsActionLoading(true);
+    setError(null);
+    try {
+      await campaignService.resumeCampaign(selectedCampaignId);
+      loadCampaigns();
+    } catch (err: any) {
+      setError(getApiErrorMessage(err, 'Falha ao retomar a campanha do intervalo.'));
+    } finally {
+      setIsActionLoading(false);
+    }
+  };
 
   const availablePrizes = (vault?.prizes ?? []).filter((p) => (p.available ?? p.quantity - p.claimed) > 0);
   const vaultHasAvailable = availablePrizes.length > 0;
@@ -346,6 +362,41 @@ export const DrawControlPage: React.FC = () => {
               </select>
             </div>
           </Card>
+
+          {/* Campanha em intervalo: retomar sinaliza a próxima rodada pro
+              participante E reabre as missões, permitindo ganhar mais cupons
+              antes da rodada seguinte. */}
+          {selectedCampaign?.status === 'PAUSED' && (
+            <Card variant="secondary" glow>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex items-start gap-3">
+                  <div className="p-1.5 rounded bg-cyber-secondary/15 text-cyber-secondary border border-cyber-secondary/30 shrink-0">
+                    <PauseCircle size={16} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-orbitron font-bold text-white tracking-wider uppercase">
+                      Campanha em intervalo
+                    </h3>
+                    <p className="text-[10px] text-cyber-muted mt-0.5 leading-relaxed max-w-md">
+                      Já rolou uma rodada. Os participantes veem "sorteio em intervalo" no painel deles. Retome pra
+                      "Ativa" pra sinalizar que a próxima rodada vem em breve e reabrir as missões, pra quem quiser
+                      ganhar mais cupons antes da próxima rodada.
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  icon={<Play size={13} />}
+                  onClick={handleResumeCampaign}
+                  isLoading={isActionLoading}
+                  className="shrink-0"
+                >
+                  Retomar pra Ativa
+                </Button>
+              </div>
+            </Card>
+          )}
 
           {/* Phase 1: Setup — cadeia (com ordem opcional) ou sorteio avulso */}
           {showSetupPanel && (

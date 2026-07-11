@@ -9,6 +9,7 @@ import { useDrawStore } from '../../store/drawStore';
 import { useSocket } from '../../hooks/useSocket';
 import { useCountdown } from '../../hooks/useCountdown';
 import { campaignService } from '../../services/campaign.service';
+import { getNextDrawTarget } from '../../utils/drawSchedule';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { PrizeWheel } from '../../components/draw/PrizeWheel';
@@ -99,6 +100,15 @@ export const DrawWatchPage: React.FC = () => {
       try {
         const campaign = await campaignService.getActiveCampaign();
         setActiveCampaign(campaign);
+
+        // O status da campanha é a fonte da verdade sobre se tem sorteio ao
+        // vivo rolando agora ou não. Sem isso, um "isSpinning"/"winner" que
+        // ficou preso no store de uma visita anterior (ex: o participante saiu
+        // da sala antes do resultado, ou a rodada já tinha terminado antes
+        // dele entrar) deixava a roleta girando pra sempre sem nunca resolver.
+        if (campaign?.status !== 'DRAWING') {
+          useDrawStore.getState().clearDraw();
+        }
       } catch (err) {
         console.error('Failed to load active campaign on DrawWatchPage:', err);
       }
@@ -106,7 +116,7 @@ export const DrawWatchPage: React.FC = () => {
     fetchActiveCampaign();
   }, []);
 
-  const countdown = useCountdown(activeCampaign?.drawDate);
+  const countdown = useCountdown(getNextDrawTarget(activeCampaign));
 
   const isWinnerState = winner !== null && wheelSettled;
   const isSpinningState = isSpinning || (winner !== null && !wheelSettled);
@@ -117,6 +127,16 @@ export const DrawWatchPage: React.FC = () => {
   return (
     <div className="flex flex-col gap-6 font-inter text-cyber-text">
       {isWinnerState && <ConfettiCanvas />}
+
+      <Button
+        variant="secondary"
+        size="sm"
+        icon={<ArrowLeft size={14} />}
+        onClick={() => navigate(user ? '/dashboard' : '/')}
+        className="self-start"
+      >
+        Voltar
+      </Button>
 
       {/* ─── Cabeçalho ao vivo ─── */}
       <div className="flex items-center justify-between bg-cyber-surface/60 border border-cyber-border rounded-lg p-4 select-none relative overflow-hidden">
@@ -229,6 +249,25 @@ export const DrawWatchPage: React.FC = () => {
               </div>
             </div>
           </Card>
+        ) : activeCampaign?.status === 'PAUSED' ? (
+          <div className="flex flex-col gap-6">
+            <Card variant="secondary" title="Sorteio em intervalo" subtitle="Já rolou uma rodada — aguarde a próxima" glow>
+              <div className="flex flex-col items-center py-6 text-center select-none">
+                <div className="w-16 h-16 rounded border border-cyber-secondary bg-cyber-secondary/10 flex items-center justify-center mb-5 text-cyber-secondary">
+                  <Clock size={28} />
+                </div>
+
+                <h3 className="text-lg font-orbitron font-extrabold uppercase text-white tracking-widest">
+                  Aguardando a próxima rodada
+                </h3>
+
+                <p className="text-xs text-cyber-muted mt-3 leading-relaxed max-w-sm">
+                  A organização já sorteou pelo menos um prêmio nesta campanha. Fica de olho — a próxima rodada pode
+                  começar a qualquer momento, ou a organização pode finalizar a campanha por aqui mesmo.
+                </p>
+              </div>
+            </Card>
+          </div>
         ) : (
           <div className="flex flex-col gap-6">
             <Card variant="danger" title="O sorteio ainda não começou" subtitle="Prepare-se, tá quase!">

@@ -50,7 +50,7 @@ export const MissionsPage: React.FC = () => {
       const list = await campaignService.getCampaigns();
       setCampaigns(list);
 
-      const active = list.find(c => c.status === 'ACTIVE' || c.status === 'DRAWING');
+      const active = list.find(c => c.status === 'ACTIVE' || c.status === 'DRAWING' || c.status === 'PAUSED');
       const defaultId = active?.id ?? list[0]?.id ?? '';
       setSelectedCampaignId(defaultId);
       setAssignTargetCampaignId(defaultId);
@@ -116,6 +116,10 @@ export const MissionsPage: React.FC = () => {
 
   const handleViewFeedbackResults = (mission: Mission) => {
     navigate(`/admin/missions/${mission.id}/feedback-results`, { state: { missionTitle: mission.title } });
+  };
+
+  const handleViewSurveyResults = (mission: Mission) => {
+    navigate(`/admin/missions/${mission.id}/survey-results`, { state: { missionTitle: mission.title } });
   };
 
   // ─── Delete ───────────────────────────────────────────────────────────────
@@ -205,6 +209,7 @@ export const MissionsPage: React.FC = () => {
       case 'QUIZ': return 'Quiz';
       case 'FEEDBACK_FORM': return 'Formulário de Feedback';
       case 'REFERRAL': return 'Indique um Amigo';
+      case 'SURVEY': return 'Pesquisa';
       default: return type;
     }
   };
@@ -323,6 +328,18 @@ export const MissionsPage: React.FC = () => {
                           onClick={() => handleViewFeedbackResults(mission)}
                           disabled={isActionLoading}
                           title="Ver resultados do formulário"
+                        >
+                          Resultados
+                        </Button>
+                      )}
+                      {!isGlobal && mission.type === 'SURVEY' && (
+                        <Button
+                          variant="accent"
+                          size="sm"
+                          icon={<BarChart3 size={13} />}
+                          onClick={() => handleViewSurveyResults(mission)}
+                          disabled={isActionLoading}
+                          title="Ver resultados da pesquisa"
                         >
                           Resultados
                         </Button>

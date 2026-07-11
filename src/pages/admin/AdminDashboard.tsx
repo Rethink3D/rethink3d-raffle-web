@@ -35,7 +35,7 @@ export const AdminDashboard: React.FC = () => {
       setCampaigns(list);
       
       // Auto-select active campaign or first draft, if any
-      const active = list.find(c => c.status === 'ACTIVE' || c.status === 'DRAWING');
+      const active = list.find(c => c.status === 'ACTIVE' || c.status === 'DRAWING' || c.status === 'PAUSED');
       if (active) {
         setSelectedCampaignId(active.id);
       } else if (list.length > 0) {

@@ -50,4 +50,11 @@ export const campaignService = {
     const response = await api.patch<Campaign>(`/campaigns/${id}/finish`, { password });
     return response.data;
   },
+
+  // Retoma manualmente do Intervalo pra Ativa — sinaliza pro participante que
+  // a próxima rodada vem aí e reabre as missões pra ganhar mais cupons.
+  async resumeCampaign(id: string): Promise<Campaign> {
+    const response = await api.patch<Campaign>(`/campaigns/${id}/resume`);
+    return response.data;
+  },
 };

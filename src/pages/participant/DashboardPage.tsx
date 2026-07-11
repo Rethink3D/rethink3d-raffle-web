@@ -11,6 +11,7 @@ import { ticketService } from '../../services/ticket.service';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { getCampaignStatusLabel } from '../../utils/campaignStatus';
+import { getNextDrawTarget, getUpcomingSchedules } from '../../utils/drawSchedule';
 import type { Campaign, Mission, Prize, TicketHistoryEntry, User } from '../../types';
 import nika from '../../assets/nika.gif';
 
@@ -20,6 +21,7 @@ const STATUS_BADGE_CLASSES: Record<Campaign['status'], string> = {
   DRAFT: 'text-cyber-muted border-cyber-muted/40 bg-cyber-muted/5',
   ACTIVE: 'text-cyber-success border-cyber-success/50 bg-cyber-success/10',
   DRAWING: 'text-cyber-primary border-cyber-primary/50 bg-cyber-primary/10 animate-pulse',
+  PAUSED: 'text-cyber-accent border-cyber-accent/50 bg-cyber-accent/10',
   FINISHED: 'text-cyber-muted border-cyber-muted/40 bg-cyber-muted/5',
 };
 
@@ -150,8 +152,10 @@ export const DashboardPage: React.FC = () => {
     };
   }, []);
 
-  // Countdown hook using drawDate
-  const countdown = useCountdown(activeCampaign?.drawDate);
+  // Conta pro próximo horário de sorteio agendado livremente pelo admin (cai
+  // pro campo único `drawDate` só em campanhas antigas sem nenhum agendamento).
+  const countdown = useCountdown(getNextDrawTarget(activeCampaign));
+  const upcomingSchedules = getUpcomingSchedules(activeCampaign);
 
   // Calculate Quest Stats
   const totalQuests = quests.length;
@@ -288,11 +292,38 @@ export const DashboardPage: React.FC = () => {
             className="flex-1"
           >
             <div className="py-4 select-none">
-              {countdown.isExpired ? (
+              {activeCampaign.status === 'DRAWING' ? (
+                <div className="flex flex-col items-center justify-center text-center gap-3">
+                  <div className="font-orbitron font-black text-xl text-cyber-primary uppercase tracking-wider animate-pulse">
+                    🔴 Sorteio ao vivo agora!
+                  </div>
+                  <Button
+                    variant="primary"
+                    size="md"
+                    onClick={() => navigate(`/watch/${activeCampaign.id}`)}
+                    className="w-full mt-2 glow-primary animate-pulse"
+                    icon={<Award size={16} />}
+                  >
+                    Entrar na Transmissão ao Vivo
+                  </Button>
+                </div>
+              ) : activeCampaign.status === 'PAUSED' ? (
+                <div className="flex flex-col items-center justify-center text-center gap-3">
+                  <div className="font-orbitron font-black text-lg text-white uppercase tracking-wider">
+                    Sorteio em intervalo
+                  </div>
+                  <p className="text-xs text-cyber-muted max-w-xs">
+                    Já rolou uma rodada — fica de olho, a próxima pode começar a qualquer momento.
+                  </p>
+                </div>
+              ) : countdown.isExpired ? (
                 <div className="flex flex-col items-center justify-center text-center gap-3">
                   <div className="font-orbitron font-black text-xl text-white uppercase tracking-wider">
-                    O sorteio já começou!
+                    Já é hora do sorteio!
                   </div>
+                  <p className="text-xs text-cyber-muted max-w-xs">
+                    A organização já pode começar a qualquer momento — fica de olho.
+                  </p>
                   <Button
                     variant="primary"
                     size="md"
@@ -335,9 +366,19 @@ export const DashboardPage: React.FC = () => {
                   <div className="flex items-center gap-2.5 bg-cyber-primary/5 border border-cyber-primary/30 rounded p-3 mt-1.5 text-xs text-cyber-primary">
                     <Calendar size={15} className="shrink-0" />
                     <span className="font-rajdhani font-bold tracking-wider">
-                      Sorteio em: {activeCampaign.drawDate ? new Date(activeCampaign.drawDate).toLocaleString('pt-BR') : 'a definir'}
+                      Sorteio em: {upcomingSchedules[0]
+                        ? new Date(upcomingSchedules[0].scheduledAt).toLocaleString('pt-BR')
+                        : activeCampaign.drawDate
+                        ? new Date(activeCampaign.drawDate).toLocaleString('pt-BR')
+                        : 'a definir'}
                     </span>
                   </div>
+
+                  {upcomingSchedules.length > 1 && (
+                    <p className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider text-center">
+                      + {upcomingSchedules.length - 1} outro{upcomingSchedules.length - 1 === 1 ? '' : 's'} sorteio{upcomingSchedules.length - 1 === 1 ? '' : 's'} agendado{upcomingSchedules.length - 1 === 1 ? '' : 's'} depois desse
+                    </p>
+                  )}
                 </div>
               )}
             </div>

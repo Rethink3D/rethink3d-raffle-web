@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { campaignService } from '../../services/campaign.service';
+import { drawScheduleService } from '../../services/drawSchedule.service';
 import { getCampaignStatusLabel } from '../../utils/campaignStatus';
 import { getApiErrorMessage } from '../../utils/apiError';
 import { confirmDialog } from '../../utils/confirm';
-import type { Campaign } from '../../types';
+import type { Campaign, DrawSchedule } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { ImageUploadField } from '../../components/ui/ImageUploadField';
 import { Modal } from '../../components/ui/Modal';
-import { 
-  Edit2, Trash2, Calendar, 
-  ToggleLeft, CheckCircle2, AlertTriangle, Plus, RefreshCw 
+import {
+  Edit2, Trash2, Calendar, Clock, X,
+  ToggleLeft, CheckCircle2, AlertTriangle, Plus, RefreshCw
 } from 'lucide-react';
 
 export const CampaignsPage: React.FC = () => {
@@ -37,6 +38,16 @@ export const CampaignsPage: React.FC = () => {
   const [campaignToFinish, setCampaignToFinish] = useState<Campaign | null>(null);
   const [finishPassword, setFinishPassword] = useState('');
   const [finishError, setFinishError] = useState<string | null>(null);
+
+  // ─── Horários de Sorteio ────────────────────────────────────────────────
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const [scheduleCampaign, setScheduleCampaign] = useState<Campaign | null>(null);
+  const [schedules, setSchedules] = useState<DrawSchedule[]>([]);
+  const [isLoadingSchedules, setIsLoadingSchedules] = useState(false);
+  const [scheduleError, setScheduleError] = useState<string | null>(null);
+  const [editingScheduleId, setEditingScheduleId] = useState<string | null>(null);
+  const [scheduleForm, setScheduleForm] = useState({ scheduledAt: '', label: '' });
+  const [isScheduleActionLoading, setIsScheduleActionLoading] = useState(false);
 
   const [isActionLoading, setIsActionLoading] = useState(false);
 
@@ -182,6 +193,89 @@ setIsActionLoading(true);
     }
   };
 
+  // ─── Horários de Sorteio ────────────────────────────────────────────────
+
+  const loadSchedules = async (campaignId: string) => {
+    try {
+      setIsLoadingSchedules(true);
+      setScheduleError(null);
+      const list = await drawScheduleService.getByCampaign(campaignId);
+      setSchedules(list);
+    } catch (err: any) {
+      setScheduleError(getApiErrorMessage(err, 'Falha ao carregar os horários agendados.'));
+    } finally {
+      setIsLoadingSchedules(false);
+    }
+  };
+
+  const handleOpenSchedule = (campaign: Campaign) => {
+    setScheduleCampaign(campaign);
+    setEditingScheduleId(null);
+    setScheduleForm({ scheduledAt: '', label: '' });
+    setScheduleError(null);
+    setIsScheduleOpen(true);
+    loadSchedules(campaign.id);
+  };
+
+  const handleEditScheduleClick = (schedule: DrawSchedule) => {
+    setEditingScheduleId(schedule.id);
+    setScheduleForm({
+      scheduledAt: formatDatetimeForInput(schedule.scheduledAt),
+      label: schedule.label || '',
+    });
+  };
+
+  const handleCancelScheduleEdit = () => {
+    setEditingScheduleId(null);
+    setScheduleForm({ scheduledAt: '', label: '' });
+  };
+
+  const handleSubmitSchedule = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!scheduleCampaign || !scheduleForm.scheduledAt) return;
+
+    setIsScheduleActionLoading(true);
+    setScheduleError(null);
+    try {
+      const payload = {
+        scheduledAt: new Date(scheduleForm.scheduledAt).toISOString(),
+        label: scheduleForm.label.trim() || null,
+      };
+      if (editingScheduleId) {
+        await drawScheduleService.update(scheduleCampaign.id, editingScheduleId, payload);
+      } else {
+        await drawScheduleService.create(scheduleCampaign.id, payload);
+      }
+      handleCancelScheduleEdit();
+      loadSchedules(scheduleCampaign.id);
+    } catch (err: any) {
+      setScheduleError(getApiErrorMessage(err, 'Falha ao salvar o horário de sorteio.'));
+    } finally {
+      setIsScheduleActionLoading(false);
+    }
+  };
+
+  const handleDeleteSchedule = async (schedule: DrawSchedule) => {
+    if (!scheduleCampaign) return;
+    const confirmed = await confirmDialog('Remover este horário de sorteio agendado?', {
+      title: 'Remover Horário',
+      confirmLabel: 'Remover',
+      cancelLabel: 'Voltar',
+    });
+    if (!confirmed) return;
+
+    setIsScheduleActionLoading(true);
+    try {
+      await drawScheduleService.remove(scheduleCampaign.id, schedule.id);
+      if (editingScheduleId === schedule.id) handleCancelScheduleEdit();
+      loadSchedules(scheduleCampaign.id);
+    } catch (err: any) {
+      setScheduleError(getApiErrorMessage(err, 'Falha ao remover o horário de sorteio.'));
+    } finally {
+      setIsScheduleActionLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-6 font-inter">
       {/* Top Title Bar */}
@@ -307,6 +401,17 @@ setIsActionLoading(true);
                     )}
 
                     <Button
+                      variant="secondary"
+                      size="sm"
+                      icon={<Clock size={13} />}
+                      onClick={() => handleOpenSchedule(campaign)}
+                      disabled={isActionLoading}
+                      title="Configurar horários de sorteio"
+                    >
+                      Horários
+                    </Button>
+
+                    <Button
                       variant="primary"
                       size="sm"
                       icon={<Edit2 size={13} />}
@@ -379,6 +484,11 @@ setIsActionLoading(true);
               onChange={(e) => setFormData({ ...formData, drawDate: e.target.value })}
             />
           </div>
+
+          <p className="text-[11px] text-cyber-muted -mt-2 px-1">
+            "Data de Sorteio" é só um horário de referência único. Pra agendar vários horários de sorteio (um por
+            rodada) use o botão "Horários" no card da campanha, depois de salvá-la.
+          </p>
 
           <div className="flex justify-end gap-3 mt-4 border-t border-cyber-border/40 pt-4">
             <Button
@@ -485,6 +595,119 @@ setIsActionLoading(true);
               onClick={handleFinishConfirm}
             >
               Confirmar Encerramento
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* Horários de Sorteio Modal */}
+      <Modal
+        isOpen={isScheduleOpen}
+        onClose={() => setIsScheduleOpen(false)}
+        title={`Horários de Sorteio — ${scheduleCampaign?.name ?? ''}`}
+        size="md"
+      >
+        <div className="space-y-5">
+          <p className="text-xs text-cyber-muted leading-relaxed">
+            Defina quando cada sorteio deve acontecer. Isso só agenda o horário mostrado pro participante — o que
+            será sorteado (prêmio, avulso ou em cadeia) continua sendo configurado por você na tela de Controle de
+            Sorteio, na hora de executar.
+          </p>
+
+          {scheduleError && (
+            <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider">
+              ⚠ {scheduleError}
+            </div>
+          )}
+
+          {/* Formulário de adicionar/editar */}
+          <form onSubmit={handleSubmitSchedule} className="flex flex-col gap-3 p-3 border border-cyber-border/60 rounded-lg bg-black/20">
+            <span className="text-[10px] font-mono text-cyber-secondary uppercase tracking-widest">
+              {editingScheduleId ? 'Editando horário' : 'Novo horário'}
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Input
+                label="Data e Hora"
+                type="datetime-local"
+                value={scheduleForm.scheduledAt}
+                onChange={(e) => setScheduleForm({ ...scheduleForm, scheduledAt: e.target.value })}
+                required
+              />
+              <Input
+                label="Nota (Opcional)"
+                placeholder="Ex: Prêmio principal"
+                value={scheduleForm.label}
+                onChange={(e) => setScheduleForm({ ...scheduleForm, label: e.target.value })}
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              {editingScheduleId && (
+                <Button type="button" variant="secondary" size="sm" onClick={handleCancelScheduleEdit} disabled={isScheduleActionLoading}>
+                  Cancelar Edição
+                </Button>
+              )}
+              <Button type="submit" variant="primary" size="sm" isLoading={isScheduleActionLoading} disabled={!scheduleForm.scheduledAt}>
+                {editingScheduleId ? 'Salvar Alterações' : 'Adicionar Horário'}
+              </Button>
+            </div>
+          </form>
+
+          {/* Lista de horários já agendados */}
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-rajdhani font-bold text-cyber-text uppercase tracking-wider px-1">
+              Horários agendados ({schedules.length})
+            </span>
+            {isLoadingSchedules ? (
+              <div className="text-center py-6 text-cyber-muted font-mono text-xs flex items-center justify-center gap-2">
+                <RefreshCw size={14} className="animate-spin" /> CARREGANDO...
+              </div>
+            ) : schedules.length === 0 ? (
+              <div className="text-center py-6 text-cyber-muted font-mono text-xs">
+                NENHUM HORÁRIO AGENDADO AINDA.
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2 max-h-64 overflow-y-auto pr-1">
+                {schedules.map((schedule) => (
+                  <div
+                    key={schedule.id}
+                    className="flex items-center justify-between gap-3 px-3 py-2.5 rounded bg-black/25 border border-cyber-border/50"
+                  >
+                    <div className="min-w-0">
+                      <div className="text-sm font-rajdhani font-bold text-white flex items-center gap-1.5">
+                        <Clock size={12} className="text-cyber-secondary shrink-0" />
+                        {new Date(schedule.scheduledAt).toLocaleString('pt-BR')}
+                      </div>
+                      {schedule.label && (
+                        <div className="text-[10px] text-cyber-muted mt-0.5 truncate">{schedule.label}</div>
+                      )}
+                    </div>
+                    <div className="flex gap-1.5 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => handleEditScheduleClick(schedule)}
+                        disabled={isScheduleActionLoading}
+                        className="p-1.5 rounded text-cyber-muted hover:text-cyber-primary hover:bg-cyber-primary/10 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                      >
+                        <Edit2 size={13} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteSchedule(schedule)}
+                        disabled={isScheduleActionLoading}
+                        className="p-1.5 rounded text-cyber-muted hover:text-cyber-danger hover:bg-cyber-danger/10 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                      >
+                        <X size={13} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="flex justify-end pt-2 border-t border-cyber-border/40">
+            <Button type="button" variant="secondary" onClick={() => setIsScheduleOpen(false)}>
+              Fechar
             </Button>
           </div>
         </div>

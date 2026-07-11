@@ -3,8 +3,8 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell,
 } from 'recharts';
-import { feedbackService } from '../../services/feedback.service';
-import type { FeedbackForm, FeedbackFormStats, QuestionType } from '../../types';
+import { surveyService } from '../../services/survey.service';
+import type { Survey, SurveyStats, QuestionType } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { getApiErrorMessage } from '../../utils/apiError';
@@ -17,22 +17,19 @@ const questionTypeLabels: Record<QuestionType, string> = {
   MULTIPLE_CHOICE: 'Escolha Única',
   CHECKBOX: 'Múltipla Escolha',
   SCALE: 'Escala de 1 a 5',
-  // NUMBER não é oferecido no assistente de Formulário de Feedback (só em
-  // Pesquisa), mas o enum é compartilhado — o label existe só pra satisfazer
-  // o tipo, nunca deve aparecer na prática aqui.
   NUMBER: 'Número',
 };
 
 const TEXT_ANSWERS_PAGE_SIZE = 20;
 
-export const FeedbackResultsPage: React.FC = () => {
+export const SurveyResultsPage: React.FC = () => {
   const { missionId } = useParams<{ missionId: string }>();
   const navigate = useNavigate();
   const location = useLocation();
   const missionTitle = (location.state as { missionTitle?: string } | null)?.missionTitle;
 
-  const [form, setForm] = useState<FeedbackForm | null>(null);
-  const [stats, setStats] = useState<FeedbackFormStats | null>(null);
+  const [survey, setSurvey] = useState<Survey | null>(null);
+  const [stats, setStats] = useState<SurveyStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState(false);
@@ -43,12 +40,12 @@ export const FeedbackResultsPage: React.FC = () => {
     try {
       setIsLoading(true);
       setError(null);
-      const formData = await feedbackService.getFeedbackByMission(missionId);
-      const statsData = await feedbackService.getStats(formData.id);
-      setForm(formData);
+      const surveyData = await surveyService.getSurveyByMission(missionId);
+      const statsData = await surveyService.getStats(surveyData.id);
+      setSurvey(surveyData);
       setStats(statsData);
     } catch (err: any) {
-      setError(getApiErrorMessage(err, 'Erro ao carregar os resultados deste formulário.'));
+      setError(getApiErrorMessage(err, 'Erro ao carregar os resultados desta pesquisa.'));
     } finally {
       setIsLoading(false);
     }
@@ -67,12 +64,12 @@ export const FeedbackResultsPage: React.FC = () => {
   };
 
   const handleExportCsv = async () => {
-    if (!form) return;
+    if (!survey) return;
     setIsExporting(true);
     setError(null);
     try {
-      const responses = await feedbackService.getResponses(form.id);
-      const sortedQuestions = [...form.questions].sort((a, b) => a.order - b.order);
+      const responses = await surveyService.getResponses(survey.id);
+      const sortedQuestions = [...survey.questions].sort((a, b) => a.order - b.order);
 
       const escapeCsv = (value: string) => `"${value.replace(/"/g, '""')}"`;
 
@@ -96,7 +93,7 @@ export const FeedbackResultsPage: React.FC = () => {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `feedback-${form.title.trim().replace(/\s+/g, '-').toLowerCase()}.csv`;
+      link.download = `pesquisa-${survey.title.trim().replace(/\s+/g, '-').toLowerCase()}.csv`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -127,7 +124,7 @@ export const FeedbackResultsPage: React.FC = () => {
           </Button>
           <div className="min-w-0">
             <h1 className="text-2xl font-orbitron font-extrabold text-white tracking-widest uppercase break-words">
-              Resultados do Feedback
+              Resultados da Pesquisa
             </h1>
             <p className="text-xs font-rajdhani font-bold text-cyber-secondary tracking-widest mt-1 break-words">
               {stats?.title || missionTitle || 'Central de respostas'}
@@ -135,7 +132,7 @@ export const FeedbackResultsPage: React.FC = () => {
           </div>
         </div>
         <div className="flex gap-2 shrink-0">
-          <Button variant="accent" size="sm" icon={<Download size={14} />} isLoading={isExporting} onClick={handleExportCsv} disabled={!form}>
+          <Button variant="accent" size="sm" icon={<Download size={14} />} isLoading={isExporting} onClick={handleExportCsv} disabled={!survey}>
             Exportar CSV
           </Button>
           <Button variant="secondary" size="sm" icon={<RefreshCw size={14} />} onClick={loadData}>
@@ -165,7 +162,7 @@ export const FeedbackResultsPage: React.FC = () => {
       {stats && stats.totalResponses === 0 && (
         <Card variant="default">
           <div className="text-center py-10 font-mono text-cyber-muted">
-            NENHUMA RESPOSTA FOI ENVIADA PARA ESTE FORMULÁRIO AINDA.
+            NENHUMA RESPOSTA FOI ENVIADA PARA ESTA PESQUISA AINDA.
           </div>
         </Card>
       )}
@@ -228,6 +225,29 @@ export const FeedbackResultsPage: React.FC = () => {
             </div>
           )}
 
+          {question.type === 'NUMBER' && question.number && (
+            <div className="grid grid-cols-3 gap-3 text-center">
+              <div className="bg-cyber-surface border border-cyber-border p-3 rounded">
+                <span className="text-[9px] font-mono text-cyber-muted block uppercase">Média</span>
+                <span className="font-orbitron font-bold text-lg text-cyber-accent mt-1 block">
+                  {question.number.average}
+                </span>
+              </div>
+              <div className="bg-cyber-surface border border-cyber-border p-3 rounded">
+                <span className="text-[9px] font-mono text-cyber-muted block uppercase">Mínimo</span>
+                <span className="font-orbitron font-bold text-lg text-white mt-1 block">
+                  {question.number.min}
+                </span>
+              </div>
+              <div className="bg-cyber-surface border border-cyber-border p-3 rounded">
+                <span className="text-[9px] font-mono text-cyber-muted block uppercase">Máximo</span>
+                <span className="font-orbitron font-bold text-lg text-white mt-1 block">
+                  {question.number.max}
+                </span>
+              </div>
+            </div>
+          )}
+
           {question.type === 'TEXT' && question.textAnswers && (
             question.textAnswers.length === 0 ? (
               <div className="flex items-center gap-2 text-cyber-muted text-xs font-mono uppercase py-4 justify-center">
@@ -256,4 +276,4 @@ export const FeedbackResultsPage: React.FC = () => {
   );
 };
 
-export default FeedbackResultsPage;
+export default SurveyResultsPage;
