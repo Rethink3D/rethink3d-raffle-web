@@ -18,6 +18,13 @@ export const drawService = {
     return response.data;
   },
 
+  // Revoga um sorteio já concluído (ex: vencedor não responde) — devolve o
+  // prêmio ao estoque do cofre e libera o vencedor pra próxima rodada.
+  async revokeDraw(drawId: string, reason: string): Promise<Draw> {
+    const response = await api.post<Draw>(`/draws/${drawId}/revoke`, { reason });
+    return response.data;
+  },
+
   async getHistory(campaignId?: string): Promise<Draw[]> {
     if (campaignId) {
       const response = await api.get<Draw[]>(`/draws/campaign/${campaignId}`);

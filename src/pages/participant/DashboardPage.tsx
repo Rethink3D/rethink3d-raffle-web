@@ -4,6 +4,7 @@ import { Calendar, ArrowRight, Award, Gift, Copy, Share2, Check, Users, Ticket a
 import { useCountdown } from '../../hooks/useCountdown';
 import { useSocket } from '../../hooks/useSocket';
 import { useAuthStore } from '../../store/authStore';
+import { useDrawStore } from '../../store/drawStore';
 import { campaignService } from '../../services/campaign.service';
 import { questService } from '../../services/quest.service';
 import { prizeService } from '../../services/prize.service';
@@ -152,6 +153,25 @@ export const DashboardPage: React.FC = () => {
 
   // Initialize Socket connection and register events
   useSocket(activeCampaign?.id);
+  const revokeVersion = useDrawStore((s) => s.revokeVersion);
+
+  // Um sorteio revogado pelo admin (vencedor não respondeu) devolve o prêmio
+  // ao estoque e some da lista de "já sorteados" — recarrega os dois sem
+  // precisar dar reload na página inteira.
+  useEffect(() => {
+    if (revokeVersion === 0 || !activeCampaign) return;
+    prizeService
+      .getCampaignPrizes(activeCampaign.id)
+      .then((campaignPrizes) => {
+        setPrizes(campaignPrizes.filter((p) => (p.available ?? p.quantity - p.claimed) > 0));
+      })
+      .catch((e) => console.warn('Failed to reload campaign prizes after revoke', e));
+    drawService
+      .getCompletedHistory(activeCampaign.id)
+      .then(setDrawHistory)
+      .catch((e) => console.warn('Failed to reload draw history after revoke', e));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [revokeVersion]);
 
   useEffect(() => {
     let isMounted = true;

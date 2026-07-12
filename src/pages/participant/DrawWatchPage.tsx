@@ -85,7 +85,7 @@ export const DrawWatchPage: React.FC = () => {
 
   useSocket(activeCampaign?.id);
 
-  const { winner, isSpinning, participants, totalTickets, othersTickets, othersCount, onlineCount, sessionEndedReason } = useDrawStore();
+  const { winner, isSpinning, participants, totalTickets, othersTickets, othersCount, onlineCount, sessionEndedReason, revokeVersion } = useDrawStore();
 
   // Rodadas já sorteadas nesta campanha (avulsas ou em cadeia) — busca pelo
   // histórico da própria campanha em vez do sessionId do socket, porque esse
@@ -110,8 +110,9 @@ export const DrawWatchPage: React.FC = () => {
     return () => {
       isMounted = false;
     };
-    // Refaz a busca a cada novo vencedor, pra incluir a rodada que acabou de sair.
-  }, [activeCampaign?.id, winner]);
+    // Refaz a busca a cada novo vencedor (rodada nova) ou revogação (admin
+    // desfez um sorteio já concluído).
+  }, [activeCampaign?.id, winner, revokeVersion]);
 
   // A roleta avisa quando termina de frear de verdade na fatia do vencedor —
   // só aí trocamos pro card de resultado, senão o card do vencedor aparece

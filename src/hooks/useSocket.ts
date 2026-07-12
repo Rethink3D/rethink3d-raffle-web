@@ -32,6 +32,7 @@ export const useSocket = (campaignId?: string) => {
     setWinner,
     setSessionEnded,
     setOnlineCount,
+    setRevoked,
     clearDraw,
   } = useDrawStore();
 
@@ -84,12 +85,17 @@ export const useSocket = (campaignId?: string) => {
       setOnlineCount(data.onlineCount);
     };
 
+    const onRevoked = () => {
+      setRevoked();
+    };
+
     socket.on('draw:started', onDrawStarted);
     socket.on('draw:participants', onParticipants);
     socket.on('draw:winner', onWinner);
     socket.on('draw:sessionEnded', onSessionEnded);
     socket.on('draw:cancelled', onCancelled);
     socket.on('draw:stats', onStats);
+    socket.on('draw:revoked', onRevoked);
 
     return () => {
       socket.off('draw:started', onDrawStarted);
@@ -98,8 +104,9 @@ export const useSocket = (campaignId?: string) => {
       socket.off('draw:sessionEnded', onSessionEnded);
       socket.off('draw:cancelled', onCancelled);
       socket.off('draw:stats', onStats);
+      socket.off('draw:revoked', onRevoked);
     };
-  }, [role, navigate, setDrawStarted, setParticipants, setWinner, setSessionEnded, setOnlineCount, clearDraw]);
+  }, [role, navigate, setDrawStarted, setParticipants, setWinner, setSessionEnded, setOnlineCount, setRevoked, clearDraw]);
 
   return { socket, isConnected: socket.connected };
 };

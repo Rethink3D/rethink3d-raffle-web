@@ -41,11 +41,17 @@ export interface DrawState {
   // concluída) — distingue de um encerramento manual pelo admin.
   sessionEndedReason: 'exhausted' | 'manual' | null;
 
+  // Incrementa a cada "draw:revoked" recebido — telas que listam
+  // ganhadores/prêmios observam esse contador pra saber quando refazer o
+  // fetch, já que a revogação não muda nenhum outro campo do store.
+  revokeVersion: number;
+
   setDrawStarted: (data: { drawId: string; sessionId?: string }) => void;
   setParticipants: (data: { participants: DrawParticipantPreview[]; totalTickets: number; othersTickets: number; othersCount: number }) => void;
   setWinner: (winner: DrawWinner) => void;
   setSessionEnded: (reason: 'exhausted' | 'manual') => void;
   setOnlineCount: (count: number) => void;
+  setRevoked: () => void;
   clearDraw: () => void;
 }
 
@@ -65,6 +71,7 @@ const initialDrawFields = {
 export const useDrawStore = create<DrawState>((set) => ({
   ...initialDrawFields,
   onlineCount: 0,
+  revokeVersion: 0,
 
   setDrawStarted: (data) =>
     set({
@@ -98,6 +105,8 @@ export const useDrawStore = create<DrawState>((set) => ({
   setSessionEnded: (reason) => set({ sessionEndedReason: reason }),
 
   setOnlineCount: (onlineCount) => set({ onlineCount }),
+
+  setRevoked: () => set((s) => ({ revokeVersion: s.revokeVersion + 1 })),
 
   clearDraw: () => set({ ...initialDrawFields }),
 }));

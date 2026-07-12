@@ -11,10 +11,18 @@ import api from '../../services/api';
 import type { Campaign, Vault, Draw, DrawSession, SessionOrderStrategy } from '../../types';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
+import { Modal } from '../../components/ui/Modal';
 import {
   Play, RefreshCw, AlertTriangle, ShieldCheck,
-  Gift, Users, Ticket, Activity, Shuffle, Repeat, ListOrdered, Vault as VaultIcon, Square, X, PauseCircle, Hourglass,
+  Gift, Users, Ticket, Activity, Shuffle, Repeat, ListOrdered, Vault as VaultIcon, Square, X, PauseCircle, Hourglass, Undo2,
 } from 'lucide-react';
+
+// Sugestões rápidas de motivo — o admin ainda pode digitar um texto livre.
+const REVOKE_REASON_PRESETS = [
+  'Falta de contato',
+  'Vencedor desistiu do prêmio',
+  'Vencedor não compareceu para retirada',
+];
 
 // A roleta (PrizeWheel) que os espectadores veem desacelera por até 8.5s
 // (MAX_DECELERATION_MS em PrizeWheel.tsx) depois que o vencedor é revelado —
@@ -53,6 +61,12 @@ export const DrawControlPage: React.FC = () => {
   // Segundos restantes até liberar a próxima rodada — evita cortar a
   // animação da roleta pra quem está assistindo (ver RESULT_REVEAL_COOLDOWN_MS acima).
   const [revealCooldownSecs, setRevealCooldownSecs] = useState(0);
+
+  // Revogar um sorteio já concluído (ex: vencedor não responde) — devolve o
+  // prêmio ao estoque e libera o vencedor pra próxima rodada.
+  const [revokeTarget, setRevokeTarget] = useState<Draw | null>(null);
+  const [revokeReason, setRevokeReason] = useState('');
+  const [isRevoking, setIsRevoking] = useState(false);
 
   // Conecta ao socket da campanha selecionada pra receber os eventos ao vivo
   useSocket(selectedCampaignId || undefined);
@@ -323,6 +337,35 @@ export const DrawControlPage: React.FC = () => {
     clearDraw();
     loadVault(selectedCampaignId);
     loadHistory(selectedCampaignId);
+  };
+
+  // ─── Revogar sorteio concluído (vencedor não responde) ──────────────────
+
+  const openRevokeModal = (draw: Draw) => {
+    setRevokeTarget(draw);
+    setRevokeReason(REVOKE_REASON_PRESETS[0]);
+  };
+
+  const closeRevokeModal = () => {
+    setRevokeTarget(null);
+    setRevokeReason('');
+  };
+
+  const handleConfirmRevoke = async () => {
+    if (!revokeTarget || !revokeReason.trim()) return;
+    setIsRevoking(true);
+    setError(null);
+    try {
+      await drawService.revokeDraw(revokeTarget.id, revokeReason.trim());
+      closeRevokeModal();
+      loadVault(selectedCampaignId);
+      loadCampaignStats(selectedCampaignId);
+      loadHistory(selectedCampaignId);
+    } catch (err: any) {
+      setError(getApiErrorMessage(err, 'Falha ao revogar o sorteio.'));
+    } finally {
+      setIsRevoking(false);
+    }
   };
 
   const isSessionMode = chained || !!activeSession;
@@ -837,12 +880,13 @@ export const DrawControlPage: React.FC = () => {
                   <th className="p-4 font-normal text-center">Cupons do Ganhador</th>
                   <th className="p-4 font-normal text-center">Cupons Concorrentes</th>
                   <th className="p-4 font-normal text-center">Estado</th>
+                  <th className="p-4 font-normal text-center">Ações</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-cyber-border/40 text-xs font-rajdhani font-bold text-white tracking-wider">
                 {history.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="p-8 text-center text-cyber-muted font-mono select-none">
+                    <td colSpan={8} className="p-8 text-center text-cyber-muted font-mono select-none">
                       NENHUM SORTEIO REGISTRADO NESTA CAMPANHA AINDA.
                     </td>
                   </tr>
@@ -878,6 +922,23 @@ export const DrawControlPage: React.FC = () => {
                         }`}>
                           {draw.status}
                         </span>
+                        {draw.status === 'CANCELLED' && draw.cancelReason && (
+                          <div className="text-[9px] text-cyber-danger/80 font-mono mt-1 normal-case max-w-[160px] mx-auto">
+                            Motivo: {draw.cancelReason}
+                          </div>
+                        )}
+                      </td>
+                      <td className="p-4 text-center">
+                        {draw.status === 'COMPLETED' && (
+                          <Button
+                            variant="danger"
+                            size="sm"
+                            icon={<Undo2 size={12} />}
+                            onClick={() => openRevokeModal(draw)}
+                          >
+                            Revogar
+                          </Button>
+                        )}
                       </td>
                     </tr>
                   ))
@@ -887,6 +948,69 @@ export const DrawControlPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal: revogar sorteio concluído */}
+      <Modal
+        isOpen={!!revokeTarget}
+        onClose={closeRevokeModal}
+        title="Revogar Sorteio"
+        size="sm"
+      >
+        {revokeTarget && (
+          <div className="flex flex-col gap-4">
+            <p className="text-xs text-cyber-text/90 leading-relaxed">
+              O prêmio <strong className="text-white">{revokeTarget.prize?.name ?? 'sorteado'}</strong> volta pro
+              estoque do cofre e <strong className="text-white">{revokeTarget.winnerName ?? 'o vencedor'}</strong> volta
+              a ser elegível pra próxima rodada. Essa ação não pode ser desfeita.
+            </p>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-rajdhani font-bold text-cyber-text uppercase tracking-wider px-1">
+                Motivo
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {REVOKE_REASON_PRESETS.map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => setRevokeReason(preset)}
+                    className={`px-2.5 py-1.5 rounded text-[10px] font-mono border transition-colors cursor-pointer ${
+                      revokeReason === preset
+                        ? 'bg-cyber-danger/15 border-cyber-danger text-cyber-danger'
+                        : 'bg-cyber-border/20 border-cyber-border text-cyber-muted hover:border-cyber-danger/50'
+                    }`}
+                  >
+                    {preset}
+                  </button>
+                ))}
+              </div>
+              <textarea
+                value={revokeReason}
+                onChange={(e) => setRevokeReason(e.target.value)}
+                rows={3}
+                maxLength={300}
+                placeholder="Descreva o motivo da revogação..."
+                className="w-full bg-cyber-bg border border-cyber-border rounded px-3 py-2.5 text-sm font-rajdhani font-bold text-white tracking-wide focus:border-cyber-danger focus:outline-none resize-none"
+              />
+            </div>
+
+            <div className="flex justify-end gap-3 pt-3 border-t border-cyber-border/40">
+              <Button variant="secondary" onClick={closeRevokeModal} disabled={isRevoking}>
+                Cancelar
+              </Button>
+              <Button
+                variant="danger"
+                icon={<Undo2 size={14} />}
+                onClick={handleConfirmRevoke}
+                isLoading={isRevoking}
+                disabled={!revokeReason.trim()}
+              >
+                Confirmar Revogação
+              </Button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 };

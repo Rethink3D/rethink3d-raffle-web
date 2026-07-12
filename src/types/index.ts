@@ -423,6 +423,7 @@ export interface Draw {
   winnerName?: string | null;
   winnerTickets?: number | null;
   totalTickets?: number | null;
+  cancelReason?: string | null;
   drawnAt?: string | null;
   createdAt: string;
   campaign?: Campaign;
