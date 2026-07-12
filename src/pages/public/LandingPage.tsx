@@ -19,6 +19,7 @@ import {
   ChevronUp,
   Compass,
   Trophy,
+  PauseCircle,
 } from "lucide-react";
 
 import step1 from "../../assets/Step1Icon.svg";
@@ -327,18 +328,14 @@ export const LandingPage: React.FC = () => {
               </div>
 
               <div className="relative z-10 w-full flex flex-col items-center">
-                {!drawTarget ? (
-                  <div className="text-cyber-muted font-mono text-sm py-4">
-                    A DEFINIR // DATA DO SORTEIO NÃO CONFIGURADA
-                  </div>
-                ) : countdown.isExpired ? (
+                {activeCampaign.status === "DRAWING" ? (
                   <div className="flex flex-col items-center gap-2 py-4">
-                    <span className="text-xl sm:text-2xl font-orbitron font-extrabold text-cyber-success tracking-widest animate-pulse">
-                      SORTEIO EM ANDAMENTO
+                    <span className="text-xl sm:text-2xl font-orbitron font-extrabold text-cyber-primary tracking-widest animate-pulse">
+                      🔴 SORTEIO AO VIVO AGORA!
                     </span>
                     <p className="text-[10px] font-mono text-cyber-muted max-w-xs uppercase">
-                      A fase de sorteio está ativa. Clique abaixo para entrar na
-                      sala de transmissão.
+                      A transmissão está rolando agora. Clique abaixo para
+                      entrar na sala.
                     </p>
                     <Button
                       variant="accent"
@@ -347,6 +344,33 @@ export const LandingPage: React.FC = () => {
                     >
                       Assistir ao Sorteio Ao Vivo
                     </Button>
+                  </div>
+                ) : activeCampaign.status === "PAUSED" ? (
+                  <div className="flex flex-col items-center gap-2 py-4">
+                    <div className="flex items-center gap-2 text-cyber-accent">
+                      <PauseCircle size={18} />
+                      <span className="text-lg sm:text-xl font-orbitron font-extrabold tracking-widest uppercase">
+                        Sorteio em Intervalo
+                      </span>
+                    </div>
+                    <p className="text-[10px] font-mono text-cyber-muted max-w-xs uppercase">
+                      Já rolou uma rodada — a próxima pode começar a qualquer
+                      momento. Fique de olho.
+                    </p>
+                  </div>
+                ) : !drawTarget ? (
+                  <div className="text-cyber-muted font-mono text-sm py-4">
+                    A DEFINIR // DATA DO SORTEIO NÃO CONFIGURADA
+                  </div>
+                ) : countdown.isExpired ? (
+                  <div className="flex flex-col items-center gap-2 py-4">
+                    <span className="text-xl sm:text-2xl font-orbitron font-extrabold text-cyber-success tracking-widest animate-pulse">
+                      JÁ É HORA DO SORTEIO
+                    </span>
+                    <p className="text-[10px] font-mono text-cyber-muted max-w-xs uppercase">
+                      A organização já pode começar a qualquer momento. Fique
+                      de olho.
+                    </p>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center">
