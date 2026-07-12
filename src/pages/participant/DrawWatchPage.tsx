@@ -85,34 +85,33 @@ export const DrawWatchPage: React.FC = () => {
 
   useSocket(activeCampaign?.id);
 
-  const { winner, isSpinning, participants, totalTickets, othersTickets, othersCount, onlineCount, sessionEndedReason, sessionId } = useDrawStore();
+  const { winner, isSpinning, participants, totalTickets, othersTickets, othersCount, onlineCount, sessionEndedReason } = useDrawStore();
 
-  // Lista de todas as rodadas já sorteadas nesta sessão em cadeia — reaproveita
-  // o mesmo endpoint que o admin já usa (GET /draws/sessions/:id), que devolve
-  // as rodadas em ordem com ganhador + prêmio de cada uma. Sem isso, a tela do
-  // participante só mostrava o resultado da rodada mais recente, perdendo o
-  // resultado das rodadas anteriores assim que uma nova começava.
-  const [sessionDraws, setSessionDraws] = useState<Draw[]>([]);
+  // Rodadas já sorteadas nesta campanha (avulsas ou em cadeia) — busca pelo
+  // histórico da própria campanha em vez do sessionId do socket, porque esse
+  // sessionId é zerado sempre que a página carrega fora de uma rodada ao vivo
+  // (ver clearDraw() abaixo, que existe pra não deixar a roleta travada de uma
+  // visita anterior). Sem essa mudança, quem entrava na tela com a campanha já
+  // em intervalo nunca via os ganhadores das rodadas anteriores.
+  const [recentDraws, setRecentDraws] = useState<Draw[]>([]);
 
   useEffect(() => {
-    if (!sessionId) {
-      setSessionDraws([]);
+    if (!activeCampaign?.id) {
+      setRecentDraws([]);
       return;
     }
     let isMounted = true;
     drawService
-      .getSession(sessionId)
-      .then((session) => {
-        if (isMounted) setSessionDraws(session.draws ?? []);
+      .getCompletedHistory(activeCampaign.id)
+      .then((draws) => {
+        if (isMounted) setRecentDraws(draws);
       })
-      .catch((err) => console.warn('Failed to load draw session winners', err));
+      .catch((err) => console.warn('Failed to load recent draw winners', err));
     return () => {
       isMounted = false;
     };
-    // Refaz a busca a cada novo vencedor (mesma sessão, uma rodada a mais).
-  }, [sessionId, winner]);
-
-  const completedSessionDraws = sessionDraws.filter((d) => d.status === 'COMPLETED');
+    // Refaz a busca a cada novo vencedor, pra incluir a rodada que acabou de sair.
+  }, [activeCampaign?.id, winner]);
 
   // A roleta avisa quando termina de frear de verdade na fatia do vencedor —
   // só aí trocamos pro card de resultado, senão o card do vencedor aparece
@@ -382,11 +381,11 @@ export const DrawWatchPage: React.FC = () => {
           </div>
         )}
 
-        {/* ─── GANHADORES DA SESSÃO (sorteio em cadeia) ─── */}
-        {completedSessionDraws.length > 0 && (
-          <Card variant="secondary" title="Ganhadores desta Sessão" subtitle="Tudo que já saiu nesta rodada em cadeia, até agora">
+        {/* ─── GANHADORES RECENTES DA CAMPANHA ─── */}
+        {recentDraws.length > 0 && (
+          <Card variant="secondary" title="Ganhadores Recentes" subtitle="Tudo que já saiu nesta campanha, até agora">
             <div className="flex flex-col divide-y divide-cyber-border/40">
-              {completedSessionDraws.map((draw, index) => (
+              {recentDraws.map((draw) => (
                 <div key={draw.id} className="flex items-center gap-3 py-3 first:pt-1 last:pb-1">
                   <div className="p-1.5 rounded shrink-0 bg-cyber-accent/10 border border-cyber-accent/30 text-cyber-accent">
                     <Trophy size={14} />
@@ -396,7 +395,8 @@ export const DrawWatchPage: React.FC = () => {
                       {draw.winnerName ?? 'Ganhador'}
                     </p>
                     <p className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider mt-0.5 truncate">
-                      Rodada {index + 1} · {draw.prize?.name ?? 'Prêmio'}
+                      {draw.prize?.name ?? 'Prêmio'}
+                      {draw.winnerTickets != null ? ` · ganhou com ${draw.winnerTickets} cupom${draw.winnerTickets === 1 ? '' : 's'}` : ''}
                     </p>
                   </div>
                 </div>

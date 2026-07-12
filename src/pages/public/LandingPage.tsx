@@ -355,7 +355,8 @@ export const LandingPage: React.FC = () => {
                     </div>
                     <p className="text-[10px] font-mono text-cyber-muted max-w-xs uppercase">
                       Já rolou uma rodada — a próxima pode começar a qualquer
-                      momento. Fique de olho.
+                      momento. Se todos os prêmios já foram sorteados, o
+                      sorteio pode ser encerrado por aqui mesmo.
                     </p>
                   </div>
                 ) : !drawTarget ? (
