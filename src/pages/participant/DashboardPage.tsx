@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Calendar, ArrowRight, Award, Gift, Copy, Share2, Check, Users, Ticket as TicketIcon, Sparkles, Trophy, ListChecks, Dices, ShieldCheck, Radio } from 'lucide-react';
+import { Calendar, ArrowRight, Award, Gift, Copy, Share2, Check, Users, Ticket as TicketIcon, Sparkles, Trophy, ListChecks, Dices, ShieldCheck, Radio, PhoneCall } from 'lucide-react';
 import { useCountdown } from '../../hooks/useCountdown';
 import { useSocket } from '../../hooks/useSocket';
 import { useAuthStore } from '../../store/authStore';
@@ -700,6 +700,11 @@ export const DashboardPage: React.FC = () => {
               icon: <Gift size={16} />,
               title: 'Prêmios saem do cofre da campanha',
               text: 'A cada rodada, um prêmio disponível é sorteado (aleatório ou em ordem definida pela organização) e vinculado ao ganhador daquela rodada.',
+            },
+            {
+              icon: <PhoneCall size={16} />,
+              title: 'Prazo de contato com o vencedor',
+              text: 'Depois do sorteio, tentamos contato com quem ganhou por até 2 dias. Se não houver resposta nesse prazo, o prêmio é sorteado novamente entre os demais participantes.',
             },
           ].map((rule, idx) => (
             <div key={idx} className="flex items-start gap-3">

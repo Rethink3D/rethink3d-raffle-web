@@ -322,6 +322,7 @@ setIsActionLoading(true);
             const isDraft = campaign.status === 'DRAFT';
             const isActive = campaign.status === 'ACTIVE';
             const isDrawing = campaign.status === 'DRAWING';
+            const isPaused = campaign.status === 'PAUSED';
             const isFinished = campaign.status === 'FINISHED';
 
             return (
@@ -388,7 +389,7 @@ setIsActionLoading(true);
                       </Button>
                     )}
 
-                    {(isActive || isDrawing) && (
+                    {(isActive || isDrawing || isPaused) && (
                       <Button
                         variant="accent"
                         size="sm"

@@ -592,6 +592,12 @@ export const LandingPage: React.FC = () => {
             poderá ganhar, mas perderá a celebração ao vivo. Entraremos em
             contato com os vencedores.
           </li>
+          <li>
+            <strong>Prazo de Contato:</strong> Após o sorteio, tentaremos
+            contato com o vencedor por até 2 dias. Se não houver resposta
+            nesse prazo, o prêmio será sorteado novamente entre os demais
+            participantes.
+          </li>
         </ul>
       </section>
 
