@@ -291,7 +291,8 @@ export const DrawWatchPage: React.FC = () => {
 
                 <p className="text-xs text-cyber-muted mt-3 leading-relaxed max-w-sm">
                   A organização já sorteou pelo menos um prêmio nesta campanha. Fica de olho — a próxima rodada pode
-                  começar a qualquer momento, ou a organização pode finalizar a campanha por aqui mesmo.
+                  começar a qualquer momento. Se todos os prêmios já foram sorteados, o sorteio pode ser encerrado
+                  por aqui mesmo.
                 </p>
               </div>
             </Card>

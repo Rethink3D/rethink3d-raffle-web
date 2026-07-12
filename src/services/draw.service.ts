@@ -27,6 +27,12 @@ export const drawService = {
     return response.data;
   },
 
+  // Itens já sorteados da campanha (só COMPLETED), pra exibir na dashboard do participante.
+  async getCompletedHistory(campaignId: string): Promise<Draw[]> {
+    const response = await api.get<Draw[]>(`/draws/campaign/${campaignId}/history`);
+    return response.data;
+  },
+
   // ─── Sorteio em Cadeia (sessão) ───────────────────────────────────────────
   async startSession(campaignId: string, orderStrategy: SessionOrderStrategy, prizeOrder?: string[]): Promise<DrawSession> {
     const response = await api.post<DrawSession>('/draws/sessions', { campaignId, orderStrategy, prizeOrder });

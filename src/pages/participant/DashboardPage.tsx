@@ -8,12 +8,13 @@ import { campaignService } from '../../services/campaign.service';
 import { questService } from '../../services/quest.service';
 import { prizeService } from '../../services/prize.service';
 import { ticketService } from '../../services/ticket.service';
+import { drawService } from '../../services/draw.service';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Modal } from '../../components/ui/Modal';
 import { getCampaignStatusLabel } from '../../utils/campaignStatus';
 import { getNextDrawTarget, getUpcomingSchedules } from '../../utils/drawSchedule';
-import type { Campaign, Mission, Prize, TicketHistoryEntry, User } from '../../types';
+import type { Campaign, Draw, Mission, Prize, TicketHistoryEntry, User } from '../../types';
 import nika from '../../assets/nika.gif';
 
 // Cores do badge de status — mesma paleta usada nos outros indicadores da
@@ -145,6 +146,7 @@ export const DashboardPage: React.FC = () => {
   const [quests, setQuests] = useState<Mission[]>([]);
   const [prizes, setPrizes] = useState<Prize[]>([]);
   const [ticketHistory, setTicketHistory] = useState<TicketHistoryEntry[]>([]);
+  const [drawHistory, setDrawHistory] = useState<Draw[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -186,6 +188,15 @@ export const DashboardPage: React.FC = () => {
             setTicketHistory(history);
           } catch (e) {
             console.warn('Failed to load ticket history', e);
+          }
+
+          // 5. Fetch itens já sorteados nesta campanha
+          try {
+            const completedDraws = await drawService.getCompletedHistory(campaign.id);
+            if (!isMounted) return;
+            setDrawHistory(completedDraws);
+          } catch (e) {
+            console.warn('Failed to load draw history', e);
           }
         }
       } catch (err: any) {
@@ -379,7 +390,8 @@ export const DashboardPage: React.FC = () => {
                     Sorteio em intervalo
                   </div>
                   <p className="text-xs text-cyber-muted max-w-xs">
-                    Já rolou uma rodada — fica de olho, a próxima pode começar a qualquer momento.
+                    Já rolou uma rodada — fica de olho, a próxima pode começar a qualquer momento. Se todos os
+                    prêmios já foram sorteados, o sorteio pode ser encerrado por aqui mesmo.
                   </p>
                 </div>
               ) : countdown.isExpired ? (
@@ -544,6 +556,48 @@ export const DashboardPage: React.FC = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </Card>
+      )}
+
+      {/* ─── ITENS JÁ SORTEADOS ─── */}
+      {drawHistory.length > 0 && (
+        <Card title="Itens Já Sorteados" subtitle="O que já saiu nesta campanha">
+          <div className="flex flex-col divide-y divide-cyber-border/40">
+            {drawHistory.map((draw) => {
+              const isMe = !!user && draw.winnerId === (user as User).id;
+              return (
+                <div key={draw.id} className="flex items-center justify-between gap-3 py-3 first:pt-1 last:pb-1">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-10 h-10 shrink-0 rounded-md overflow-hidden border border-cyber-border/60 bg-black/40 flex items-center justify-center">
+                      {draw.prize?.imageUrl ? (
+                        <img
+                          src={draw.prize.imageUrl}
+                          alt={draw.prize.name}
+                          className="w-full h-full object-contain"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                          }}
+                        />
+                      ) : (
+                        <Gift size={18} className="text-cyber-accent" />
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-rajdhani font-bold text-white truncate">
+                        {draw.prize?.name ?? 'Prêmio'}
+                      </p>
+                      <p className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider mt-0.5">
+                        {draw.drawnAt ? new Date(draw.drawnAt).toLocaleString('pt-BR') : ''}
+                      </p>
+                    </div>
+                  </div>
+                  <span className={`text-xs font-orbitron font-extrabold shrink-0 ${isMe ? 'text-cyber-success' : 'text-cyber-muted'}`}>
+                    {isMe ? 'Você ganhou! 🎉' : draw.winnerName ?? 'Sorteado'}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </Card>
       )}
