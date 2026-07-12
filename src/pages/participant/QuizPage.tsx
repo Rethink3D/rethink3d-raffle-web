@@ -27,6 +27,7 @@ export const QuizPage: React.FC = () => {
   const [quizResult, setQuizResult] = useState<QuizSubmitResult | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [wasReset, setWasReset] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchQuizData = async () => {
@@ -72,6 +73,28 @@ export const QuizPage: React.FC = () => {
 
     fetchQuizData();
   }, [missionId]);
+
+  // Sair da aba (trocar de aba, minimizar, ir pesquisar a resposta em outro
+  // lugar) reinicia o quiz do zero — navegar pra outra página dentro do app
+  // já reseta sozinho (o componente desmonta), mas trocar de aba mantém o
+  // componente montado e preservaria o progresso sem essa checagem.
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) return;
+      if (!quiz || quizResult || submitting) return;
+
+      setCurrentQuestionIndex(0);
+      setSelectedOptionId(null);
+      setAnswers([]);
+      if (quiz.questions) {
+        setQuestions([...quiz.questions].sort(() => Math.random() - 0.5));
+      }
+      setWasReset(true);
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [quiz, quizResult, submitting]);
 
   const handleOptionSelect = (optionId: string) => {
     setSelectedOptionId(optionId);
@@ -324,6 +347,12 @@ export const QuizPage: React.FC = () => {
           </span>
         )}
       </div>
+
+      {wasReset && (
+        <div className="mb-4 p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider text-center">
+          Você saiu da aba do quiz — o progresso foi reiniciado do zero.
+        </div>
+      )}
 
       <Card variant="secondary" glow>
         {/* Progress header */}
