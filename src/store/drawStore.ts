@@ -16,6 +16,7 @@ export interface DrawWinnerPrize {
 export interface DrawWinner {
   winnerId: string;
   winnerName: string;
+  winnerTickets: number;
   prize: DrawWinnerPrize | null;
   totalTickets: number;
   totalParticipants: number;

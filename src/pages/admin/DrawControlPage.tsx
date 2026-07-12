@@ -13,8 +13,16 @@ import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import {
   Play, RefreshCw, AlertTriangle, ShieldCheck,
-  Gift, Users, Ticket, Activity, Shuffle, Repeat, ListOrdered, Vault as VaultIcon, Square, X, PauseCircle,
+  Gift, Users, Ticket, Activity, Shuffle, Repeat, ListOrdered, Vault as VaultIcon, Square, X, PauseCircle, Hourglass,
 } from 'lucide-react';
+
+// A roleta (PrizeWheel) que os espectadores veem desacelera por até 8.5s
+// (MAX_DECELERATION_MS em PrizeWheel.tsx) depois que o vencedor é revelado —
+// o admin não tem como saber quando cada tela terminou de girar localmente.
+// Sem essa trava, o admin podia iniciar a próxima rodada antes disso, o que
+// dispara um novo "draw:started" pra todo mundo e apaga o resultado anterior
+// no meio da animação de quem ainda estava assistindo.
+const RESULT_REVEAL_COOLDOWN_MS = 9000;
 
 export const DrawControlPage: React.FC = () => {
   const { drawId, winner, isSpinning, onlineCount, sessionEndedReason, clearDraw } = useDrawStore();
@@ -42,8 +50,25 @@ export const DrawControlPage: React.FC = () => {
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Segundos restantes até liberar a próxima rodada — evita cortar a
+  // animação da roleta pra quem está assistindo (ver RESULT_REVEAL_COOLDOWN_MS acima).
+  const [revealCooldownSecs, setRevealCooldownSecs] = useState(0);
+
   // Conecta ao socket da campanha selecionada pra receber os eventos ao vivo
   useSocket(selectedCampaignId || undefined);
+
+  useEffect(() => {
+    if (!winner) return;
+    setRevealCooldownSecs(Math.ceil(RESULT_REVEAL_COOLDOWN_MS / 1000));
+    const interval = setInterval(() => {
+      setRevealCooldownSecs((secs) => Math.max(secs - 1, 0));
+    }, 1000);
+    const timeout = setTimeout(() => setRevealCooldownSecs(0), RESULT_REVEAL_COOLDOWN_MS);
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [winner]);
 
   const loadCampaigns = async () => {
     try {
@@ -612,7 +637,9 @@ export const DrawControlPage: React.FC = () => {
                         {winner.winnerName}
                       </h2>
                       <div className="mt-3 flex justify-center gap-4 text-xs font-mono text-cyber-muted">
-                        <span>CUPONS TOTAIS: <strong className="text-cyber-secondary">{winner.totalTickets}</strong></span>
+                        <span>GANHOU COM: <strong className="text-cyber-secondary">{winner.winnerTickets} cupom{winner.winnerTickets === 1 ? '' : 's'}</strong></span>
+                        <span>•</span>
+                        <span>CUPONS NO TOTAL: {winner.totalTickets}</span>
                         <span>•</span>
                         <span>CÓDIGO ID: {winner.winnerId?.slice(0, 8)}</span>
                       </div>
@@ -687,7 +714,7 @@ export const DrawControlPage: React.FC = () => {
                     <div className="relative p-6 bg-black/45 border border-cyber-border rounded-lg max-w-lg mx-auto">
                       <span className="text-[10px] font-mono text-cyber-muted block mb-1 uppercase tracking-widest">GANHADOR DESTA RODADA</span>
                       <h2 className="text-3xl font-orbitron font-extrabold text-white uppercase tracking-wide truncate">{winner.winnerName}</h2>
-                      <span className="text-xs font-mono text-cyber-muted">CUPONS: {winner.totalTickets}</span>
+                      <span className="text-xs font-mono text-cyber-muted">GANHOU COM: {winner.winnerTickets} cupom{winner.winnerTickets === 1 ? '' : 's'} (total: {winner.totalTickets})</span>
                       {winner.prize && (
                         <div className="mt-3 text-xs font-rajdhani font-bold text-cyber-accent uppercase">
                           Prêmio: {winner.prize.name}
@@ -695,6 +722,12 @@ export const DrawControlPage: React.FC = () => {
                       )}
                     </div>
 
+                    {revealCooldownSecs > 0 && !sessionEndedReason && (
+                      <div className="flex items-center justify-center gap-2 text-cyber-accent text-[11px] font-rajdhani font-bold uppercase tracking-wider">
+                        <Hourglass size={13} className="animate-pulse" />
+                        <span>Aguarde a roleta parar pra quem está assistindo ({revealCooldownSecs}s)</span>
+                      </div>
+                    )}
                     <div className="flex justify-center gap-3 pt-3 border-t border-cyber-border/30">
                       {sessionEndedReason ? (
                         <Button variant="secondary" onClick={handleFinishSessionUi}>Concluir e Reiniciar</Button>
@@ -703,8 +736,14 @@ export const DrawControlPage: React.FC = () => {
                           <Button variant="secondary" icon={<Square size={13} />} onClick={handleEndSession} disabled={isActionLoading}>
                             Encerrar Cadeia
                           </Button>
-                          <Button variant="accent" icon={<Shuffle size={15} />} onClick={handleDrawNextInSession} isLoading={isActionLoading} disabled={!vaultHasAvailable}>
-                            Sortear Próxima Rodada
+                          <Button
+                            variant="accent"
+                            icon={<Shuffle size={15} />}
+                            onClick={handleDrawNextInSession}
+                            isLoading={isActionLoading}
+                            disabled={!vaultHasAvailable || revealCooldownSecs > 0}
+                          >
+                            {revealCooldownSecs > 0 ? `Aguarde (${revealCooldownSecs}s)` : 'Sortear Próxima Rodada'}
                           </Button>
                         </>
                       )}
@@ -795,6 +834,7 @@ export const DrawControlPage: React.FC = () => {
                   <th className="p-4 font-normal">Tipo</th>
                   <th className="p-4 font-normal">Prêmio</th>
                   <th className="p-4 font-normal">Ganhador</th>
+                  <th className="p-4 font-normal text-center">Cupons do Ganhador</th>
                   <th className="p-4 font-normal text-center">Cupons Concorrentes</th>
                   <th className="p-4 font-normal text-center">Estado</th>
                 </tr>
@@ -802,7 +842,7 @@ export const DrawControlPage: React.FC = () => {
               <tbody className="divide-y divide-cyber-border/40 text-xs font-rajdhani font-bold text-white tracking-wider">
                 {history.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="p-8 text-center text-cyber-muted font-mono select-none">
+                    <td colSpan={7} className="p-8 text-center text-cyber-muted font-mono select-none">
                       NENHUM SORTEIO REGISTRADO NESTA CAMPANHA AINDA.
                     </td>
                   </tr>
@@ -825,6 +865,9 @@ export const DrawControlPage: React.FC = () => {
                         ) : (
                           <span className="text-cyber-danger font-mono font-semibold">SEM GANHADOR</span>
                         )}
+                      </td>
+                      <td className="p-4 text-center font-mono text-cyber-secondary">
+                        {draw.winnerTickets ?? '—'}
                       </td>
                       <td className="p-4 text-center font-mono text-cyber-text/80">{draw.totalTickets || 0}</td>
                       <td className="p-4 text-center">

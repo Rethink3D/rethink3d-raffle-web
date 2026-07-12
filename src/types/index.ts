@@ -421,6 +421,7 @@ export interface Draw {
   status: DrawStatus;
   winnerId?: string | null;
   winnerName?: string | null;
+  winnerTickets?: number | null;
   totalTickets?: number | null;
   drawnAt?: string | null;
   createdAt: string;

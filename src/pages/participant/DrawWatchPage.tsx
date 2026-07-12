@@ -226,7 +226,7 @@ export const DrawWatchPage: React.FC = () => {
               </h3>
 
               <div className="w-full max-w-sm border-t border-b border-cyber-border/40 py-3.5 my-5">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <div>
                     <span className="text-[9px] font-mono text-cyber-muted uppercase block">Prêmio</span>
                     <span className="font-rajdhani font-bold text-sm text-white mt-0.5 block">
@@ -234,8 +234,14 @@ export const DrawWatchPage: React.FC = () => {
                     </span>
                   </div>
                   <div>
-                    <span className="text-[9px] font-mono text-cyber-muted uppercase block">Tickets acumulados</span>
+                    <span className="text-[9px] font-mono text-cyber-muted uppercase block">Ganhou com</span>
                     <span className="font-rajdhani font-bold text-sm text-cyber-accent mt-0.5 block">
+                      {winner.winnerTickets} cupom{winner.winnerTickets === 1 ? '' : 's'}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[9px] font-mono text-cyber-muted uppercase block">Tickets no total</span>
+                    <span className="font-rajdhani font-bold text-sm text-white mt-0.5 block">
                       {winner.totalTickets}
                     </span>
                   </div>

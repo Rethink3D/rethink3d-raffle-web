@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Calendar, ArrowRight, Award, Gift, Copy, Share2, Check, Users, Ticket as TicketIcon, Sparkles, Trophy } from 'lucide-react';
+import { Calendar, ArrowRight, Award, Gift, Copy, Share2, Check, Users, Ticket as TicketIcon, Sparkles, Trophy, ListChecks, Dices, ShieldCheck, Radio } from 'lucide-react';
 import { useCountdown } from '../../hooks/useCountdown';
 import { useSocket } from '../../hooks/useSocket';
 import { useAuthStore } from '../../store/authStore';
@@ -333,6 +333,14 @@ export const DashboardPage: React.FC = () => {
             <Button
               variant="secondary"
               size="sm"
+              icon={<ListChecks size={14} />}
+              onClick={() => navigate('/quests')}
+            >
+              Missões
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
               icon={<Trophy size={14} />}
               onClick={() => navigate('/ranking')}
             >
@@ -592,9 +600,16 @@ export const DashboardPage: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                  <span className={`text-xs font-orbitron font-extrabold shrink-0 ${isMe ? 'text-cyber-success' : 'text-cyber-muted'}`}>
-                    {isMe ? 'Você ganhou! 🎉' : draw.winnerName ?? 'Sorteado'}
-                  </span>
+                  <div className="flex flex-col items-end shrink-0">
+                    <span className={`text-xs font-orbitron font-extrabold ${isMe ? 'text-cyber-success' : 'text-cyber-muted'}`}>
+                      {isMe ? 'Você ganhou! 🎉' : draw.winnerName ?? 'Sorteado'}
+                    </span>
+                    {draw.winnerTickets != null && (
+                      <span className="text-[10px] font-mono text-cyber-accent uppercase tracking-wider mt-0.5">
+                        ganhou com {draw.winnerTickets} cupom{draw.winnerTickets === 1 ? '' : 's'}
+                      </span>
+                    )}
+                  </div>
                 </div>
               );
             })}
@@ -641,6 +656,44 @@ export const DashboardPage: React.FC = () => {
           </div>
         </Card>
       )}
+
+      {/* ─── REGRAS DO SORTEIO ─── */}
+      <Card title="Como Funciona o Sorteio" subtitle="Regras gerais — leia antes de torcer 😉">
+        <div className="flex flex-col gap-4 py-1">
+          {[
+            {
+              icon: <Dices size={16} />,
+              title: 'Mais cupons = mais chances, mas nunca garantia',
+              text: 'Cada cupom é um número a mais na roleta. Ter 1000 cupons te dá muito mais chance do que quem tem 10 — mas é um sorteio de verdade: quem tem só 10 também pode ser o sorteado. Sorte é sorte.',
+            },
+            {
+              icon: <ShieldCheck size={16} />,
+              title: 'Um prêmio por pessoa',
+              text: 'Quem já ganhou algo nesta campanha sai do pool das próximas rodadas — assim mais gente diferente tem chance de levar um prêmio pra casa.',
+            },
+            {
+              icon: <Radio size={16} />,
+              title: 'Sorteio ao vivo e transparente',
+              text: 'O resultado é sorteado na hora, na transmissão pública — qualquer pessoa pode acompanhar em tempo real e ver a roleta girar até o resultado final.',
+            },
+            {
+              icon: <Gift size={16} />,
+              title: 'Prêmios saem do cofre da campanha',
+              text: 'A cada rodada, um prêmio disponível é sorteado (aleatório ou em ordem definida pela organização) e vinculado ao ganhador daquela rodada.',
+            },
+          ].map((rule, idx) => (
+            <div key={idx} className="flex items-start gap-3">
+              <div className="p-1.5 rounded shrink-0 bg-cyber-secondary/10 border border-cyber-secondary/30 text-cyber-secondary mt-0.5">
+                {rule.icon}
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-rajdhani font-bold text-white">{rule.title}</p>
+                <p className="text-xs text-cyber-muted leading-relaxed mt-0.5">{rule.text}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
     </div>
   );
 };
