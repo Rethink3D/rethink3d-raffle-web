@@ -73,9 +73,9 @@ export const Modal: React.FC<ModalProps> = ({
         <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-brand-secondary" />
 
         {/* Header */}
-        <div className="relative border-b border-brand-border p-4 flex items-center justify-between bg-black/20">
+        <div className="relative border-b border-brand-border p-4 flex items-center justify-between bg-sunken-20">
           <div className="flex flex-col">
-            <h2 id="modal-title" className="text-lg font-display font-extrabold tracking-widest text-white uppercase">
+            <h2 id="modal-title" className="text-lg font-display font-extrabold tracking-widest text-brand-strong uppercase">
               {title}
             </h2>
           </div>

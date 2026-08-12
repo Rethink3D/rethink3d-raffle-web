@@ -126,7 +126,7 @@ export const FeedbackResultsPage: React.FC = () => {
             Voltar
           </Button>
           <div className="min-w-0">
-            <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase break-words">
+            <h1 className="text-2xl font-display font-extrabold text-brand-strong tracking-widest uppercase break-words">
               Resultados do Feedback
             </h1>
             <p className="text-xs font-ui font-bold text-brand-secondary tracking-widest mt-1 break-words">
@@ -155,7 +155,7 @@ export const FeedbackResultsPage: React.FC = () => {
           <div className="flex items-center gap-3">
             <Users size={22} className="text-brand-primary shrink-0" />
             <div>
-              <div className="text-2xl font-display font-extrabold text-white">{stats.totalResponses}</div>
+              <div className="text-2xl font-display font-extrabold text-brand-strong">{stats.totalResponses}</div>
               <div className="text-[10px] font-mono text-brand-muted uppercase tracking-wider">Respostas Recebidas</div>
             </div>
           </div>
@@ -205,7 +205,7 @@ export const FeedbackResultsPage: React.FC = () => {
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2">
                 <Star size={16} className="text-brand-accent" />
-                <span className="text-sm font-ui font-bold text-white">
+                <span className="text-sm font-ui font-bold text-brand-strong">
                   Média: <span className="text-brand-accent">{question.scale.average.toFixed(2)}</span> / 5
                 </span>
               </div>
@@ -237,7 +237,7 @@ export const FeedbackResultsPage: React.FC = () => {
               <div className="flex flex-col gap-2">
                 <div className="flex flex-col gap-2 max-h-96 overflow-y-auto pr-1">
                   {question.textAnswers.slice(0, textAnswerLimits[question.id] ?? TEXT_ANSWERS_PAGE_SIZE).map((answer, idx) => (
-                    <div key={idx} className="p-3 rounded bg-black/25 border border-brand-border/50 text-xs font-ui font-semibold text-brand-text break-words">
+                    <div key={idx} className="p-3 rounded bg-sunken-25 border border-brand-border/50 text-xs font-ui font-semibold text-brand-text break-words">
                       {answer}
                     </div>
                   ))}

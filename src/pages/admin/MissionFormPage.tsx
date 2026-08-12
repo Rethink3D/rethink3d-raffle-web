@@ -785,7 +785,7 @@ export const MissionFormPage: React.FC = () => {
           Voltar
         </Button>
         <div>
-          <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase">
+          <h1 className="text-2xl font-display font-extrabold text-brand-strong tracking-widest uppercase">
             {formStep === 'quiz'
               ? `${isEditing ? 'Editar' : 'Criar'} Perguntas do Quiz`
               : formStep === 'feedback'
@@ -839,7 +839,7 @@ export const MissionFormPage: React.FC = () => {
                 Descrição do Desafio
               </label>
               <textarea
-                className="w-full bg-brand-bg border border-brand-border rounded px-4 py-2.5 text-sm font-ui font-semibold text-white tracking-wide placeholder-brand-muted focus:border-brand-secondary focus:ring-1 focus:ring-brand-secondary focus:outline-none"
+                className="w-full bg-brand-bg border border-brand-border rounded px-4 py-2.5 text-sm font-ui font-semibold text-brand-strong tracking-wide placeholder-brand-muted focus:border-brand-secondary focus:ring-1 focus:ring-brand-secondary focus:outline-none"
                 rows={3}
                 placeholder="Explique o que o participante precisa fazer para receber a recompensa."
                 value={formData.description}
@@ -865,7 +865,7 @@ export const MissionFormPage: React.FC = () => {
                 <select
                   value={formData.type}
                   onChange={(e) => setFormData({ ...formData, type: e.target.value as MissionType })}
-                  className="w-full bg-brand-bg border border-brand-border rounded px-4 py-2.5 text-sm font-ui font-bold text-white tracking-wide focus:border-brand-secondary focus:outline-none h-[42px]"
+                  className="w-full bg-brand-bg border border-brand-border rounded px-4 py-2.5 text-sm font-ui font-bold text-brand-strong tracking-wide focus:border-brand-secondary focus:outline-none h-[42px]"
                 >
                   <option value="PROOF_UPLOAD">Envio de Comprovante</option>
                   <option value="QUIZ">Questionário (Quiz)</option>
@@ -998,9 +998,9 @@ export const MissionFormPage: React.FC = () => {
 
             <div className="flex flex-col gap-4">
               {quizQuestions.map((question, qIndex) => (
-                <div key={qIndex} className="border border-brand-border rounded-lg p-4 flex flex-col gap-3 bg-black/20">
+                <div key={qIndex} className="border border-brand-border rounded-lg p-4 flex flex-col gap-3 bg-sunken-20">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-display font-bold text-white uppercase tracking-wider">
+                    <span className="text-xs font-display font-bold text-brand-strong uppercase tracking-wider">
                       Pergunta {qIndex + 1}
                     </span>
                     <button
@@ -1039,7 +1039,7 @@ export const MissionFormPage: React.FC = () => {
                           title="Marcar como resposta correta"
                           className={`shrink-0 w-7 h-7 rounded-full border-2 flex items-center justify-center cursor-pointer transition-colors ${
                             question.correctIndex === oIndex
-                              ? 'bg-brand-success border-brand-success text-black'
+                              ? 'bg-brand-success border-brand-success on-fill'
                               : 'border-brand-border text-transparent hover:border-brand-success/60'
                           }`}
                         >
@@ -1111,9 +1111,9 @@ export const MissionFormPage: React.FC = () => {
 
             <div className="flex flex-col gap-4">
               {feedbackQuestions.map((question, qIndex) => (
-                <div key={qIndex} className="border border-brand-border rounded-lg p-4 flex flex-col gap-3 bg-black/20">
+                <div key={qIndex} className="border border-brand-border rounded-lg p-4 flex flex-col gap-3 bg-sunken-20">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-display font-bold text-white uppercase tracking-wider">
+                    <span className="text-xs font-display font-bold text-brand-strong uppercase tracking-wider">
                       Pergunta {qIndex + 1}
                     </span>
                     <button
@@ -1141,7 +1141,7 @@ export const MissionFormPage: React.FC = () => {
                       <select
                         value={question.type}
                         onChange={(e) => updateFeedbackQuestionType(qIndex, e.target.value as QuestionType)}
-                        className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-xs font-ui font-bold text-white tracking-wide focus:border-brand-secondary focus:outline-none h-[38px]"
+                        className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-xs font-ui font-bold text-brand-strong tracking-wide focus:border-brand-secondary focus:outline-none h-[38px]"
                       >
                         {(Object.keys(feedbackQuestionTypeLabels) as QuestionType[])
                           .filter((type) => type !== 'NUMBER')
@@ -1263,9 +1263,9 @@ export const MissionFormPage: React.FC = () => {
 
             <div className="flex flex-col gap-4">
               {surveyQuestions.map((question, qIndex) => (
-                <div key={qIndex} className="border border-brand-border rounded-lg p-4 flex flex-col gap-3 bg-black/20">
+                <div key={qIndex} className="border border-brand-border rounded-lg p-4 flex flex-col gap-3 bg-sunken-20">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-display font-bold text-white uppercase tracking-wider">
+                    <span className="text-xs font-display font-bold text-brand-strong uppercase tracking-wider">
                       Pergunta {qIndex + 1}
                     </span>
                     <button
@@ -1293,7 +1293,7 @@ export const MissionFormPage: React.FC = () => {
                       <select
                         value={question.type}
                         onChange={(e) => updateSurveyQuestionType(qIndex, e.target.value as QuestionType)}
-                        className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-xs font-ui font-bold text-white tracking-wide focus:border-brand-secondary focus:outline-none h-[38px]"
+                        className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-xs font-ui font-bold text-brand-strong tracking-wide focus:border-brand-secondary focus:outline-none h-[38px]"
                       >
                         {(Object.keys(surveyQuestionTypeLabels) as QuestionType[]).map((type) => (
                           <option key={type} value={type}>{surveyQuestionTypeLabels[type]}</option>

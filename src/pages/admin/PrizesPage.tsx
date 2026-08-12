@@ -202,7 +202,7 @@ export const PrizesPage: React.FC = () => {
       >
         <div className="flex flex-col gap-4 mt-2">
           {/* Image Container */}
-          <div className="aspect-video relative rounded-md border border-brand-border overflow-hidden bg-black/55 flex items-center justify-center">
+          <div className="aspect-video relative rounded-md border border-brand-border overflow-hidden bg-sunken-55 flex items-center justify-center">
             {prize.imageUrl ? (
               <img
                 src={prize.imageUrl}
@@ -226,7 +226,7 @@ export const PrizesPage: React.FC = () => {
           </p>
 
           <div className="flex justify-between items-center border-t border-brand-border/40 pt-3 text-[11px] font-mono text-brand-muted">
-            <span>ENTREGUES: <strong className="text-white font-bold">{prize.claimed}</strong> / {prize.quantity}</span>
+            <span>ENTREGUES: <strong className="text-brand-strong font-bold">{prize.claimed}</strong> / {prize.quantity}</span>
             {prize.claimed >= prize.quantity && (
               <span className="flex items-center gap-1 text-brand-danger text-[9px] uppercase font-bold">
                 <Lock size={11} /> Esgotado
@@ -263,7 +263,7 @@ export const PrizesPage: React.FC = () => {
       {/* Header Panel */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border/40 pb-5">
         <div>
-          <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase">
+          <h1 className="text-2xl font-display font-extrabold text-brand-strong tracking-widest uppercase">
             COFRE DE PRÊMIOS
           </h1>
           <p className="text-xs font-ui font-bold text-brand-secondary tracking-widest mt-1">
@@ -296,7 +296,7 @@ export const PrizesPage: React.FC = () => {
       <Card variant="default">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h3 className="text-sm font-display font-bold text-white tracking-wider uppercase">
+            <h3 className="text-sm font-display font-bold text-brand-strong tracking-wider uppercase">
               CAMPANHA ATIVA
             </h3>
             <p className="text-[10px] font-mono text-brand-muted uppercase mt-0.5">
@@ -308,7 +308,7 @@ export const PrizesPage: React.FC = () => {
             <select
               value={selectedCampaignId}
               onChange={(e) => setSelectedCampaignId(e.target.value)}
-              className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-sm font-ui font-bold text-white tracking-wide focus:border-brand-secondary focus:outline-none"
+              className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-sm font-ui font-bold text-brand-strong tracking-wide focus:border-brand-secondary focus:outline-none"
               disabled={isLoadingCampaigns}
             >
               {isLoadingCampaigns ? (
@@ -346,7 +346,7 @@ export const PrizesPage: React.FC = () => {
               <VaultIcon size={28} />
             </div>
             <div>
-              <h3 className="text-base font-display font-bold text-white uppercase tracking-wider">
+              <h3 className="text-base font-display font-bold text-brand-strong uppercase tracking-wider">
                 Esta campanha ainda não tem um cofre
               </h3>
               <p className="text-xs text-brand-muted mt-1 max-w-sm">
@@ -426,7 +426,7 @@ export const PrizesPage: React.FC = () => {
               Descrição / Características
             </label>
             <textarea
-              className="w-full bg-brand-bg border border-brand-border rounded px-4 py-2.5 text-sm font-ui font-semibold text-white tracking-wide placeholder-brand-muted focus:border-brand-secondary focus:ring-1 focus:ring-brand-secondary focus:outline-none"
+              className="w-full bg-brand-bg border border-brand-border rounded px-4 py-2.5 text-sm font-ui font-semibold text-brand-strong tracking-wide placeholder-brand-muted focus:border-brand-secondary focus:ring-1 focus:ring-brand-secondary focus:outline-none"
               rows={3}
               placeholder="Descreva detalhes como cor, voltagem, marca, etc."
               value={formData.description}
@@ -485,7 +485,7 @@ export const PrizesPage: React.FC = () => {
 
           <p className="text-sm font-body text-brand-text">
             Você tem certeza de que deseja excluir permanentemente o prêmio{' '}
-            <strong className="text-white font-semibold">"{prizeToDelete?.name}"</strong>?
+            <strong className="text-brand-strong font-semibold">"{prizeToDelete?.name}"</strong>?
             Essa ação não pode ser desfeita.
           </p>
 

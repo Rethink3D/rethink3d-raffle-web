@@ -6,6 +6,7 @@ import { getApiErrorMessage } from '../../utils/apiError';
 import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
+import { copy } from '../../theme/copy';
 import { Phone, Lock, LogIn } from 'lucide-react';
 import nika from '../../assets/nika.gif';
 import { ThemeAsset } from '../../theme/assets';
@@ -92,20 +93,20 @@ export const LoginPage: React.FC = () => {
         <div className="fixed inset-0 bg-black/85 flex flex-col items-center justify-center z-50 pointer-events-auto select-none">
           <ThemeAsset kind="loader" size={120} />
           <span className="text-xs font-mono text-brand-secondary tracking-[0.2em] uppercase animate-pulse mt-2">
-            AUTENTICANDO CREDENCIAIS...
+            {copy.loginOverlay}
           </span>
         </div>
       )}
       <Card 
-        title="CONTINUAR HISTÓRIA" 
-        subtitle="CONTINUE DE ONDE PAROU"
+        title={copy.loginTitle}
+        subtitle={copy.loginSubtitle}
         variant="secondary"
         glow
       >
 
         {serverError && (
           <div className="mb-4 bg-brand-danger/10 border border-brand-danger rounded p-3 text-xs font-mono text-brand-danger uppercase">
-            ⚡ ERRO // {serverError}
+            {serverError}
           </div>
         )}
 
@@ -119,7 +120,7 @@ export const LoginPage: React.FC = () => {
             onChange={handlePhoneChange}
             error={errorMap.phone}
             icon={<Phone size={16} />}
-            statusIndicator={phone.replace(/\D/g, '').length === 11 ? '[SYS_READY]' : '[SYS_WAITING]'}
+            statusIndicator={phone.replace(/\D/g, '').length === 11 ? copy.sysReady : copy.sysWaiting}
             required
           />
 
@@ -134,7 +135,7 @@ export const LoginPage: React.FC = () => {
             onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
             error={errorMap.pin}
             icon={<Lock size={16} />}
-            statusIndicator={pin.length === 4 ? '[SYS_READY]' : '[SYS_WAITING]'}
+            statusIndicator={pin.length === 4 ? copy.sysReady : copy.sysWaiting}
             required
           />
 
@@ -153,14 +154,14 @@ export const LoginPage: React.FC = () => {
               isLoading={isLoading}
               icon={<LogIn size={16} />}
             >
-              RETORNAR AO JOGO
+              {copy.loginSubmit}
             </Button>
 
             <div className="flex justify-center items-center gap-2 mt-4 text-xs font-mono text-brand-muted uppercase">
               <span>
-                SEM SAVE?{' '}
+                {copy.loginNoAccount}{' '}
                 <Link to="/register" className="text-brand-primary hover:underline font-bold">
-                  CRIAR NOVO &gt;
+                  {copy.loginCreateLink}
                 </Link>
               </span>
             </div>

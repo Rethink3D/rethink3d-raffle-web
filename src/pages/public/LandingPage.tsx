@@ -187,7 +187,7 @@ export const LandingPage: React.FC = () => {
 
         <ThemeAsset
           kind="heroDecor"
-          className="absolute right-0 bottom-0 w-2/3 max-w-xl opacity-90 pointer-events-none select-none z-0"
+          className="absolute -right-4 -bottom-4 w-1/3 max-w-[220px] opacity-45 pointer-events-none select-none z-0"
         />
 
         {/* Abstract Cyber Grid overlay */}
@@ -195,21 +195,19 @@ export const LandingPage: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-brand-bg via-transparent to-transparent pointer-events-none" />
 
         {/* Glow corners */}
-        <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-brand-primary" />
-        <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-brand-primary" />
-        <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-brand-primary" />
-        <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-brand-primary" />
+        <div className="hud-corner absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-brand-primary" />
+        <div className="hud-corner absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-brand-primary" />
+        <div className="hud-corner absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-brand-primary" />
+        <div className="hud-corner absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-brand-primary" />
 
         <div className="relative z-10 max-w-3xl flex flex-col items-center">
-          <h1 className="font-display text-3xl sm:text-5xl md:text-6xl font-black tracking-widest text-white uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] leading-tight">
+          <h1 className="font-display text-3xl sm:text-5xl md:text-6xl font-black tracking-widest text-brand-strong uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] leading-tight">
             RETHINK
             <span className="text-brand-primary text-glow-primary">3D</span>
           </h1>
 
           <p className="font-body text-sm sm:text-base text-brand-muted mt-6 max-w-xl leading-relaxed">
-            Participe das missões, acumule cupons e aumente suas chances de
-            ganhar nos sorteios ao vivo. Cada missão concluída rende novos
-            cupons para você aumentar suas chances.
+            {copy.heroParagraph}
           </p>
 
           {/* CTA Buttons */}
@@ -232,7 +230,7 @@ export const LandingPage: React.FC = () => {
                   className="sm:w-1/2"
                   onClick={() => navigate("/register")}
                 >
-                  Criar Personagem
+                  {copy.ctaRegister}
                 </Button>
                 <Button
                   variant="secondary"
@@ -240,7 +238,7 @@ export const LandingPage: React.FC = () => {
                   className="sm:w-1/2"
                   onClick={() => navigate("/login")}
                 >
-                  Continuar História
+                  {copy.ctaLogin}
                 </Button>
               </>
             )}
@@ -250,7 +248,7 @@ export const LandingPage: React.FC = () => {
 
       {/* 2. DYNAMIC ACTIVE CAMPAIGN & COUNTDOWN */}
       <section className="flex flex-col gap-6">
-        <h2 className="font-display text-base sm:text-xl font-bold text-white tracking-widest uppercase border-b border-brand-border pb-2">
+        <h2 className="font-display text-base sm:text-xl font-bold text-brand-strong tracking-widest uppercase border-b border-brand-border pb-2">
           ⚡ CAMPANHAS ATIVAS
         </h2>
 
@@ -271,7 +269,7 @@ export const LandingPage: React.FC = () => {
             >
               <div className="flex flex-col gap-4 mt-2">
                 {activeCampaign.coverImageUrl && (
-                  <div className="aspect-video relative rounded-md border border-brand-border overflow-hidden bg-black/55">
+                  <div className="aspect-video relative rounded-md border border-brand-border overflow-hidden bg-sunken-55">
                     <img
                       src={activeCampaign.coverImageUrl}
                       alt={activeCampaign.name}
@@ -289,9 +287,9 @@ export const LandingPage: React.FC = () => {
                 </p>
 
                 {/* Visual specs */}
-                <div className="grid grid-cols-2 gap-4 bg-black/40 border border-brand-border/40 p-4 rounded text-xs font-mono text-brand-muted mt-2">
+                <div className="grid grid-cols-2 gap-4 bg-sunken-40 border border-brand-border/40 p-4 rounded text-xs font-mono text-brand-muted mt-2">
                   <div>
-                    <span className="block text-white font-bold mb-1">
+                    <span className="block text-brand-strong font-bold mb-1">
                       DATA DE LANÇAMENTO
                     </span>
                     {activeCampaign.startDate
@@ -299,7 +297,7 @@ export const LandingPage: React.FC = () => {
                       : "N/D"}
                   </div>
                   <div>
-                    <span className="block text-white font-bold mb-1">
+                    <span className="block text-brand-strong font-bold mb-1">
                       DATA DO SORTEIO
                     </span>
                     {drawTarget
@@ -388,7 +386,7 @@ export const LandingPage: React.FC = () => {
                     {/* Digital HUD Counter */}
                     <div className="flex gap-2 sm:gap-4 justify-center select-none">
                       <div className="flex flex-col">
-                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-black/60 border border-brand-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-display font-black text-brand-accent text-glow-accent">
+                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-sunken-60 border border-brand-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-display font-black text-brand-accent text-glow-accent">
                           {countdown.formatted.days}
                         </div>
                         <span className="text-[9px] font-mono text-brand-muted mt-1 uppercase tracking-widest">
@@ -399,7 +397,7 @@ export const LandingPage: React.FC = () => {
                         :
                       </span>
                       <div className="flex flex-col">
-                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-black/60 border border-brand-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-display font-black text-brand-accent text-glow-accent">
+                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-sunken-60 border border-brand-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-display font-black text-brand-accent text-glow-accent">
                           {countdown.formatted.hours}
                         </div>
                         <span className="text-[9px] font-mono text-brand-muted mt-1 uppercase tracking-widest">
@@ -410,7 +408,7 @@ export const LandingPage: React.FC = () => {
                         :
                       </span>
                       <div className="flex flex-col">
-                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-black/60 border border-brand-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-display font-black text-brand-accent text-glow-accent">
+                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-sunken-60 border border-brand-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-display font-black text-brand-accent text-glow-accent">
                           {countdown.formatted.minutes}
                         </div>
                         <span className="text-[9px] font-mono text-brand-muted mt-1 uppercase tracking-widest">
@@ -421,7 +419,7 @@ export const LandingPage: React.FC = () => {
                         :
                       </span>
                       <div className="flex flex-col">
-                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-black/60 border border-brand-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-display font-black text-brand-accent text-glow-accent">
+                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-sunken-60 border border-brand-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-display font-black text-brand-accent text-glow-accent">
                           {countdown.formatted.seconds}
                         </div>
                         <span className="text-[9px] font-mono text-brand-muted mt-1 uppercase tracking-widest">
@@ -436,7 +434,7 @@ export const LandingPage: React.FC = () => {
           </div>
         ) : (
           <Card className="border-brand-danger/40 bg-brand-surface/40 py-12 flex flex-col items-center text-center">
-            <h3 className="font-display font-bold text-white text-lg uppercase tracking-wider">
+            <h3 className="font-display font-bold text-brand-strong text-lg uppercase tracking-wider">
               Nenhuma campanha ativa
             </h3>
             <p className="font-body text-xs text-brand-muted mt-2 max-w-sm">
@@ -460,7 +458,7 @@ export const LandingPage: React.FC = () => {
       {/* 2.5 RANKING PÚBLICO */}
       {activeCampaign && rankingEntries.length > 0 && (
         <section className="flex flex-col gap-6">
-          <h2 className="font-display text-base sm:text-xl font-bold text-white tracking-widest uppercase border-b border-brand-border pb-2">
+          <h2 className="font-display text-base sm:text-xl font-bold text-brand-strong tracking-widest uppercase border-b border-brand-border pb-2">
             🏆 RANKING DE CUPONS
           </h2>
 
@@ -489,7 +487,7 @@ export const LandingPage: React.FC = () => {
 
       {/* 3. HOW TO EARN TICKETS */}
       <section className="flex flex-col gap-6">
-        <h2 className="font-display text-base sm:text-xl font-bold text-white tracking-widest uppercase border-b border-brand-border pb-2">
+        <h2 className="font-display text-base sm:text-xl font-bold text-brand-strong tracking-widest uppercase border-b border-brand-border pb-2">
           💡 COMO FUNCIONA
         </h2>
 
@@ -510,7 +508,7 @@ export const LandingPage: React.FC = () => {
                   </span>
                 </div>
 
-                <h3 className="font-display font-extrabold text-sm text-white uppercase tracking-wider mt-3">
+                <h3 className="font-display font-extrabold text-sm text-brand-strong uppercase tracking-wider mt-3">
                   {step.title}
                 </h3>
 
@@ -525,7 +523,7 @@ export const LandingPage: React.FC = () => {
 
       {/* 4. FAQ ACCORDION */}
       <section className="flex flex-col gap-6">
-        <h2 className="font-display text-base sm:text-xl font-bold text-white tracking-widest uppercase border-b border-brand-border pb-2">
+        <h2 className="font-display text-base sm:text-xl font-bold text-brand-strong tracking-widest uppercase border-b border-brand-border pb-2">
           ❓ PERGUNTAS FREQUENTES
         </h2>
 
@@ -540,7 +538,7 @@ export const LandingPage: React.FC = () => {
                 {/* Header Toggle */}
                 <button
                   onClick={() => toggleFaq(index)}
-                  className="w-full flex items-center justify-between p-4 text-left font-ui font-bold text-sm sm:text-base text-white tracking-wide uppercase hover:bg-brand-surface/60 transition-colors focus:outline-none cursor-pointer"
+                  className="w-full flex items-center justify-between p-4 text-left font-ui font-bold text-sm sm:text-base text-brand-strong tracking-wide uppercase hover:bg-brand-surface/60 transition-colors focus:outline-none cursor-pointer"
                 >
                   <span className="flex items-center gap-3">
                     <HelpCircle
@@ -558,7 +556,7 @@ export const LandingPage: React.FC = () => {
 
                 {/* Body Content */}
                 {isOpen && (
-                  <div className="px-4 pb-4 pt-1 border-t border-brand-border/40 text-xs sm:text-sm text-brand-muted leading-relaxed font-body bg-black/25">
+                  <div className="px-4 pb-4 pt-1 border-t border-brand-border/40 text-xs sm:text-sm text-brand-muted leading-relaxed font-body bg-sunken-25">
                     {faq.a}
                   </div>
                 )}
@@ -577,7 +575,7 @@ export const LandingPage: React.FC = () => {
           </h2>
         </div>
 
-        <ul className="list-disc list-inside flex flex-col gap-2 font-body text-xs leading-relaxed text-white text-justify">
+        <ul className="list-disc list-inside flex flex-col gap-2 font-body text-xs leading-relaxed text-brand-strong text-justify">
           <li>
             <strong>Contas Únicas Apenas:</strong> Os participantes estão
             estritamente limitados a uma conta associada ao seu número de

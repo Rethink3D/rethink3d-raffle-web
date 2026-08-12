@@ -6,6 +6,7 @@ import { getApiErrorMessage } from '../../utils/apiError';
 import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
+import { copy } from '../../theme/copy';
 import { Lock } from 'lucide-react';
 import { ThemeAsset } from '../../theme/assets';
 
@@ -101,7 +102,7 @@ export const ChangePinPage: React.FC = () => {
             onChange={(e) => setCurrentPin(e.target.value.replace(/\D/g, ''))}
             error={errorMap.currentPin}
             icon={<Lock size={16} />}
-            statusIndicator={currentPin.length === 4 ? '[SYS_READY]' : '[SYS_WAITING]'}
+            statusIndicator={currentPin.length === 4 ? copy.sysReady : copy.sysWaiting}
             required
           />
 
@@ -116,7 +117,7 @@ export const ChangePinPage: React.FC = () => {
               onChange={(e) => setNewPin(e.target.value.replace(/\D/g, ''))}
               error={errorMap.newPin}
               icon={<Lock size={16} />}
-              statusIndicator={newPin.length === 4 ? '[SYS_READY]' : '[SYS_WAITING]'}
+              statusIndicator={newPin.length === 4 ? copy.sysReady : copy.sysWaiting}
               required
             />
 
@@ -130,7 +131,7 @@ export const ChangePinPage: React.FC = () => {
               onChange={(e) => setConfirmPin(e.target.value.replace(/\D/g, ''))}
               error={errorMap.confirmPin}
               icon={<Lock size={16} />}
-              statusIndicator={confirmPin === newPin && newPin.length === 4 ? '[SYS_READY]' : '[SYS_WAITING]'}
+              statusIndicator={confirmPin === newPin && newPin.length === 4 ? copy.sysReady : copy.sysWaiting}
               required
             />
           </div>

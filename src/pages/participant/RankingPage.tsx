@@ -64,7 +64,7 @@ export const RankingPage: React.FC = () => {
     return (
       <div className="max-w-md mx-auto my-10">
         <Card variant="danger" title="Ops, algo deu errado" glow>
-          <p className="text-sm font-ui font-bold text-white tracking-wider text-center">{error}</p>
+          <p className="text-sm font-ui font-bold text-brand-strong tracking-wider text-center">{error}</p>
         </Card>
       </div>
     );

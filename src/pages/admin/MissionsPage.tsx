@@ -240,7 +240,7 @@ export const MissionsPage: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left">
             <thead>
-              <tr className="border-b border-brand-border bg-black/45 text-[11px] font-mono tracking-wider text-brand-muted uppercase select-none">
+              <tr className="border-b border-brand-border bg-sunken-45 text-[11px] font-mono tracking-wider text-brand-muted uppercase select-none">
                 <th className="p-4 font-normal text-center w-16">Ordem</th>
                 <th className="p-4 font-normal">Título / Descrição</th>
                 <th className="p-4 font-normal">Tipo</th>
@@ -250,7 +250,7 @@ export const MissionsPage: React.FC = () => {
                 <th className="p-4 font-normal text-right">Ações</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-brand-border/40 text-xs font-ui font-bold text-white tracking-wider">
+            <tbody className="divide-y divide-brand-border/40 text-xs font-ui font-bold text-brand-strong tracking-wider">
               {list.map((mission, index) => (
                 <tr key={mission.id} className="hover:bg-brand-surface/30 transition-colors">
                   <td className="p-4 text-center font-mono">
@@ -260,14 +260,14 @@ export const MissionsPage: React.FC = () => {
                         <button
                           onClick={() => handleMove(index, 'up', isGlobal)}
                           disabled={index === 0 || isActionLoading}
-                          className="p-1 rounded bg-black/40 border border-brand-border/40 hover:border-brand-primary disabled:opacity-30 disabled:pointer-events-none text-brand-muted hover:text-brand-primary cursor-pointer"
+                          className="p-1 rounded bg-sunken-40 border border-brand-border/40 hover:border-brand-primary disabled:opacity-30 disabled:pointer-events-none text-brand-muted hover:text-brand-primary cursor-pointer"
                         >
                           <ArrowUp size={12} />
                         </button>
                         <button
                           onClick={() => handleMove(index, 'down', isGlobal)}
                           disabled={index === list.length - 1 || isActionLoading}
-                          className="p-1 rounded bg-black/40 border border-brand-border/40 hover:border-brand-primary disabled:opacity-30 disabled:pointer-events-none text-brand-muted hover:text-brand-primary cursor-pointer"
+                          className="p-1 rounded bg-sunken-40 border border-brand-border/40 hover:border-brand-primary disabled:opacity-30 disabled:pointer-events-none text-brand-muted hover:text-brand-primary cursor-pointer"
                         >
                           <ArrowDown size={12} />
                         </button>
@@ -276,7 +276,7 @@ export const MissionsPage: React.FC = () => {
                   </td>
                   <td className="p-4 max-w-sm">
                     <div className="flex flex-col">
-                      <span className="text-sm font-semibold text-white">{mission.title}</span>
+                      <span className="text-sm font-semibold text-brand-strong">{mission.title}</span>
                       <span className="text-[10px] text-brand-muted font-normal mt-0.5 line-clamp-2">{mission.description}</span>
                     </div>
                   </td>
@@ -387,7 +387,7 @@ export const MissionsPage: React.FC = () => {
       {/* Top Banner */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border/40 pb-5">
         <div>
-          <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase">
+          <h1 className="text-2xl font-display font-extrabold text-brand-strong tracking-widest uppercase">
             {copy.manageMissionsUpper}
           </h1>
           <p className="text-xs font-ui font-bold text-brand-secondary tracking-widest mt-1">
@@ -453,7 +453,7 @@ export const MissionsPage: React.FC = () => {
           <Card variant="default">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div>
-                <h3 className="text-sm font-display font-bold text-white tracking-wider uppercase">
+                <h3 className="text-sm font-display font-bold text-brand-strong tracking-wider uppercase">
                   CAMPANHA SELECIONADA
                 </h3>
                 <p className="text-[10px] font-mono text-brand-muted uppercase mt-0.5">
@@ -464,7 +464,7 @@ export const MissionsPage: React.FC = () => {
                 <select
                   value={selectedCampaignId}
                   onChange={(e) => setSelectedCampaignId(e.target.value)}
-                  className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-sm font-ui font-bold text-white tracking-wide focus:border-brand-secondary focus:outline-none"
+                  className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-sm font-ui font-bold text-brand-strong tracking-wide focus:border-brand-secondary focus:outline-none"
                   disabled={isLoadingCampaigns}
                 >
                   {isLoadingCampaigns ? (
@@ -494,7 +494,7 @@ export const MissionsPage: React.FC = () => {
             <div className="flex items-start gap-3">
               <Globe size={18} className="text-brand-accent shrink-0 mt-0.5" />
               <div>
-                <h3 className="text-sm font-display font-bold text-white tracking-wider uppercase">
+                <h3 className="text-sm font-display font-bold text-brand-strong tracking-wider uppercase">
                   {copy.globalMissionsHintUpper}
                 </h3>
                 <p className="text-[10px] font-mono text-brand-muted uppercase mt-0.5 leading-relaxed">
@@ -518,12 +518,12 @@ export const MissionsPage: React.FC = () => {
       >
         <div className="space-y-4">
           <p className="text-sm font-body text-brand-text">
-            Vincular <strong className="text-white">"{missionToAssign?.title}"</strong> a qual campanha?
+            Vincular <strong className="text-brand-strong">"{missionToAssign?.title}"</strong> a qual campanha?
           </p>
           <select
             value={assignTargetCampaignId}
             onChange={(e) => setAssignTargetCampaignId(e.target.value)}
-            className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-sm font-ui font-bold text-white tracking-wide focus:border-brand-secondary focus:outline-none"
+            className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-sm font-ui font-bold text-brand-strong tracking-wide focus:border-brand-secondary focus:outline-none"
           >
             {campaigns.map((c) => (
               <option key={c.id} value={c.id}>{c.name} ({getCampaignStatusLabel(c.status)})</option>
@@ -550,7 +550,7 @@ export const MissionsPage: React.FC = () => {
         <div className="space-y-4">
           <p className="text-sm font-body text-brand-text">
             {copy.confirmDeleteProse}{' '}
-            <strong className="text-white">"{questToDelete?.title}"</strong>?
+            <strong className="text-brand-strong">"{questToDelete?.title}"</strong>?
             Esta ação apagará todos os dados de completude e comprovantes associados.
           </p>
           <div className="flex justify-end gap-3 pt-4 border-t border-brand-border/40">

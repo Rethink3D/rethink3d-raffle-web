@@ -66,6 +66,32 @@ const cyber = {
   completeMoreProse: 'Quer ganhar ainda mais cupons e aumentar suas chances de ganhar? Complete as missões disponíveis.',
   campaignFallbackProse: 'Cumpra missões, junte cupons e concorra a prêmios incríveis!',
   remainingMissionsSubtitle: 'Complete as missões restantes para ganhar mais cupons!',
+
+  sysReady: '[SYS_READY]',
+  sysWaiting: '[SYS_WAITING]',
+
+  heroParagraph:
+    'Participe das missões, acumule cupons e aumente suas chances de ganhar nos sorteios ao vivo. Cada missão concluída rende novos cupons para você aumentar suas chances.',
+  ctaRegister: 'Criar Personagem',
+  ctaLogin: 'Continuar História',
+
+  loginTitle: 'CONTINUAR HISTÓRIA',
+  loginSubtitle: 'CONTINUE DE ONDE PAROU',
+  loginSubmit: 'RETORNAR AO JOGO',
+  loginOverlay: 'AUTENTICANDO CREDENCIAIS...',
+  loginNoAccount: 'SEM SAVE?',
+  loginCreateLink: 'CRIAR NOVO >',
+
+  registerTitle: 'CRIAR SAVEPOINT',
+  registerSubtitle: 'CRIE SEU AVATAR E INICIE A JORNADA',
+  registerSubmit: 'CRIAR PERSONAGEM',
+  registerOverlay: 'INICIALIZANDO REGISTRO...',
+  registerHasAccount: 'Já possui save?',
+
+  dashboardLoading: 'Carregando sua aventura...',
+  noCampaignProse:
+    'Ainda não temos uma campanha ativa. Fique de olho — assim que uma nova aventura começar, ela aparece bem aqui.',
+  prizesTitle: 'Prêmios em Jogo',
 };
 
 const feira: typeof cyber = {
@@ -134,6 +160,32 @@ const feira: typeof cyber = {
   completeMoreProse: 'Quer ganhar ainda mais cupons e aumentar suas chances de ganhar? Complete os desafios disponíveis.',
   campaignFallbackProse: 'Cumpra desafios, junte cupons e concorra a prêmios incríveis!',
   remainingMissionsSubtitle: 'Complete os desafios restantes para ganhar mais cupons!',
+
+  sysReady: 'Pronto',
+  sysWaiting: '',
+
+  heroParagraph:
+    'Complete os desafios, acumule cupons e aumente suas chances nos sorteios ao vivo. Cada desafio concluído rende novos cupons.',
+  ctaRegister: 'Criar minha conta',
+  ctaLogin: 'Entrar',
+
+  loginTitle: 'Entrar na sua conta',
+  loginSubtitle: 'Acesse com telefone e PIN',
+  loginSubmit: 'Entrar',
+  loginOverlay: 'Entrando',
+  loginNoAccount: 'Ainda não tem conta?',
+  loginCreateLink: 'Cadastre-se',
+
+  registerTitle: 'Criar sua conta',
+  registerSubtitle: 'Cadastre-se para participar do sorteio',
+  registerSubmit: 'Criar conta',
+  registerOverlay: 'Criando sua conta',
+  registerHasAccount: 'Já tem conta?',
+
+  dashboardLoading: 'Carregando',
+  noCampaignProse:
+    'Ainda não temos uma campanha ativa. Fique de olho — assim que uma nova campanha começar, ela aparece bem aqui.',
+  prizesTitle: 'Prêmios do sorteio',
 };
 
 export const copy = THEME === 'cyber' ? cyber : feira;

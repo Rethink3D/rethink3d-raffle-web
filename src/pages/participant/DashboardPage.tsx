@@ -64,7 +64,7 @@ const ReferralCodeCard: React.FC<{ code: string }> = ({ code }) => {
       <div className="flex flex-col sm:flex-row items-center gap-4 py-2">
         <div className="flex items-center gap-2 bg-brand-bg border border-brand-secondary/40 rounded-lg px-5 py-3 select-all">
           <Users size={18} className="text-brand-secondary shrink-0" />
-          <span className="font-display font-black text-2xl text-white tracking-[0.3em]">
+          <span className="font-display font-black text-2xl text-brand-strong tracking-[0.3em]">
             {code}
           </span>
         </div>
@@ -116,7 +116,7 @@ const SignupBonusModal: React.FC = () => {
           <p className="font-display font-black text-3xl text-brand-success text-glow-secondary">
             +{signupBonusPopup} cupons
           </p>
-          <p className="text-sm font-ui font-bold text-white mt-1 uppercase tracking-wide">
+          <p className="text-sm font-ui font-bold text-brand-strong mt-1 uppercase tracking-wide">
             Só por se cadastrar!
           </p>
         </div>
@@ -252,7 +252,7 @@ export const DashboardPage: React.FC = () => {
       <div className="flex flex-col items-center justify-center min-h-[60vh] select-none pointer-events-none">
         <ThemeAsset kind="loader" size={120} />
         <div className="text-brand-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
-          Carregando sua aventura...
+          {copy.dashboardLoading}
         </div>
       </div>
     );
@@ -264,7 +264,7 @@ export const DashboardPage: React.FC = () => {
         <SignupBonusModal />
         <Card variant="danger" title="Ops, algo deu errado" glow>
           <div className="flex flex-col items-center gap-4 text-center">
-            <p className="text-sm font-ui font-bold text-white tracking-wider">
+            <p className="text-sm font-ui font-bold text-brand-strong tracking-wider">
               {error}
             </p>
             <Button variant="danger" size="md" onClick={() => window.location.reload()}>
@@ -284,7 +284,7 @@ export const DashboardPage: React.FC = () => {
           <div className="flex flex-col items-center gap-4 text-center py-4">
             <ThemeAsset kind="waiting" size={96} className="w-24" />
             <p className="text-sm font-body text-brand-muted max-w-sm">
-              Ainda não temos uma campanha ativa. Fique de olho — assim que uma nova aventura começar, ela aparece bem aqui.
+              {copy.noCampaignProse}
             </p>
           </div>
         </Card>
@@ -329,7 +329,7 @@ export const DashboardPage: React.FC = () => {
               </span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl font-display font-black text-white uppercase tracking-wide text-glow-primary break-words leading-tight">
+            <h2 className="text-3xl sm:text-4xl font-display font-black text-brand-strong uppercase tracking-wide text-glow-primary break-words leading-tight">
               {activeCampaign.name}
             </h2>
 
@@ -403,7 +403,7 @@ export const DashboardPage: React.FC = () => {
                 </div>
               ) : activeCampaign.status === 'PAUSED' ? (
                 <div className="flex flex-col items-center justify-center text-center gap-3">
-                  <div className="font-display font-black text-lg text-white uppercase tracking-wider">
+                  <div className="font-display font-black text-lg text-brand-strong uppercase tracking-wider">
                     Sorteio em intervalo
                   </div>
                   <p className="text-xs text-brand-muted max-w-xs">
@@ -413,7 +413,7 @@ export const DashboardPage: React.FC = () => {
                 </div>
               ) : countdown.isExpired ? (
                 <div className="flex flex-col items-center justify-center text-center gap-3">
-                  <div className="font-display font-black text-xl text-white uppercase tracking-wider">
+                  <div className="font-display font-black text-xl text-brand-strong uppercase tracking-wider">
                     Já é hora do sorteio!
                   </div>
                   <p className="text-xs text-brand-muted max-w-xs">
@@ -433,19 +433,19 @@ export const DashboardPage: React.FC = () => {
                 <div className="flex flex-col gap-4">
                   <div className="grid grid-cols-4 gap-2 text-center">
                     <div className="bg-brand-surface border border-brand-primary/30 rounded p-2.5">
-                      <div className="font-display font-black text-2xl text-white tracking-tighter">
+                      <div className="font-display font-black text-2xl text-brand-strong tracking-tighter">
                         {countdown.formatted.days}
                       </div>
                       <div className="text-[8px] font-mono text-brand-muted uppercase tracking-widest mt-0.5">DIAS</div>
                     </div>
                     <div className="bg-brand-surface border border-brand-primary/30 rounded p-2.5">
-                      <div className="font-display font-black text-2xl text-white tracking-tighter">
+                      <div className="font-display font-black text-2xl text-brand-strong tracking-tighter">
                         {countdown.formatted.hours}
                       </div>
                       <div className="text-[8px] font-mono text-brand-muted uppercase tracking-widest mt-0.5">HORAS</div>
                     </div>
                     <div className="bg-brand-surface border border-brand-primary/30 rounded p-2.5">
-                      <div className="font-display font-black text-2xl text-white tracking-tighter">
+                      <div className="font-display font-black text-2xl text-brand-strong tracking-tighter">
                         {countdown.formatted.minutes}
                       </div>
                       <div className="text-[8px] font-mono text-brand-muted uppercase tracking-widest mt-0.5">MINS</div>
@@ -496,7 +496,7 @@ export const DashboardPage: React.FC = () => {
                   <span className="text-[10px] font-mono tracking-widest text-brand-secondary uppercase">
                     Concluídas
                   </span>
-                  <span className="font-display font-extrabold text-2xl text-white mt-1">
+                  <span className="font-display font-extrabold text-2xl text-brand-strong mt-1">
                     {completedQuests} <span className="text-brand-muted text-lg">/ {totalQuests}</span>
                   </span>
                 </div>
@@ -533,7 +533,7 @@ export const DashboardPage: React.FC = () => {
       {prizes.length > 0 && (
         <Card
           variant="accent"
-          title="Prêmios em Jogo"
+          title={copy.prizesTitle}
           subtitle="Quem for sorteado leva um destes pra casa"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-2">
@@ -542,7 +542,7 @@ export const DashboardPage: React.FC = () => {
                 key={prize.id}
                 className="flex gap-3 bg-brand-surface/70 border border-brand-border/80 rounded-lg p-3 items-center"
               >
-                <div className="w-16 h-16 shrink-0 rounded-md overflow-hidden border border-brand-border/60 bg-black/40 flex items-center justify-center">
+                <div className="w-16 h-16 shrink-0 rounded-md overflow-hidden border border-brand-border/60 bg-sunken-40 flex items-center justify-center">
                   {prize.imageUrl ? (
                     <img
                       src={prize.imageUrl}
@@ -557,7 +557,7 @@ export const DashboardPage: React.FC = () => {
                   )}
                 </div>
                 <div className="flex flex-col min-w-0">
-                  <span className="text-sm font-display font-bold text-white uppercase tracking-wide break-words">
+                  <span className="text-sm font-display font-bold text-brand-strong uppercase tracking-wide break-words">
                     {prize.name}
                   </span>
                   {prize.description && (
@@ -586,7 +586,7 @@ export const DashboardPage: React.FC = () => {
               return (
                 <div key={draw.id} className="flex items-center justify-between gap-3 py-3 first:pt-1 last:pb-1">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-10 h-10 shrink-0 rounded-md overflow-hidden border border-brand-border/60 bg-black/40 flex items-center justify-center">
+                    <div className="w-10 h-10 shrink-0 rounded-md overflow-hidden border border-brand-border/60 bg-sunken-40 flex items-center justify-center">
                       {draw.prize?.imageUrl ? (
                         <img
                           src={draw.prize.imageUrl}
@@ -601,7 +601,7 @@ export const DashboardPage: React.FC = () => {
                       )}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-ui font-bold text-white truncate">
+                      <p className="text-sm font-ui font-bold text-brand-strong truncate">
                         {draw.prize?.name ?? 'Prêmio'}
                       </p>
                       <p className="text-[10px] font-mono text-brand-muted uppercase tracking-wider mt-0.5">
@@ -650,7 +650,7 @@ export const DashboardPage: React.FC = () => {
                       {isSignup ? <Gift size={14} /> : isReferral ? <Users size={14} /> : <TicketIcon size={14} />}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-ui font-bold text-white truncate">{label}</p>
+                      <p className="text-sm font-ui font-bold text-brand-strong truncate">{label}</p>
                       <p className="text-[10px] font-mono text-brand-muted uppercase tracking-wider mt-0.5">
                         {new Date(entry.createdAt).toLocaleString('pt-BR')}
                       </p>
@@ -701,7 +701,7 @@ export const DashboardPage: React.FC = () => {
                 {rule.icon}
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-ui font-bold text-white">{rule.title}</p>
+                <p className="text-sm font-ui font-bold text-brand-strong">{rule.title}</p>
                 <p className="text-xs text-brand-muted leading-relaxed mt-0.5">{rule.text}</p>
               </div>
             </div>

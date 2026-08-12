@@ -117,7 +117,7 @@ export const PrintUpload: React.FC<PrintUploadProps> = ({
         <span className="text-[10px] font-mono tracking-widest text-brand-secondary uppercase">
           // INTERFACE DE ENVIO DE COMPROVAÇÃO
         </span>
-        <h3 className="text-base font-display font-extrabold text-white uppercase tracking-wider mt-0.5">
+        <h3 className="text-base font-display font-extrabold text-brand-strong uppercase tracking-wider mt-0.5">
           {missionTitle}
         </h3>
       </div>
@@ -155,7 +155,7 @@ export const PrintUpload: React.FC<PrintUploadProps> = ({
                   <Upload size={32} />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <p className="text-sm font-ui font-bold text-white tracking-wide">
+                  <p className="text-sm font-ui font-bold text-brand-strong tracking-wide">
                     ARRASTE E SOLTE A IMAGEM AQUI OU{' '}
                     <span 
                       onClick={onButtonClick} 
@@ -176,7 +176,7 @@ export const PrintUpload: React.FC<PrintUploadProps> = ({
                     <FileImage size={24} />
                   </div>
                   <div className="flex-1 min-w-0 text-left">
-                    <p className="text-sm font-ui font-bold text-white truncate uppercase tracking-wider">
+                    <p className="text-sm font-ui font-bold text-brand-strong truncate uppercase tracking-wider">
                       {file.name}
                     </p>
                     <p className="text-xs font-mono text-brand-muted">
@@ -250,7 +250,7 @@ export const PrintUpload: React.FC<PrintUploadProps> = ({
           </div>
 
           <div className="flex flex-col gap-1.5 select-none">
-            <h4 className="text-base font-display font-extrabold text-white tracking-widest uppercase">
+            <h4 className="text-base font-display font-extrabold text-brand-strong tracking-widest uppercase">
               ENVIO REALIZADO COM SUCESSO
             </h4>
             <p className="text-xs font-mono text-brand-success tracking-widest uppercase">

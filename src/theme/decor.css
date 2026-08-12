@@ -9,9 +9,30 @@
 }
 
 [data-theme="feira"] body {
-  background-image:
-    linear-gradient(180deg, rgb(var(--c-surface)) 0%, rgb(var(--c-bg)) 340px);
-  background-repeat: no-repeat;
+  background-image: none;
+}
+
+/* No tema escuro, opacidade parcial deixava o papel de parede aparecer atrás
+   dos painéis. Sobre a página clara ela só lava o contraste: superfícies e
+   texto voltam a ser opacos. */
+[data-theme="feira"] [class*="bg-brand-surface/"] {
+  background-color: rgb(var(--c-surface));
+}
+
+[data-theme="feira"] [class*="text-brand-text/"] {
+  color: rgb(var(--c-text));
+}
+
+/* Os tamanhos de 9 a 11px eram parte da estética de HUD e ficam ilegíveis
+   sobre fundo claro. */
+[data-theme="feira"] [class*="text-[9px]"]  { font-size: 0.6875rem; }
+[data-theme="feira"] [class*="text-[10px]"] { font-size: 0.75rem; }
+[data-theme="feira"] [class*="text-[11px]"] { font-size: 0.8125rem; }
+
+[data-theme="feira"] .theme-card {
+  box-shadow:
+    0 1px 2px rgb(var(--c-text) / 0.05),
+    0 6px 16px rgb(var(--c-text) / 0.06);
 }
 
 .glow-primary   { box-shadow: 0 0 14px rgb(var(--c-primary) / 0.4); }
@@ -85,6 +106,29 @@
 [data-theme="feira"] .rounded-md,
 [data-theme="feira"] .rounded-lg,
 [data-theme="feira"] .rounded-xl { border-radius: var(--radius); }
+
+[data-theme="cyber"] .on-fill { color: #000000; }
+[data-theme="feira"] .on-fill { color: #ffffff; }
+[data-theme="cyber"] .on-fill-hover:hover { color: #000000; }
+[data-theme="feira"] .on-fill-hover:hover { color: #ffffff; }
+
+[data-theme="cyber"] .bg-sunken-20 { background-color: rgb(0 0 0 / 0.20); }
+[data-theme="cyber"] .bg-sunken-25 { background-color: rgb(0 0 0 / 0.25); }
+[data-theme="cyber"] .bg-sunken-30 { background-color: rgb(0 0 0 / 0.30); }
+[data-theme="cyber"] .bg-sunken-35 { background-color: rgb(0 0 0 / 0.35); }
+[data-theme="cyber"] .bg-sunken-40 { background-color: rgb(0 0 0 / 0.40); }
+[data-theme="cyber"] .bg-sunken-45 { background-color: rgb(0 0 0 / 0.45); }
+[data-theme="cyber"] .bg-sunken-55 { background-color: rgb(0 0 0 / 0.55); }
+[data-theme="cyber"] .bg-sunken-60 { background-color: rgb(0 0 0 / 0.60); }
+
+[data-theme="feira"] .bg-sunken-20 { background-color: rgb(var(--c-text) / 0.025); }
+[data-theme="feira"] .bg-sunken-25 { background-color: rgb(var(--c-text) / 0.030); }
+[data-theme="feira"] .bg-sunken-30 { background-color: rgb(var(--c-text) / 0.035); }
+[data-theme="feira"] .bg-sunken-35 { background-color: rgb(var(--c-text) / 0.040); }
+[data-theme="feira"] .bg-sunken-40 { background-color: rgb(var(--c-text) / 0.050); }
+[data-theme="feira"] .bg-sunken-45 { background-color: rgb(var(--c-text) / 0.055); }
+[data-theme="feira"] .bg-sunken-55 { background-color: rgb(var(--c-text) / 0.070); }
+[data-theme="feira"] .bg-sunken-60 { background-color: rgb(var(--c-text) / 0.080); }
 
 [data-theme="feira"] ::-webkit-scrollbar-track { background: rgb(var(--c-surface)); }
 [data-theme="feira"] ::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); }

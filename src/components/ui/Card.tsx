@@ -48,7 +48,7 @@ export const Card: React.FC<CardProps> = ({
   return (
     <div
       className={`
-        relative bg-brand-surface/85 border ${borderColors[variant]} 
+        theme-card relative bg-brand-surface/85 border ${borderColors[variant]}
         rounded-lg p-5 transition-all duration-300
         ${glow ? glowEffects[variant] : ''}
         ${className}
@@ -69,7 +69,7 @@ export const Card: React.FC<CardProps> = ({
         <div className="border-b border-brand-border/40 pb-3 mb-4 flex justify-between items-start gap-4">
           <div className="min-w-0">
             {title && (
-              <h3 className="text-base font-display font-bold tracking-widest text-white uppercase break-words">
+              <h3 className="text-base font-display font-bold tracking-widest text-brand-strong uppercase break-words">
                 {title}
               </h3>
             )}

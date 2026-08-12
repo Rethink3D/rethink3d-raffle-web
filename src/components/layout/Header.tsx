@@ -240,7 +240,7 @@ export const Header: React.FC = () => {
           <div className="flex items-center gap-2 sm:gap-4 min-w-0">
             {/* User Profile Summary */}
             <div className="hidden sm:flex flex-col text-right min-w-0">
-              <span className="text-xs font-ui font-bold text-white tracking-wide uppercase truncate">
+              <span className="text-xs font-ui font-bold text-brand-strong tracking-wide uppercase truncate">
                 {user.name}
               </span>
               <span className="text-[9px] font-mono tracking-widest text-brand-muted -mt-0.5 uppercase flex items-center justify-end gap-1">
@@ -312,7 +312,7 @@ export const Header: React.FC = () => {
             </Link>
             <Link
               to="/register"
-              className="text-xs font-display uppercase border border-brand-primary bg-brand-primary/10 text-white px-3 sm:px-4 py-2 hover:bg-brand-primary hover:glow-primary transition-all rounded shrink-0 whitespace-nowrap"
+              className="text-xs font-display uppercase border border-brand-primary bg-brand-primary/10 text-brand-strong px-3 sm:px-4 py-2 hover:bg-brand-primary hover:glow-primary transition-all rounded shrink-0 whitespace-nowrap"
             >
               Cadastrar
             </Link>

@@ -19,6 +19,7 @@ export default {
           success:   'rgb(var(--c-success) / <alpha-value>)',
           danger:    'rgb(var(--c-danger) / <alpha-value>)',
           text:      'rgb(var(--c-text) / <alpha-value>)',
+          strong:    'rgb(var(--c-strong) / <alpha-value>)',
           muted:     'rgb(var(--c-muted) / <alpha-value>)',
         }
       },

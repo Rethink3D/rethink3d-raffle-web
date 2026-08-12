@@ -86,7 +86,7 @@ export const AdminDashboard: React.FC = () => {
       {/* Header section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border/40 pb-5">
         <div>
-          <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase">
+          <h1 className="text-2xl font-display font-extrabold text-brand-strong tracking-widest uppercase">
             PAINEL DE CONTROLE
           </h1>
           <p className="text-xs font-ui font-bold text-brand-secondary tracking-widest mt-1">
@@ -124,7 +124,7 @@ export const AdminDashboard: React.FC = () => {
         <Card variant="default" className="lg:col-span-2">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h3 className="text-sm font-display font-bold text-white tracking-wider uppercase">
+              <h3 className="text-sm font-display font-bold text-brand-strong tracking-wider uppercase">
                 FILTRO DE MÉTRICAS
               </h3>
               <p className="text-[10px] font-mono text-brand-muted uppercase mt-0.5">
@@ -136,7 +136,7 @@ export const AdminDashboard: React.FC = () => {
               <select
                 value={selectedCampaignId}
                 onChange={(e) => setSelectedCampaignId(e.target.value)}
-                className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-sm font-ui font-bold text-white tracking-wide focus:border-brand-secondary focus:outline-none"
+                className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-sm font-ui font-bold text-brand-strong tracking-wide focus:border-brand-secondary focus:outline-none"
                 disabled={isLoadingCampaigns}
               >
                 {isLoadingCampaigns ? (
@@ -172,7 +172,7 @@ export const AdminDashboard: React.FC = () => {
             </div>
           </div>
           <div className="mt-4 flex items-baseline gap-2">
-            <span className="text-3xl font-display font-extrabold text-white text-glow-accent">
+            <span className="text-3xl font-display font-extrabold text-brand-strong text-glow-accent">
               {onlineCount}
             </span>
             <span className="text-xs font-ui font-bold text-brand-muted uppercase tracking-widest">
@@ -197,7 +197,7 @@ export const AdminDashboard: React.FC = () => {
               <p className="text-xs font-ui font-bold text-brand-muted tracking-wider uppercase">
                 PARTICIPANTES
               </p>
-              <h2 className="text-2xl font-display font-extrabold text-white mt-2">
+              <h2 className="text-2xl font-display font-extrabold text-brand-strong mt-2">
                 {isLoadingStats ? '---' : stats?.totalParticipants ?? 0}
               </h2>
             </div>
@@ -217,7 +217,7 @@ export const AdminDashboard: React.FC = () => {
               <p className="text-xs font-ui font-bold text-brand-secondary tracking-wider uppercase">
                 CUPONS EMITIDOS
               </p>
-              <h2 className="text-2xl font-display font-extrabold text-white mt-2 text-glow-secondary">
+              <h2 className="text-2xl font-display font-extrabold text-brand-strong mt-2 text-glow-secondary">
                 {isLoadingStats ? '---' : stats?.totalTickets ?? 0}
               </h2>
             </div>
@@ -237,7 +237,7 @@ export const AdminDashboard: React.FC = () => {
               <p className="text-xs font-ui font-bold text-brand-primary tracking-wider uppercase">
                 {copy.missionsCompletedUpper}
               </p>
-              <h2 className="text-2xl font-display font-extrabold text-white mt-2">
+              <h2 className="text-2xl font-display font-extrabold text-brand-strong mt-2">
                 {isLoadingStats ? '---' : stats?.completedMissions ?? 0}
               </h2>
             </div>
@@ -257,7 +257,7 @@ export const AdminDashboard: React.FC = () => {
         <div className="lg:col-span-2 space-y-4">
           <div className="flex items-center gap-2">
             <Award size={18} className="text-brand-primary" />
-            <h2 className="text-base font-display font-bold text-white tracking-widest uppercase">
+            <h2 className="text-base font-display font-bold text-brand-strong tracking-widest uppercase">
               CAMPANHAS DISPONÍVEIS
             </h2>
           </div>
@@ -266,14 +266,14 @@ export const AdminDashboard: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full border-collapse text-left">
                 <thead>
-                  <tr className="border-b border-brand-border bg-black/45 text-[11px] font-mono tracking-wider text-brand-muted uppercase select-none">
+                  <tr className="border-b border-brand-border bg-sunken-45 text-[11px] font-mono tracking-wider text-brand-muted uppercase select-none">
                     <th className="p-4 font-normal">Nome</th>
                     <th className="p-4 font-normal">Status</th>
                     <th className="p-4 font-normal">Data Sorteio</th>
                     <th className="p-4 font-normal text-right">Ação</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-brand-border/40 text-xs font-ui font-bold text-white tracking-wider">
+                <tbody className="divide-y divide-brand-border/40 text-xs font-ui font-bold text-brand-strong tracking-wider">
                   {isLoadingCampaigns ? (
                     <tr>
                       <td colSpan={4} className="p-8 text-center text-brand-muted font-mono select-none">
@@ -300,7 +300,7 @@ export const AdminDashboard: React.FC = () => {
                             c.status === 'ACTIVE' ? 'bg-brand-success/15 border border-brand-success/40 text-brand-success' :
                             c.status === 'DRAWING' ? 'bg-brand-accent/15 border border-brand-accent/40 text-brand-accent animate-pulse' :
                             c.status === 'FINISHED' ? 'bg-brand-muted/15 border border-brand-muted/40 text-brand-muted' :
-                            'bg-brand-border/40 border border-brand-border text-white'
+                            'bg-brand-border/40 border border-brand-border text-brand-strong'
                           }`}>
                             {getCampaignStatusLabel(c.status)}
                           </span>
@@ -328,7 +328,7 @@ export const AdminDashboard: React.FC = () => {
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Play size={18} className="text-brand-accent" />
-            <h2 className="text-base font-display font-bold text-white tracking-widest uppercase">
+            <h2 className="text-base font-display font-bold text-brand-strong tracking-widest uppercase">
               AÇÕES RÁPIDAS
             </h2>
           </div>
@@ -340,9 +340,9 @@ export const AdminDashboard: React.FC = () => {
               </div>
 
               {activeCampaign ? (
-                <div className="bg-black/35 rounded border border-brand-border/60 p-3 flex flex-col gap-1 text-xs">
+                <div className="bg-sunken-35 rounded border border-brand-border/60 p-3 flex flex-col gap-1 text-xs">
                   <span className="font-mono text-brand-muted uppercase text-[10px]">CAMPANHA EM FOCO</span>
-                  <span className="font-display text-white text-sm uppercase truncate">{activeCampaign.name}</span>
+                  <span className="font-display text-brand-strong text-sm uppercase truncate">{activeCampaign.name}</span>
                   <span className="font-mono text-brand-secondary mt-1">Status: {getCampaignStatusLabel(activeCampaign.status)}</span>
                 </div>
               ) : (

@@ -187,7 +187,7 @@ export const DrawWatchPage: React.FC = () => {
             <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-brand-primary rounded-full animate-ping" />
           </div>
           <div>
-            <h2 className="text-base font-display font-extrabold uppercase text-white tracking-widest leading-none">
+            <h2 className="text-base font-display font-extrabold uppercase text-brand-strong tracking-widest leading-none">
               Sorteio Ao Vivo
             </h2>
             <div className="text-[9px] font-mono text-brand-secondary tracking-widest mt-1">
@@ -201,7 +201,7 @@ export const DrawWatchPage: React.FC = () => {
             <Users size={14} className="text-brand-secondary" />
             <div className="flex flex-col">
               <span className="text-[9px] font-mono text-brand-muted uppercase">Assistindo</span>
-              <span className="font-display font-bold text-xs text-white">{onlineCount || 1}</span>
+              <span className="font-display font-bold text-xs text-brand-strong">{onlineCount || 1}</span>
             </div>
           </div>
         </div>
@@ -209,7 +209,7 @@ export const DrawWatchPage: React.FC = () => {
 
       <div className="max-w-3xl mx-auto w-full flex flex-col gap-6">
         {activeCampaign?.coverImageUrl && (
-          <div className="aspect-video relative rounded-lg border border-brand-border overflow-hidden bg-black/55 select-none">
+          <div className="aspect-video relative rounded-lg border border-brand-border overflow-hidden bg-sunken-55 select-none">
             <img
               src={activeCampaign.coverImageUrl}
               alt={activeCampaign.name}
@@ -232,7 +232,7 @@ export const DrawWatchPage: React.FC = () => {
                 O sorteado foi
               </span>
 
-              <h3 className="text-3xl font-display font-black text-white uppercase mt-2 tracking-wide text-glow-primary">
+              <h3 className="text-3xl font-display font-black text-brand-strong uppercase mt-2 tracking-wide text-glow-primary">
                 {winner.winnerName}
               </h3>
 
@@ -240,7 +240,7 @@ export const DrawWatchPage: React.FC = () => {
                 <div className="grid grid-cols-3 gap-4">
                   <div>
                     <span className="text-[9px] font-mono text-brand-muted uppercase block">Prêmio</span>
-                    <span className="font-ui font-bold text-sm text-white mt-0.5 block">
+                    <span className="font-ui font-bold text-sm text-brand-strong mt-0.5 block">
                       {winner.prize?.name || 'Grande Prêmio'}
                     </span>
                   </div>
@@ -252,7 +252,7 @@ export const DrawWatchPage: React.FC = () => {
                   </div>
                   <div>
                     <span className="text-[9px] font-mono text-brand-muted uppercase block">Tickets no total</span>
-                    <span className="font-ui font-bold text-sm text-white mt-0.5 block">
+                    <span className="font-ui font-bold text-sm text-brand-strong mt-0.5 block">
                       {winner.totalTickets}
                     </span>
                   </div>
@@ -285,7 +285,7 @@ export const DrawWatchPage: React.FC = () => {
               />
 
               <div className="flex flex-col gap-1 items-center">
-                <span className="text-xs font-ui font-bold text-white uppercase tracking-wider">
+                <span className="text-xs font-ui font-bold text-brand-strong uppercase tracking-wider">
                   Cada fatia é uma chance real — quanto mais tickets, maior o pedaço
                 </span>
                 <span className="text-[10px] font-mono text-brand-muted uppercase tracking-widest">
@@ -302,7 +302,7 @@ export const DrawWatchPage: React.FC = () => {
                   <Clock size={28} />
                 </div>
 
-                <h3 className="text-lg font-display font-extrabold uppercase text-white tracking-widest">
+                <h3 className="text-lg font-display font-extrabold uppercase text-brand-strong tracking-widest">
                   Aguardando a próxima rodada
                 </h3>
 
@@ -322,7 +322,7 @@ export const DrawWatchPage: React.FC = () => {
                   <Lock size={28} />
                 </div>
 
-                <h3 className="text-lg font-display font-extrabold uppercase text-white tracking-widest">
+                <h3 className="text-lg font-display font-extrabold uppercase text-brand-strong tracking-widest">
                   {copy.missionsFrozen}
                 </h3>
 
@@ -335,7 +335,7 @@ export const DrawWatchPage: React.FC = () => {
                     <span className="text-[10px] font-mono text-brand-danger tracking-widest uppercase flex items-center gap-1.5">
                       <Clock size={12} /> Falta pouco pro sorteio
                     </span>
-                    <div className="font-display font-black text-3xl text-white tracking-widest">
+                    <div className="font-display font-black text-3xl text-brand-strong tracking-widest">
                       {countdown.hudDisplay}
                     </div>
                   </div>
@@ -344,7 +344,7 @@ export const DrawWatchPage: React.FC = () => {
                     <span className="text-[10px] font-mono text-brand-primary tracking-widest uppercase animate-pulse">
                       Já já a organização começa o sorteio...
                     </span>
-                    <div className="text-xs font-ui font-bold text-white uppercase tracking-wider bg-brand-border rounded px-4 py-1.5 mt-1 border border-brand-border/80">
+                    <div className="text-xs font-ui font-bold text-brand-strong uppercase tracking-wider bg-brand-border rounded px-4 py-1.5 mt-1 border border-brand-border/80">
                       Fica ligado nesta tela
                     </div>
                   </div>
@@ -366,7 +366,7 @@ export const DrawWatchPage: React.FC = () => {
                           <Gift size={14} />
                         </div>
                         <div>
-                          <h4 className="font-display font-bold text-xs text-white uppercase tracking-wider">{p.name}</h4>
+                          <h4 className="font-display font-bold text-xs text-brand-strong uppercase tracking-wider">{p.name}</h4>
                           <p className="text-[10px] text-brand-muted mt-0.5 normal-case font-body">
                             {p.description || 'Recompensa exclusiva da campanha'}
                           </p>
@@ -403,7 +403,7 @@ export const DrawWatchPage: React.FC = () => {
                     <Trophy size={14} />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-ui font-bold text-white truncate">
+                    <p className="text-sm font-ui font-bold text-brand-strong truncate">
                       {draw.winnerName ?? 'Ganhador'}
                     </p>
                     <p className="text-[10px] font-mono text-brand-muted uppercase tracking-wider mt-0.5 truncate">

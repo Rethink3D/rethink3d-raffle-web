@@ -54,7 +54,7 @@ export const Leaderboard: React.FC<LeaderboardProps> = ({ entries, highlightUser
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-ui font-bold text-white truncate">
+              <p className="text-sm font-ui font-bold text-brand-strong truncate">
                 {entry.name}
                 {isMe && <span className="ml-2 text-[10px] font-mono text-brand-secondary uppercase">Você</span>}
               </p>
@@ -80,7 +80,7 @@ export const MyPositionCard: React.FC<{ entry: LeaderboardEntry }> = ({ entry })
     </div>
     <div className="flex-1 min-w-0">
       <p className="text-[10px] font-mono text-brand-secondary uppercase tracking-widest">Sua posição</p>
-      <p className="text-sm font-ui font-bold text-white">{entry.rank}º lugar</p>
+      <p className="text-sm font-ui font-bold text-brand-strong">{entry.rank}º lugar</p>
     </div>
     <div className="flex items-center gap-1.5 shrink-0 text-brand-success font-display font-extrabold text-sm">
       <TicketIcon size={13} />

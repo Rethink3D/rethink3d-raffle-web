@@ -48,7 +48,7 @@ export const ParticipantProofsPage: React.FC = () => {
             Voltar
           </Button>
           <div>
-            <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase">
+            <h1 className="text-2xl font-display font-extrabold text-brand-strong tracking-widest uppercase">
               Comprovantes
             </h1>
             <p className="text-xs font-ui font-bold text-brand-secondary tracking-widest mt-1">
@@ -84,10 +84,10 @@ export const ParticipantProofsPage: React.FC = () => {
           {proofs.map((proof) => (
             <div
               key={proof.id}
-              className="border border-brand-border/80 bg-black/35 rounded overflow-hidden flex flex-col group hover:border-brand-primary/60 transition-all duration-300"
+              className="border border-brand-border/80 bg-sunken-35 rounded overflow-hidden flex flex-col group hover:border-brand-primary/60 transition-all duration-300"
             >
               {/* Photo container */}
-              <div className="aspect-video relative overflow-hidden bg-black/60 flex items-center justify-center border-b border-brand-border/60">
+              <div className="aspect-video relative overflow-hidden bg-sunken-60 flex items-center justify-center border-b border-brand-border/60">
                 {proof.mimeType.startsWith('image/') ? (
                   <img
                     src={proof.signedUrl}
@@ -105,7 +105,7 @@ export const ParticipantProofsPage: React.FC = () => {
                   href={proof.signedUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="absolute top-2 right-2 p-1.5 rounded bg-black/70 border border-brand-border hover:border-brand-secondary text-white transition-colors cursor-pointer"
+                  className="absolute top-2 right-2 p-1.5 rounded bg-black/70 border border-brand-border hover:border-brand-secondary text-brand-strong transition-colors cursor-pointer"
                   title="Abrir imagem original"
                 >
                   <ExternalLink size={12} />
@@ -114,7 +114,7 @@ export const ParticipantProofsPage: React.FC = () => {
 
               {/* Meta details */}
               <div className="p-3 space-y-1.5 text-[11px] font-ui font-semibold text-brand-muted">
-                <div className="text-white font-bold truncate text-xs">
+                <div className="text-brand-strong font-bold truncate text-xs">
                   {proof.mission?.title || copy.unknownMission}
                 </div>
                 <div className="flex justify-between font-mono text-[9px]">

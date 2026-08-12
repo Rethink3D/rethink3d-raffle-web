@@ -282,7 +282,7 @@ setIsActionLoading(true);
       {/* Top Title Bar */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border/40 pb-5">
         <div>
-          <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase">
+          <h1 className="text-2xl font-display font-extrabold text-brand-strong tracking-widest uppercase">
             GESTOR DE CAMPANHAS
           </h1>
           <p className="text-xs font-ui font-bold text-brand-secondary tracking-widest mt-1">
@@ -346,7 +346,7 @@ setIsActionLoading(true);
               >
                 <div className="flex flex-col h-full gap-4 mt-2">
                   {campaign.coverImageUrl && (
-                    <div className="aspect-video relative rounded-md border border-brand-border overflow-hidden bg-black/55">
+                    <div className="aspect-video relative rounded-md border border-brand-border overflow-hidden bg-sunken-55">
                       <img
                         src={campaign.coverImageUrl}
                         alt={campaign.name}
@@ -365,13 +365,13 @@ setIsActionLoading(true);
                   <div className="space-y-2 border-t border-b border-brand-border/40 py-3 text-xs font-ui font-bold text-brand-muted tracking-wide">
                     <div className="flex justify-between">
                       <span className="flex items-center gap-1 uppercase"><Calendar size={12} /> INÍCIO:</span>
-                      <span className="font-mono text-white">
+                      <span className="font-mono text-brand-strong">
                         {campaign.startDate ? new Date(campaign.startDate).toLocaleString('pt-BR') : 'IMEDIATO'}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="flex items-center gap-1 uppercase"><Calendar size={12} /> SORTEIO:</span>
-                      <span className="font-mono text-white">
+                      <span className="font-mono text-brand-strong">
                         {campaign.drawDate ? new Date(campaign.drawDate).toLocaleString('pt-BR') : 'NÃO AGENDADO'}
                       </span>
                     </div>
@@ -457,7 +457,7 @@ setIsActionLoading(true);
               Descrição
             </label>
             <textarea
-              className="w-full bg-brand-bg border border-brand-border rounded px-4 py-2.5 text-sm font-ui font-semibold text-white tracking-wide placeholder-brand-muted focus:border-brand-secondary focus:ring-1 focus:ring-brand-secondary focus:outline-none"
+              className="w-full bg-brand-bg border border-brand-border rounded px-4 py-2.5 text-sm font-ui font-semibold text-brand-strong tracking-wide placeholder-brand-muted focus:border-brand-secondary focus:ring-1 focus:ring-brand-secondary focus:outline-none"
               rows={4}
               placeholder="Descreva a campanha, regras de participação, prêmios especiais..."
               value={formData.description}
@@ -527,7 +527,7 @@ setIsActionLoading(true);
 
           <p className="text-sm font-body text-brand-text">
             Você tem certeza de que deseja deletar permanentemente a campanha{' '}
-            <strong className="text-white font-semibold">"{campaignToDelete?.name}"</strong>? 
+            <strong className="text-brand-strong font-semibold">"{campaignToDelete?.name}"</strong>? 
             {copy.campaignWipeProse}
           </p>
 
@@ -566,7 +566,7 @@ setIsActionLoading(true);
           </div>
 
           <p className="text-sm font-body text-brand-text">
-            Encerrar <strong className="text-white font-semibold">"{campaignToFinish?.name}"</strong> impede
+            Encerrar <strong className="text-brand-strong font-semibold">"{campaignToFinish?.name}"</strong> impede
             novos cupons e participações. Digite sua senha para confirmar.
           </p>
 
@@ -623,7 +623,7 @@ setIsActionLoading(true);
           )}
 
           {/* Formulário de adicionar/editar */}
-          <form onSubmit={handleSubmitSchedule} className="flex flex-col gap-3 p-3 border border-brand-border/60 rounded-lg bg-black/20">
+          <form onSubmit={handleSubmitSchedule} className="flex flex-col gap-3 p-3 border border-brand-border/60 rounded-lg bg-sunken-20">
             <span className="text-[10px] font-mono text-brand-secondary uppercase tracking-widest">
               {editingScheduleId ? 'Editando horário' : 'Novo horário'}
             </span>
@@ -672,10 +672,10 @@ setIsActionLoading(true);
                 {schedules.map((schedule) => (
                   <div
                     key={schedule.id}
-                    className="flex items-center justify-between gap-3 px-3 py-2.5 rounded bg-black/25 border border-brand-border/50"
+                    className="flex items-center justify-between gap-3 px-3 py-2.5 rounded bg-sunken-25 border border-brand-border/50"
                   >
                     <div className="min-w-0">
-                      <div className="text-sm font-ui font-bold text-white flex items-center gap-1.5">
+                      <div className="text-sm font-ui font-bold text-brand-strong flex items-center gap-1.5">
                         <Clock size={12} className="text-brand-secondary shrink-0" />
                         {new Date(schedule.scheduledAt).toLocaleString('pt-BR')}
                       </div>

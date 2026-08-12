@@ -63,7 +63,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     className={`
                       flex items-center gap-3 px-4 py-3 rounded font-ui font-bold text-sm tracking-wider uppercase transition-all duration-200 border
                       ${active 
-                        ? 'bg-brand-primary/10 border-brand-primary text-white glow-primary' 
+                        ? 'bg-brand-primary/10 border-brand-primary text-brand-strong glow-primary' 
                         : 'border-transparent text-brand-muted hover:text-brand-text hover:bg-brand-surface/50 hover:border-brand-border/50'}
                     `}
                   >
@@ -115,7 +115,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                       className={`
                         flex items-center gap-3 px-4 py-3 rounded font-ui font-bold text-sm tracking-wider uppercase transition-all duration-200 border
                         ${active 
-                          ? 'bg-brand-primary/10 border-brand-primary text-white glow-primary' 
+                          ? 'bg-brand-primary/10 border-brand-primary text-brand-strong glow-primary' 
                           : 'border-transparent text-brand-muted hover:text-brand-text hover:bg-brand-surface/50 hover:border-brand-border/50'}
                       `}
                     >

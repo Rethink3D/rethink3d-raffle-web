@@ -41,7 +41,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             className={`
               w-full bg-brand-bg border ${error ? 'border-brand-danger focus:border-brand-danger focus:ring-1 focus:ring-brand-danger' : 'border-brand-border focus:border-brand-secondary focus:ring-1 focus:ring-brand-secondary'} 
-              rounded px-4 py-2.5 text-sm font-ui font-semibold text-white tracking-wide placeholder-brand-muted transition-all duration-200
+              rounded px-4 py-2.5 text-sm font-ui font-semibold text-brand-strong tracking-wide placeholder-brand-muted transition-all duration-200
               ${icon ? 'pl-10' : ''}
               ${className}
             `}

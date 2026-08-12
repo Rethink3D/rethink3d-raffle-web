@@ -50,7 +50,7 @@ export const ReferralRedeem: React.FC<ReferralRedeemProps> = ({
         <span className="text-[10px] font-mono tracking-widest text-brand-secondary uppercase">
           Indique um Amigo
         </span>
-        <h3 className="text-base font-display font-extrabold text-white uppercase tracking-wider mt-0.5">
+        <h3 className="text-base font-display font-extrabold text-brand-strong uppercase tracking-wider mt-0.5">
           {missionTitle}
         </h3>
       </div>
@@ -72,7 +72,7 @@ export const ReferralRedeem: React.FC<ReferralRedeemProps> = ({
               placeholder="000000"
               maxLength={6}
               disabled={submitting}
-              className="w-full bg-brand-bg border border-brand-border rounded px-3 py-3 text-center text-2xl font-display font-black tracking-[0.4em] text-white focus:border-brand-secondary focus:outline-none"
+              className="w-full bg-brand-bg border border-brand-border rounded px-3 py-3 text-center text-2xl font-display font-black tracking-[0.4em] text-brand-strong focus:border-brand-secondary focus:outline-none"
             />
           </div>
 
@@ -107,7 +107,7 @@ export const ReferralRedeem: React.FC<ReferralRedeemProps> = ({
           </div>
 
           <div className="flex flex-col gap-1.5 select-none">
-            <h4 className="text-base font-display font-extrabold text-white tracking-widest uppercase">
+            <h4 className="text-base font-display font-extrabold text-brand-strong tracking-widest uppercase">
               Código validado!
             </h4>
             <p className="text-xs font-mono text-brand-success tracking-widest uppercase flex items-center gap-1.5 justify-center">

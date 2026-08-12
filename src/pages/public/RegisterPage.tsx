@@ -6,6 +6,7 @@ import { getApiErrorMessage } from '../../utils/apiError';
 import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
+import { copy } from '../../theme/copy';
 import { User, Phone, Lock } from 'lucide-react';
 import agree from '../../assets/agree.gif';
 import { ThemeAsset } from '../../theme/assets';
@@ -114,20 +115,20 @@ export const RegisterPage: React.FC = () => {
         <div className="fixed inset-0 bg-black/85 flex flex-col items-center justify-center z-50 pointer-events-auto select-none">
           <ThemeAsset kind="loader" size={120} />
           <span className="text-xs font-mono text-brand-primary tracking-[0.2em] uppercase animate-pulse mt-2">
-            INICIALIZANDO REGISTRO...
+            {copy.registerOverlay}
           </span>
         </div>
       )}
       <Card 
-        title="CRIAR SAVEPOINT" 
-        subtitle="CRIE SEU AVATAR E INICIE A JORNADA"
+        title={copy.registerTitle}
+        subtitle={copy.registerSubtitle}
         variant="primary"
         glow
       >
 
         {serverError && (
           <div className="mb-4 bg-brand-danger/10 border border-brand-danger rounded p-3 text-xs font-mono text-brand-danger uppercase">
-            ⚡ CADASTRO REJEITADO // {serverError}
+            {serverError}
           </div>
         )}
 
@@ -141,7 +142,7 @@ export const RegisterPage: React.FC = () => {
             onChange={(e) => setName(e.target.value)}
             error={errorMap.name}
             icon={<User size={16} />}
-            statusIndicator={name.trim().length >= 3 ? '[SYS_READY]' : '[SYS_WAITING]'}
+            statusIndicator={name.trim().length >= 3 ? copy.sysReady : copy.sysWaiting}
             required
           />
 
@@ -154,7 +155,7 @@ export const RegisterPage: React.FC = () => {
             onChange={handlePhoneChange}
             error={errorMap.phone}
             icon={<Phone size={16} />}
-            statusIndicator={phone.replace(/\D/g, '').length === 11 ? '[SYS_READY]' : '[SYS_WAITING]'}
+            statusIndicator={phone.replace(/\D/g, '').length === 11 ? copy.sysReady : copy.sysWaiting}
             required
           />
 
@@ -170,7 +171,7 @@ export const RegisterPage: React.FC = () => {
               onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
               error={errorMap.pin}
               icon={<Lock size={16} />}
-              statusIndicator={pin.length === 4 ? '[SYS_READY]' : '[SYS_WAITING]'}
+              statusIndicator={pin.length === 4 ? copy.sysReady : copy.sysWaiting}
               required
             />
 
@@ -184,7 +185,7 @@ export const RegisterPage: React.FC = () => {
               onChange={(e) => setConfirmPin(e.target.value.replace(/\D/g, ''))}
               error={errorMap.confirmPin}
               icon={<Lock size={16} />}
-              statusIndicator={confirmPin === pin && pin.length === 4 ? '[SYS_READY]' : '[SYS_WAITING]'}
+              statusIndicator={confirmPin === pin && pin.length === 4 ? copy.sysReady : copy.sysWaiting}
               required
             />
           </div>
@@ -197,11 +198,11 @@ export const RegisterPage: React.FC = () => {
               isLoading={isLoading}
               icon={THEME === 'cyber' ? <img src={agree} alt="" className="w-5 h-5 object-contain" /> : undefined}
             >
-              CRIAR PERSONAGEM
+              {copy.registerSubmit}
             </Button>
 
             <div className="text-center text-xs font-mono text-brand-muted mt-2 uppercase">
-              Já possui save?{' '}
+              {copy.registerHasAccount}{' '}
               <Link to="/login" className="text-brand-secondary hover:underline tracking-wide">
                 Acessar &gt;
               </Link>

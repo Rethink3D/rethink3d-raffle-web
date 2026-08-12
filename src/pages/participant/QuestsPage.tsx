@@ -119,7 +119,7 @@ export const QuestsPage: React.FC = () => {
       <div className="max-w-md mx-auto my-10 select-none">
         <Card variant="danger" title="Ops, algo deu errado" glow>
           <div className="flex flex-col items-center gap-4 text-center">
-            <p className="text-sm font-ui font-bold text-white tracking-wider">
+            <p className="text-sm font-ui font-bold text-brand-strong tracking-wider">
               {error}
             </p>
             <Button variant="danger" size="md" onClick={fetchQuests}>
@@ -172,7 +172,7 @@ export const QuestsPage: React.FC = () => {
         <div className="absolute top-0 right-0 w-24 h-24 pointer-events-none opacity-5 bg-cyber-grid" />
 
         <div className="flex flex-col">
-          <h2 className="text-xl font-display font-extrabold text-white uppercase tracking-wider">
+          <h2 className="text-xl font-display font-extrabold text-brand-strong uppercase tracking-wider">
             {copy.yourMissions}
           </h2>
           <p className="text-xs text-brand-muted mt-1 leading-relaxed max-w-2xl">
@@ -187,7 +187,7 @@ export const QuestsPage: React.FC = () => {
               Todas concluídas!
             </span>
           ) : (
-            <span className="text-xs font-ui font-bold text-white uppercase bg-brand-border/80 border border-brand-border/90 px-3 py-1.5 rounded">
+            <span className="text-xs font-ui font-bold text-brand-strong uppercase bg-brand-border/80 border border-brand-border/90 px-3 py-1.5 rounded">
               {quests.length} missõe{quests.length === 1 ? '' : 's'} disponíve{quests.length === 1 ? 'l' : 'is'}
             </span>
           )}
@@ -199,7 +199,7 @@ export const QuestsPage: React.FC = () => {
         <Card variant="secondary" glow className="text-center">
           <div className="flex flex-col items-center gap-3 py-4 select-none">
             <ThemeAsset kind="celebrate" size={80} className="w-20" />
-            <h3 className="text-lg font-display font-extrabold text-white uppercase tracking-wider">
+            <h3 className="text-lg font-display font-extrabold text-brand-strong uppercase tracking-wider">
               Parabéns, você completou todas as missões!
             </h3>
             <p className="text-sm text-brand-muted max-w-md">
@@ -229,7 +229,7 @@ export const QuestsPage: React.FC = () => {
         {quests.length === 0 ? (
           <Card className="text-center py-10 select-none">
             <HelpCircle size={36} className="text-brand-muted mx-auto mb-2" />
-            <p className="text-sm font-ui font-bold text-white uppercase tracking-wider">
+            <p className="text-sm font-ui font-bold text-brand-strong uppercase tracking-wider">
               Nenhuma missão cadastrada ainda
             </p>
             <p className="text-xs text-brand-muted mt-1">

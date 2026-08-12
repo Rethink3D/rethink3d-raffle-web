@@ -183,7 +183,7 @@ export const QuizPage: React.FC = () => {
         <Card variant="danger" title="Ops, algo deu errado" glow>
           <div className="flex flex-col items-center gap-4 text-center">
             <XCircle size={48} className="text-brand-danger" />
-            <p className="text-sm font-ui font-bold text-white tracking-wider">
+            <p className="text-sm font-ui font-bold text-brand-strong tracking-wider">
               {error}
             </p>
             <Button variant="danger" size="md" onClick={() => navigate('/dashboard')} icon={<ArrowLeft size={14} />}>
@@ -256,7 +256,7 @@ export const QuizPage: React.FC = () => {
             <div className="grid grid-cols-3 gap-3 w-full mt-6 text-center">
               <div className="bg-brand-surface border border-brand-border p-3 rounded">
                 <span className="text-[9px] font-mono text-brand-muted block uppercase">Acertos</span>
-                <span className="font-display font-bold text-lg text-white mt-1 block">
+                <span className="font-display font-bold text-lg text-brand-strong mt-1 block">
                   {accuracy}%
                 </span>
               </div>
@@ -312,7 +312,7 @@ export const QuizPage: React.FC = () => {
     <div className="max-w-2xl mx-auto my-6 font-body">
       {/* Quiz Title Header */}
       <div className="flex flex-col gap-1 mb-4 select-none">
-        <h2 className="text-lg font-display font-extrabold text-white uppercase tracking-wider break-words">
+        <h2 className="text-lg font-display font-extrabold text-brand-strong uppercase tracking-wider break-words">
           {quiz.title}
         </h2>
         {rewardAmount > 0 && (
@@ -349,11 +349,11 @@ export const QuizPage: React.FC = () => {
 
         {/* Question Text */}
         <div className="mb-6">
-          <h3 className="text-base font-display font-bold text-white uppercase tracking-wide leading-relaxed break-words">
+          <h3 className="text-base font-display font-bold text-brand-strong uppercase tracking-wide leading-relaxed break-words">
             {currentQuestion.text}
           </h3>
           {currentQuestion.imageUrl && (
-            <div className="mt-4 border border-brand-border rounded overflow-hidden max-h-48 flex justify-center bg-black/40">
+            <div className="mt-4 border border-brand-border rounded overflow-hidden max-h-48 flex justify-center bg-sunken-40">
               <img 
                 src={currentQuestion.imageUrl} 
                 alt="Pista visual da pergunta"
@@ -373,7 +373,7 @@ export const QuizPage: React.FC = () => {
                 onClick={() => handleOptionSelect(option.id)}
                 className={`w-full text-left p-4 rounded border transition-all duration-200 font-ui font-bold text-sm tracking-wide uppercase select-none cursor-pointer relative overflow-hidden
                   ${isSelected 
-                    ? 'bg-brand-secondary/15 border-brand-secondary text-white glow-secondary' 
+                    ? 'bg-brand-secondary/15 border-brand-secondary text-brand-strong glow-secondary' 
                     : 'bg-brand-surface/60 border-brand-border text-brand-muted hover:border-brand-secondary/40 hover:text-white'}`}
               >
                 {/* Visual glow corner overlay when selected */}

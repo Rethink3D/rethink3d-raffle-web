@@ -193,7 +193,7 @@ export const FeedbackPage: React.FC = () => {
         <Card variant="danger" title="Ops, algo deu errado" glow>
           <div className="flex flex-col items-center gap-4 text-center">
             <ShieldAlert size={48} className="text-brand-danger" />
-            <p className="text-sm font-ui font-bold text-white tracking-wider">
+            <p className="text-sm font-ui font-bold text-brand-strong tracking-wider">
               {error}
             </p>
             <Button variant="danger" size="md" onClick={() => navigate('/dashboard')} icon={<ArrowLeft size={14} />}>
@@ -216,7 +216,7 @@ export const FeedbackPage: React.FC = () => {
               <CheckCircle2 size={40} />
             </div>
 
-            <h3 className="text-lg font-display font-extrabold uppercase tracking-wider text-white">
+            <h3 className="text-lg font-display font-extrabold uppercase tracking-wider text-brand-strong">
               {copy.missionDoneBang}
             </h3>
 
@@ -274,7 +274,7 @@ export const FeedbackPage: React.FC = () => {
         <span className="text-[10px] font-mono tracking-widest text-brand-accent uppercase">
           Formulário de feedback
         </span>
-        <h2 className="text-lg font-display font-extrabold text-white uppercase tracking-wider break-words">
+        <h2 className="text-lg font-display font-extrabold text-brand-strong uppercase tracking-wider break-words">
           {form.title}
         </h2>
       </div>
@@ -303,7 +303,7 @@ export const FeedbackPage: React.FC = () => {
                     value={(answers[q.id] as string) || ''}
                     onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                     placeholder="Escreva sua resposta..."
-                    className="w-full bg-brand-bg border border-brand-border/80 focus:border-brand-accent rounded p-3 text-sm font-ui font-semibold text-white tracking-wide placeholder-brand-muted/60 transition-all outline-none"
+                    className="w-full bg-brand-bg border border-brand-border/80 focus:border-brand-accent rounded p-3 text-sm font-ui font-semibold text-brand-strong tracking-wide placeholder-brand-muted/60 transition-all outline-none"
                   />
                 )}
 
@@ -317,7 +317,7 @@ export const FeedbackPage: React.FC = () => {
                           key={opt.id}
                           className={`flex items-center gap-3 p-3 rounded border transition-all duration-150 cursor-pointer select-none
                             ${isSelected 
-                              ? 'bg-brand-accent/10 border-brand-accent text-white glow-accent' 
+                              ? 'bg-brand-accent/10 border-brand-accent text-brand-strong glow-accent' 
                               : 'bg-brand-surface/60 border-brand-border text-brand-muted hover:border-brand-accent/40 hover:text-white'}`}
                         >
                           <input
@@ -348,7 +348,7 @@ export const FeedbackPage: React.FC = () => {
                           key={opt.id}
                           className={`flex items-center gap-3 p-3 rounded border transition-all duration-150 cursor-pointer select-none
                             ${isChecked 
-                              ? 'bg-brand-secondary/15 border-brand-secondary text-white glow-secondary' 
+                              ? 'bg-brand-secondary/15 border-brand-secondary text-brand-strong glow-secondary' 
                               : 'bg-brand-surface/60 border-brand-border text-brand-muted hover:border-brand-secondary/40 hover:text-white'}`}
                         >
                           <input

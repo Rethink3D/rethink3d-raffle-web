@@ -141,7 +141,7 @@ export const ParticipantsPage: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border/40 pb-5">
         <div>
-          <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase">
+          <h1 className="text-2xl font-display font-extrabold text-brand-strong tracking-widest uppercase">
             PARTICIPANTES
           </h1>
           <p className="text-xs font-ui font-bold text-brand-secondary tracking-widest mt-1">
@@ -172,7 +172,7 @@ export const ParticipantsPage: React.FC = () => {
             <select
               value={selectedCampaignId}
               onChange={(e) => setSelectedCampaignId(e.target.value)}
-              className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-sm font-ui font-bold text-white tracking-wide focus:border-brand-secondary focus:outline-none"
+              className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-sm font-ui font-bold text-brand-strong tracking-wide focus:border-brand-secondary focus:outline-none"
               disabled={isLoadingCampaigns}
             >
               <option value="">-- Todos (Geral, Sem dados de cupons) --</option>
@@ -218,7 +218,7 @@ export const ParticipantsPage: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left">
               <thead>
-                <tr className="border-b border-brand-border bg-black/45 text-[11px] font-mono tracking-wider text-brand-muted uppercase select-none">
+                <tr className="border-b border-brand-border bg-sunken-45 text-[11px] font-mono tracking-wider text-brand-muted uppercase select-none">
                   <th className="p-4 font-normal">Participante</th>
                   <th className="p-4 font-normal">Contatos</th>
                   {selectedCampaignId && <th className="p-4 font-normal text-center">Cupons</th>}
@@ -226,7 +226,7 @@ export const ParticipantsPage: React.FC = () => {
                   <th className="p-4 font-normal text-right w-64">Ações</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-brand-border/40 text-xs font-ui font-bold text-white tracking-wider">
+              <tbody className="divide-y divide-brand-border/40 text-xs font-ui font-bold text-brand-strong tracking-wider">
                 {participants.map((user) => (
                   <tr key={user.id} className="hover:bg-brand-surface/30 transition-colors">
                     <td className="p-4">
@@ -328,10 +328,10 @@ export const ParticipantsPage: React.FC = () => {
           </div>
 
           <p className="text-sm font-body text-brand-text">
-            O PIN de acesso do participante <strong className="text-white">{selectedUserForPin?.name}</strong> foi redefinido.
+            O PIN de acesso do participante <strong className="text-brand-strong">{selectedUserForPin?.name}</strong> foi redefinido.
           </p>
 
-          <div className="bg-black/45 border border-brand-border rounded-lg p-5 text-center my-4 relative overflow-hidden">
+          <div className="bg-sunken-45 border border-brand-border rounded-lg p-5 text-center my-4 relative overflow-hidden">
             <div className="absolute inset-0 pointer-events-none bg-cyber-grid opacity-10" />
             <span className="text-[10px] font-mono text-brand-muted block mb-1 uppercase tracking-widest">PIN TEMPORÁRIO</span>
             <span className="text-3xl font-display font-extrabold tracking-widest text-brand-secondary text-glow-secondary select-all px-2">

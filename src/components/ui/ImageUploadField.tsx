@@ -88,7 +88,7 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
       )}
 
       {value && (
-        <div className="rounded border border-brand-border p-2 bg-black/45 flex flex-col gap-2">
+        <div className="rounded border border-brand-border p-2 bg-sunken-45 flex flex-col gap-2">
           <span className="text-[10px] font-mono text-brand-muted uppercase tracking-wider">Pré-visualização:</span>
           <img
             src={value}

@@ -64,7 +64,7 @@ export const RankingPage: React.FC = () => {
     <div className="space-y-6 font-body">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border/40 pb-5">
         <div>
-          <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase flex items-center gap-2">
+          <h1 className="text-2xl font-display font-extrabold text-brand-strong tracking-widest uppercase flex items-center gap-2">
             <Trophy size={22} className="text-brand-primary" />
             RANKING
           </h1>
@@ -96,7 +96,7 @@ export const RankingPage: React.FC = () => {
           <select
             value={selectedCampaignId}
             onChange={(e) => setSelectedCampaignId(e.target.value)}
-            className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-sm font-ui font-bold text-white tracking-wide focus:border-brand-secondary focus:outline-none"
+            className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-sm font-ui font-bold text-brand-strong tracking-wide focus:border-brand-secondary focus:outline-none"
             disabled={isLoadingCampaigns}
           >
             <option value="">-- Selecione uma campanha --</option>

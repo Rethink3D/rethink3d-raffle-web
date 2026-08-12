@@ -174,7 +174,7 @@ export const PrizeWheel: React.FC<PrizeWheelProps> = ({
               style={{ transform: `rotate(${s.midDeg}deg)` }}
             >
               <span
-                className="mt-3 text-[9px] font-display font-bold text-white uppercase tracking-wide truncate max-w-[70px] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
+                className="mt-3 text-[9px] font-display font-bold text-brand-strong uppercase tracking-wide truncate max-w-[70px] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
                 title={s.label}
               >
                 {s.label}

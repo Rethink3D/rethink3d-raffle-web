@@ -124,7 +124,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({
       {/* Top row: image (esquerda) + badges/título + botão de ação (desktop) */}
       <div className="flex flex-row items-start gap-4">
         {imageUrl && (
-          <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 self-start rounded-md overflow-hidden border border-brand-border/60 bg-black/40 flex items-center justify-center">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 self-start rounded-md overflow-hidden border border-brand-border/60 bg-sunken-40 flex items-center justify-center">
             <img
               src={imageUrl}
               alt={title}
@@ -152,7 +152,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({
           </div>
 
           {/* Quest Title */}
-          <h4 className="text-base font-display font-bold text-white uppercase tracking-wide break-words">
+          <h4 className="text-base font-display font-bold text-brand-strong uppercase tracking-wide break-words">
             {title}
           </h4>
         </div>
