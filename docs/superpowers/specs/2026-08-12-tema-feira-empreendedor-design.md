@@ -56,6 +56,27 @@ Tipografia: **Figtree**, família única em todo o site. Geométrica humanista, 
 
 Linguagem visual: fundo branco; hero em bloco de cor sólida; cantos arredondados amplos; polígonos angulares sobrepostos às fotografias; fotografia real de pessoas; headings pesados e grandes; ausência total de brilho ou neon; copy sóbria e direta.
 
+## Mapa de papéis semânticos
+
+| Papel | feira | cyber (preservado) | Contraste feira sobre branco |
+|---|---|---|---|
+| `bg` | `#FFFFFF` | `#0a0a0f` | — |
+| `surface` | `#F7F9FF` | `#12121e` | — |
+| `border` | `#DDE3F0` | `#1e1e3a` | — |
+| `primary` | `#950F29` | `#7c3aed` | 8,9:1 |
+| `glow` | `#B31434` | `#a855f7` | 6,5:1 |
+| `secondary` | `#2A4FDA` | `#06b6d4` | 5,4:1 |
+| `accent` | `#005EB8` | `#f59e0b` | 5,7:1 |
+| `highlight` | `#E7F79E` | `#f59e0b` | só fundo |
+| `success` | `#2E7D52` | `#10b981` | 5,0:1 |
+| `danger` | `#C41E3A` | `#ef4444` | 5,9:1 |
+| `text` | `#1B244B` | `#e2e8f0` | 13,9:1 |
+| `muted` | `#687499` | `#64748b` | 4,6:1 |
+
+O papel `accent` é usado como cor de texto em 63 pontos do código. A lima `#E7F79E` sobre branco tem contraste de 1,2:1 e seria ilegível nesses pontos. Por isso `accent` no tema feira recebe o azul institucional, e a lima ganha um token novo, `highlight`, destinado exclusivamente a preenchimento de fundo com texto navy por cima — que é exatamente como a feira a usa. O token `highlight` também existe no tema cyber, apontando para o âmbar que já é o `accent` de lá, de modo que nenhum tema fica com token indefinido.
+
+Todos os papéis usados como cor de texto passam no critério AA da WCAG para texto normal sobre o fundo do próprio tema.
+
 ## Arquitetura
 
 ### Seleção de tema
