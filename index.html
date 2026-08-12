@@ -8,7 +8,7 @@
     <title>Rethink3D Raffle — Sorteio Gamificado</title>
     <meta name="description" content="Participe do sorteio gamificado da Rethink3D. Complete missões, acumule cupons e concorra a prêmios exclusivos de impressão 3D em tempo real." />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#7c3aed" />
+    <meta name="theme-color" content="#950F29" />
 
     <!-- Open Graph -->
     <meta property="og:type"        content="website" />
@@ -61,6 +61,11 @@
 
       html, body {
         min-height: 100vh;
+        font-family: system-ui, -apple-system, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      [data-theme="cyber"] body {
         background-color: #0a0a0f;
         background-image:
           linear-gradient(rgba(10, 10, 15, 0.88), rgba(10, 10, 15, 0.94)),
@@ -70,9 +75,17 @@
         background-attachment: fixed;
         background-repeat: no-repeat;
         color: #a0a0b8;
-        font-family: system-ui, -apple-system, sans-serif;
-        -webkit-font-smoothing: antialiased;
       }
+
+      [data-theme="feira"] body {
+        background-color: #ffffff;
+        color: #687499;
+      }
+
+      [data-theme="feira"] #shell-logo { color: #1b244b; }
+      [data-theme="feira"] #shell-logo span { color: #950f29; }
+      [data-theme="feira"] #shell-sub { color: #687499; letter-spacing: 0.05em; text-transform: none; }
+      [data-theme="feira"] #shell-hint { color: #98a2bd; letter-spacing: 0.05em; text-transform: none; }
 
       /* Loading shell shown before React hydrates */
       #shell {

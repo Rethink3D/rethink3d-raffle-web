@@ -1,0 +1,41 @@
+:root[data-theme="cyber"] {
+  --c-bg: 10 10 15;
+  --c-surface: 18 18 30;
+  --c-border: 30 30 58;
+  --c-primary: 124 58 237;
+  --c-glow: 168 85 247;
+  --c-secondary: 6 182 212;
+  --c-accent: 245 158 11;
+  --c-highlight: 245 158 11;
+  --c-success: 16 185 129;
+  --c-danger: 239 68 68;
+  --c-text: 226 232 240;
+  --c-muted: 100 116 139;
+
+  --font-display: 'Orbitron', sans-serif;
+  --font-ui: 'Rajdhani', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  --radius: 0.5rem;
+}
+
+:root[data-theme="feira"] {
+  --c-bg: 255 255 255;
+  --c-surface: 247 249 255;
+  --c-border: 221 227 240;
+  --c-primary: 149 15 41;
+  --c-glow: 179 20 52;
+  --c-secondary: 42 79 218;
+  --c-accent: 0 94 184;
+  --c-highlight: 231 247 158;
+  --c-success: 46 125 82;
+  --c-danger: 196 30 58;
+  --c-text: 27 36 75;
+  --c-muted: 104 116 153;
+
+  --font-display: 'Figtree', sans-serif;
+  --font-ui: 'Figtree', sans-serif;
+  --font-body: 'Figtree', sans-serif;
+
+  --radius: 1rem;
+}

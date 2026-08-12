@@ -3,6 +3,8 @@
   NÃO usar @import aqui — causaria render-blocking waterfall.
 */
 
+@import './theme/tokens.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,7 +13,10 @@
 @layer base {
   body {
     @apply bg-cyber-bg text-cyber-text font-inter antialiased overflow-x-hidden min-h-screen;
-    background-image: 
+  }
+
+  [data-theme="cyber"] body {
+    background-image:
       linear-gradient(rgba(10, 10, 15, 0.88), rgba(10, 10, 15, 0.94)),
       url('/Background.webp');
     background-size: cover;

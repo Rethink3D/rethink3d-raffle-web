@@ -8,26 +8,29 @@ export default {
     extend: {
       colors: {
         cyber: {
-          bg: '#0a0a0f',
-          surface: '#12121e',
-          border: '#1e1e3a',
-          primary: '#7c3aed',
-          glow: '#a855f7',
-          secondary: '#06b6d4',
-          accent: '#f59e0b',
-          success: '#10b981',
-          danger: '#ef4444',
-          text: '#e2e8f0',
-          muted: '#64748b',
+          bg:        'rgb(var(--c-bg) / <alpha-value>)',
+          surface:   'rgb(var(--c-surface) / <alpha-value>)',
+          border:    'rgb(var(--c-border) / <alpha-value>)',
+          primary:   'rgb(var(--c-primary) / <alpha-value>)',
+          glow:      'rgb(var(--c-glow) / <alpha-value>)',
+          secondary: 'rgb(var(--c-secondary) / <alpha-value>)',
+          accent:    'rgb(var(--c-accent) / <alpha-value>)',
+          highlight: 'rgb(var(--c-highlight) / <alpha-value>)',
+          success:   'rgb(var(--c-success) / <alpha-value>)',
+          danger:    'rgb(var(--c-danger) / <alpha-value>)',
+          text:      'rgb(var(--c-text) / <alpha-value>)',
+          muted:     'rgb(var(--c-muted) / <alpha-value>)',
         }
       },
       fontFamily: {
-        orbitron: ['Orbitron', 'sans-serif'],
-        rajdhani: ['Rajdhani', 'sans-serif'],
-        inter: ['Inter', 'sans-serif'],
-      }
+        orbitron: 'var(--font-display)',
+        rajdhani: 'var(--font-ui)',
+        inter:    'var(--font-body)',
+      },
+      borderRadius: {
+        theme: 'var(--radius)',
+      },
     },
   },
   plugins: [],
 }
-
