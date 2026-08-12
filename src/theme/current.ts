@@ -1,4 +1,4 @@
-export type ThemeId = 'feira' | 'cyber';
+export type ThemeId = 'padrao' | 'cyber';
 
 export const THEME: ThemeId =
-  import.meta.env.VITE_THEME === 'cyber' ? 'cyber' : 'feira';
+  import.meta.env.VITE_THEME === 'cyber' ? 'cyber' : 'padrao';

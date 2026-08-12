@@ -9,7 +9,7 @@ function themeHtml(theme: string): Plugin {
         '<html lang="pt-BR">',
         `<html lang="pt-BR" data-theme="${theme}">`
       )
-      if (theme === 'feira') {
+      if (theme === 'padrao') {
         out = out
           .replace(
             /\s*<script src="https:\/\/unpkg\.com\/@lottiefiles[^>]*><\/script>/g,
@@ -17,9 +17,9 @@ function themeHtml(theme: string): Plugin {
           )
           .replace(
             /family=Inter[^"]*/g,
-            'family=Figtree:wght@400;500;600;700;800&display=swap'
+            'family=Raleway:wght@600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap'
           )
-          .replace('href="/favicon.svg"', 'href="/favicon-feira.svg"')
+          .replace('href="/favicon.svg"', 'href="/favicon-padrao.svg"')
           .replace(
             'Participe do sorteio gamificado da Rethink3D. Complete missões, acumule cupons e concorra a prêmios exclusivos de impressão 3D em tempo real.',
             'Participe do sorteio da Rethink3D na Feira do Empreendedor. Complete desafios, acumule cupons e concorra a prêmios de impressão 3D.'
@@ -48,7 +48,7 @@ function themeHtml(theme: string): Plugin {
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const theme = env.VITE_THEME === 'cyber' ? 'cyber' : 'feira'
+  const theme = env.VITE_THEME === 'cyber' ? 'cyber' : 'padrao'
 
   return {
     plugins: [react(), themeHtml(theme)],

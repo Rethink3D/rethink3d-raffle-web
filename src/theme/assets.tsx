@@ -94,7 +94,7 @@ const gifByKind: Partial<Record<AssetKind, string>> = {
   quizFail: random3,
 };
 
-const feiraByKind = {
+const padraoByKind = {
   waiting: EmptyState,
   celebrate: SuccessSeal,
   quizFail: RetryMark,
@@ -117,10 +117,10 @@ export const ThemeAsset: React.FC<ThemeAssetProps> = ({ kind, size = 100, classN
     return <img src={gifByKind[kind]} alt="" className={className} draggable={false} />;
   }
 
-  const Feira = feiraByKind[kind];
+  const Padrao = padraoByKind[kind];
   return (
     <div className={className}>
-      <Feira size={size} />
+      <Padrao size={size} />
     </div>
   );
 };

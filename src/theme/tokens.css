@@ -20,24 +20,30 @@
   --radius: 0.5rem;
 }
 
-:root[data-theme="feira"] {
-  --c-bg: 240 243 250;
+:root[data-theme="padrao"] {
+  --c-bg: 242 246 252;
   --c-surface: 255 255 255;
-  --c-border: 200 210 230;
-  --c-primary: 149 15 41;
-  --c-glow: 179 20 52;
-  --c-secondary: 42 79 218;
-  --c-accent: 0 94 184;
-  --c-highlight: 231 247 158;
-  --c-success: 46 125 82;
-  --c-danger: 196 30 58;
-  --c-text: 27 36 75;
-  --c-strong: 27 36 75;
-  --c-muted: 71 82 117;
+  --c-border: 211 220 232;
+  --c-primary: 11 99 206;
+  --c-glow: 0 151 255;
+  --c-secondary: 14 116 144;
+  --c-accent: 180 83 9;
+  --c-highlight: 232 242 254;
+  --c-success: 21 128 61;
+  --c-danger: 196 20 47;
+  --c-text: 24 29 39;
+  --c-strong: 11 18 32;
+  --c-muted: 76 87 108;
 
-  --font-display: 'Figtree', sans-serif;
-  --font-ui: 'Figtree', sans-serif;
-  --font-body: 'Figtree', sans-serif;
+  --font-display: 'Raleway', sans-serif;
+  --font-ui: 'Open Sans', sans-serif;
+  --font-body: 'Open Sans', sans-serif;
 
-  --radius: 1rem;
+  --radius: 0.75rem;
+
+  --c-header: 11 99 206;
+}
+
+:root[data-theme="cyber"] {
+  --c-header: 18 18 30;
 }

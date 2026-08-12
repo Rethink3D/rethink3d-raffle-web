@@ -8,7 +8,7 @@
     <title>Rethink3D Raffle — Sorteio Gamificado</title>
     <meta name="description" content="Participe do sorteio gamificado da Rethink3D. Complete missões, acumule cupons e concorra a prêmios exclusivos de impressão 3D em tempo real." />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#950F29" />
+    <meta name="theme-color" content="#0B63CE" />
 
     <!-- Open Graph -->
     <meta property="og:type"        content="website" />
@@ -77,18 +77,18 @@
         color: #a0a0b8;
       }
 
-      [data-theme="feira"] body {
-        background-color: #ffffff;
-        color: #687499;
+      [data-theme="padrao"] body {
+        background-color: #f2f6fc;
+        color: #4C576C;
       }
 
-      [data-theme="feira"] #shell-logo { color: #1b244b; }
-      [data-theme="feira"] #shell-logo span { color: #950f29; }
-      [data-theme="feira"] #shell-sub { color: #687499; letter-spacing: 0.05em; text-transform: none; }
-      [data-theme="feira"] #shell-hint { color: #98a2bd; letter-spacing: 0.05em; text-transform: none; }
+      [data-theme="padrao"] #shell-logo { color: #0b1220; }
+      [data-theme="padrao"] #shell-logo span { color: #0b63ce; }
+      [data-theme="padrao"] #shell-sub { color: #4C576C; letter-spacing: 0.05em; text-transform: none; }
+      [data-theme="padrao"] #shell-hint { color: #717680; letter-spacing: 0.05em; text-transform: none; }
 
-      [data-theme="cyber"] #shell-loader-feira { display: none; }
-      [data-theme="feira"] #shell-loader-cyber { display: none; }
+      [data-theme="cyber"] #shell-loader-padrao { display: none; }
+      [data-theme="padrao"] #shell-loader-cyber { display: none; }
 
       /* Loading shell shown before React hydrates */
       #shell {
@@ -153,9 +153,9 @@
           autoplay
         ></lottie-player>
       </div>
-      <svg id="shell-loader-feira" width="72" height="72" viewBox="0 0 50 50" aria-hidden="true">
-        <circle cx="25" cy="25" r="20" fill="none" stroke="#dde3f0" stroke-width="4" />
-        <circle cx="25" cy="25" r="20" fill="none" stroke="#950f29" stroke-width="4"
+      <svg id="shell-loader-padrao" width="72" height="72" viewBox="0 0 50 50" aria-hidden="true">
+        <circle cx="25" cy="25" r="20" fill="none" stroke="#d3dce8" stroke-width="4" />
+        <circle cx="25" cy="25" r="20" fill="none" stroke="#0b63ce" stroke-width="4"
                 stroke-linecap="round" stroke-dasharray="90 126">
           <animateTransform attributeName="transform" type="rotate"
                             from="0 25 25" to="360 25 25" dur="0.9s" repeatCount="indefinite" />

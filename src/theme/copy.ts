@@ -88,13 +88,33 @@ const cyber = {
   registerOverlay: 'INICIALIZANDO REGISTRO...',
   registerHasAccount: 'Já possui save?',
 
+  landingCampaigns: '⚡ CAMPANHAS ATIVAS',
+  landingRanking: '🏆 RANKING DE CUPONS',
+  landingHowItWorks: '💡 COMO FUNCIONA',
+  landingFaq: '❓ PERGUNTAS FREQUENTES',
+
+  step1Title: 'CRIAR CONTA',
+  step2Title: 'CUMPRIR MISSÕES',
+  step1Desc: 'Crie sua identidade digital com nome, telefone e código PIN seguro de 4 dígitos.',
+  step2Desc: 'Complete as missões disponíveis na campanha. Algumas podem exigir o envio de um comprovante, outras podem envolver questionários, formulários ou ações automáticas.',
+  step3Title: 'COLETE CUPONS',
+  step3Desc: 'Cada missão concluída adiciona novos cupons à sua conta. Quanto mais cupons você tiver, maiores serão suas chances no sorteio.',
+  step4Title: 'ASSISTIR AO SORTEIO AO VIVO',
+  step4Desc: 'No horário marcado, acompanhe o sorteio ao vivo diretamente pela plataforma e descubra os vencedores em tempo real.',
+
+  faq1Q: 'Como funciona o sistema de cupons do sorteio?',
+  faq1A: 'Cada missão concluída concede uma quantidade de cupons. No momento do sorteio, cada cupom representa uma chance adicional de ser sorteado.',
+  faq2Q: 'Que tipos de missões/tarefas existem?',
+  faq2A: 'As missões variam conforme a campanha. Elas podem incluir envio de comprovantes, quizzes, formulários de feedback ou outras atividades definidas pelos organizadores.',
+  faq3A: 'Caso uma missão exija um comprovante, siga as instruções exibidas na descrição da missão e envie a imagem solicitada. Após o envio, a missão será validada conforme as regras da campanha.',
+
   dashboardLoading: 'Carregando sua aventura...',
   noCampaignProse:
     'Ainda não temos uma campanha ativa. Fique de olho — assim que uma nova aventura começar, ela aparece bem aqui.',
   prizesTitle: 'Prêmios em Jogo',
 };
 
-const feira: typeof cyber = {
+const padrao: typeof cyber = {
   missions: 'Desafios',
   missionsSingular: 'Desafio',
   adminMenu: 'Administração',
@@ -182,10 +202,30 @@ const feira: typeof cyber = {
   registerOverlay: 'Criando sua conta',
   registerHasAccount: 'Já tem conta?',
 
+  landingCampaigns: 'Campanhas ativas',
+  landingRanking: 'Ranking de cupons',
+  landingHowItWorks: 'Como funciona',
+  landingFaq: 'Perguntas frequentes',
+
+  step1Title: 'Criar conta',
+  step2Title: 'Cumprir desafios',
+  step1Desc: 'Cadastre-se com nome, telefone e um PIN de 4 dígitos. Leva menos de um minuto.',
+  step2Desc: 'Complete os desafios disponíveis na campanha. Alguns pedem o envio de um comprovante, outros são questionários ou formulários rápidos.',
+  step3Title: 'Colete cupons',
+  step3Desc: 'Cada desafio concluído adiciona cupons à sua conta. Quanto mais cupons, maiores as suas chances no sorteio.',
+  step4Title: 'Acompanhe o sorteio ao vivo',
+  step4Desc: 'No horário marcado, acompanhe o sorteio ao vivo pela plataforma e veja os vencedores em tempo real.',
+
+  faq1Q: 'Como funciona o sistema de cupons?',
+  faq1A: 'Cada desafio concluído concede uma quantidade de cupons. No momento do sorteio, cada cupom representa uma chance a mais de ser sorteado.',
+  faq2Q: 'Que tipos de desafio existem?',
+  faq2A: 'Os desafios variam conforme a campanha. Podem incluir envio de comprovantes, quizzes, formulários de feedback ou outras atividades definidas pelos organizadores.',
+  faq3A: 'Caso um desafio exija comprovante, siga as instruções na descrição e envie a imagem solicitada. Depois do envio, o desafio é validado conforme as regras da campanha.',
+
   dashboardLoading: 'Carregando',
   noCampaignProse:
     'Ainda não temos uma campanha ativa. Fique de olho — assim que uma nova campanha começar, ela aparece bem aqui.',
   prizesTitle: 'Prêmios do sorteio',
 };
 
-export const copy = THEME === 'cyber' ? cyber : feira;
+export const copy = THEME === 'cyber' ? cyber : padrao;

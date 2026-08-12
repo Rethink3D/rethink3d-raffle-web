@@ -22,7 +22,7 @@ Crie um `.env` na raiz com:
 ```bash
 VITE_API_URL=
 VITE_SOCKET_URL=
-VITE_THEME=feira
+VITE_THEME=padrao
 ```
 
 `VITE_THEME` escolhe a identidade visual no build:

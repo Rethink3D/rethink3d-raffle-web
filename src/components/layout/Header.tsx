@@ -12,6 +12,7 @@ import api from "../../services/api";
 import { campaignService } from "../../services/campaign.service";
 import { socket } from "../../hooks/useSocket";
 import logo from "../../assets/Logo.webp";
+import { THEME } from "../../theme/current";
 
 export const Header: React.FC = () => {
   const { user, role, logout } = useAuthStore();
@@ -208,7 +209,7 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className={`fixed top-0 left-0 w-full overflow-x-hidden bg-brand-surface/70 border-b border-brand-border/80 backdrop-blur-md z-40 select-none transition-transform duration-300 ${
+    <header className={`theme-header fixed top-0 left-0 w-full overflow-x-hidden bg-brand-surface/70 border-b border-brand-border/80 backdrop-blur-md z-40 select-none transition-transform duration-300 ${
       visible ? "translate-y-0" : "-translate-y-full"
     }`}>
       {/* Visual cyber line under Header */}
@@ -228,7 +229,7 @@ export const Header: React.FC = () => {
           className="group flex items-center shrink-0"
         >
           <img
-            src={logo}
+            src={THEME === 'cyber' ? logo : '/LogoRethink3D.webp'}
             alt="Rethink3D x MageXP"
             className="h-12 sm:h-20 md:h-24 w-auto object-contain shrink-0"
             draggable={false}

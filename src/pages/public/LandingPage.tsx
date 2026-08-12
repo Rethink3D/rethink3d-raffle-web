@@ -20,6 +20,10 @@ import {
   Compass,
   Trophy,
   PauseCircle,
+  UserPlus,
+  ListChecks,
+  Ticket,
+  Radio,
 } from "lucide-react";
 
 import step1 from "../../assets/Step1Icon.svg";
@@ -84,61 +88,59 @@ export const LandingPage: React.FC = () => {
     setOpenFaq(openFaq === index ? null : index);
   };
 
+  const isCyber = THEME === 'cyber';
+
   const steps = [
     {
-      title: "CRIAR CONTA",
-      desc: "Crie sua identidade digital com nome, telefone e código PIN seguro de 4 dígitos.",
-      icon: (
-        <img src={step1} alt="Criar Conta" className="w-6 h-6 object-contain" />
+      title: copy.step1Title,
+      desc: copy.step1Desc,
+      icon: isCyber ? (
+        <img src={step1} alt="" className="w-6 h-6 object-contain" />
+      ) : (
+        <UserPlus size={20} />
       ),
     },
     {
-      title: copy.fulfillMissionsUpper,
-      desc: "Complete as missões disponíveis na campanha. Algumas podem exigir o envio de um comprovante, outras podem envolver questionários, formulários ou ações automáticas.",
-      icon: (
-        <img
-          src={step2}
-          alt=""
-          className="w-6 h-6 object-contain"
-        />
+      title: copy.step2Title,
+      desc: copy.step2Desc,
+      icon: isCyber ? (
+        <img src={step2} alt="" className="w-6 h-6 object-contain" />
+      ) : (
+        <ListChecks size={20} />
       ),
     },
     {
-      title: "COLETE CUPONS",
-      desc: "Cada missão concluída adiciona novos cupons à sua conta. Quanto mais cupons você tiver, maiores serão suas chances no sorteio.",
-      icon: (
-        <img
-          src={step3}
-          alt="Colete Cupons"
-          className="w-6 h-6 object-contain"
-        />
+      title: copy.step3Title,
+      desc: copy.step3Desc,
+      icon: isCyber ? (
+        <img src={step3} alt="" className="w-6 h-6 object-contain" />
+      ) : (
+        <Ticket size={20} />
       ),
     },
     {
-      title: "ASSISTIR AO SORTEIO AO VIVO",
-      desc: "No horário marcado, acompanhe o sorteio ao vivo diretamente pela plataforma e descubra os vencedores em tempo real.",
-      icon: (
-        <img
-          src={step4}
-          alt="Assistir Sorteio"
-          className="w-6 h-6 object-contain"
-        />
+      title: copy.step4Title,
+      desc: copy.step4Desc,
+      icon: isCyber ? (
+        <img src={step4} alt="" className="w-6 h-6 object-contain" />
+      ) : (
+        <Radio size={20} />
       ),
     },
   ];
 
   const faqs = [
     {
-      q: "Como funciona o sistema de cupons do sorteio?",
-      a: "Cada missão concluída concede uma quantidade de cupons. No momento do sorteio, cada cupom representa uma chance adicional de ser sorteado.",
+      q: copy.faq1Q,
+      a: copy.faq1A,
     },
     {
-      q: "Que tipos de missões/tarefas existem?",
-      a: "As missões variam conforme a campanha. Elas podem incluir envio de comprovantes, quizzes, formulários de feedback ou outras atividades definidas pelos organizadores.",
+      q: copy.faq2Q,
+      a: copy.faq2A,
     },
     {
       q: "Como são verificadas as fotos?",
-      a: "Caso uma missão exija um comprovante, siga as instruções exibidas na descrição da missão e envie a imagem solicitada. Após o envio, a missão será validada conforme as regras da campanha.",
+      a: copy.faq3A,
     },
     {
       q: "Como sei quando o sorteio está ao vivo?",
@@ -153,7 +155,7 @@ export const LandingPage: React.FC = () => {
   return (
     <div className="flex flex-col gap-12 font-body text-brand-text">
       {/* 1. HERO BANNER */}
-      <section className="relative py-12 md:py-20 flex flex-col items-center justify-center text-center overflow-hidden border border-brand-primary/40 rounded-lg bg-brand-surface/60 px-4">
+      <section className="section-tint relative py-12 md:py-20 flex flex-col items-center justify-center text-center overflow-hidden border border-brand-primary/40 rounded-lg bg-brand-surface/60 px-4">
         {/* Elementos GIFs de fundo distribuídos nos cantos e laterais do Hero */}
         {THEME === 'cyber' && (
           <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0 opacity-40">
@@ -187,7 +189,7 @@ export const LandingPage: React.FC = () => {
 
         <ThemeAsset
           kind="heroDecor"
-          className="absolute -right-4 -bottom-4 w-1/3 max-w-[220px] opacity-45 pointer-events-none select-none z-0"
+          className="absolute -right-4 -bottom-4 w-1/3 max-w-[220px] opacity-60 pointer-events-none select-none z-0"
         />
 
         {/* Abstract Cyber Grid overlay */}
@@ -211,7 +213,7 @@ export const LandingPage: React.FC = () => {
           </p>
 
           {/* CTA Buttons */}
-          <div className="mt-8 flex flex-col sm:flex-row gap-4 w-full justify-center px-4 max-w-md">
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 w-full justify-center px-4 max-w-lg">
             {token ? (
               <Button
                 variant="primary"
@@ -249,7 +251,7 @@ export const LandingPage: React.FC = () => {
       {/* 2. DYNAMIC ACTIVE CAMPAIGN & COUNTDOWN */}
       <section className="flex flex-col gap-6">
         <h2 className="font-display text-base sm:text-xl font-bold text-brand-strong tracking-widest uppercase border-b border-brand-border pb-2">
-          ⚡ CAMPANHAS ATIVAS
+          {copy.landingCampaigns}
         </h2>
 
         {loading ? (
@@ -444,7 +446,7 @@ export const LandingPage: React.FC = () => {
             </p>
             {!token && (
               <Button
-                variant="danger"
+                variant="primary"
                 className="mt-5"
                 onClick={() => navigate("/register")}
               >
@@ -457,9 +459,9 @@ export const LandingPage: React.FC = () => {
 
       {/* 2.5 RANKING PÚBLICO */}
       {activeCampaign && rankingEntries.length > 0 && (
-        <section className="flex flex-col gap-6">
+        <section className="section-band flex flex-col gap-6">
           <h2 className="font-display text-base sm:text-xl font-bold text-brand-strong tracking-widest uppercase border-b border-brand-border pb-2">
-            🏆 RANKING DE CUPONS
+            {copy.landingRanking}
           </h2>
 
           <Card
@@ -488,7 +490,7 @@ export const LandingPage: React.FC = () => {
       {/* 3. HOW TO EARN TICKETS */}
       <section className="flex flex-col gap-6">
         <h2 className="font-display text-base sm:text-xl font-bold text-brand-strong tracking-widest uppercase border-b border-brand-border pb-2">
-          💡 COMO FUNCIONA
+          {copy.landingHowItWorks}
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -500,11 +502,15 @@ export const LandingPage: React.FC = () => {
               <div className="flex flex-col gap-3">
                 {/* Step header */}
                 <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 border border-brand-border flex items-center justify-center rounded bg-white p-1.5">
+                  <div className={`w-10 h-10 border flex items-center justify-center rounded p-1.5 ${
+                    isCyber
+                      ? 'border-brand-border bg-white'
+                      : 'border-brand-primary/20 bg-brand-highlight text-brand-primary'
+                  }`}>
                     {step.icon}
                   </div>
                   <span className="font-mono text-xs text-brand-muted font-bold">
-                    PASSO_0{index + 1}
+                    {isCyber ? `PASSO_0${index + 1}` : `Passo ${index + 1}`}
                   </span>
                 </div>
 
@@ -524,7 +530,7 @@ export const LandingPage: React.FC = () => {
       {/* 4. FAQ ACCORDION */}
       <section className="flex flex-col gap-6">
         <h2 className="font-display text-base sm:text-xl font-bold text-brand-strong tracking-widest uppercase border-b border-brand-border pb-2">
-          ❓ PERGUNTAS FREQUENTES
+          {copy.landingFaq}
         </h2>
 
         <div className="flex flex-col gap-3">
