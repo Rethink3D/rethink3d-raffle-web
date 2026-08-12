@@ -87,6 +87,9 @@
       [data-theme="feira"] #shell-sub { color: #687499; letter-spacing: 0.05em; text-transform: none; }
       [data-theme="feira"] #shell-hint { color: #98a2bd; letter-spacing: 0.05em; text-transform: none; }
 
+      [data-theme="cyber"] #shell-loader-feira { display: none; }
+      [data-theme="feira"] #shell-loader-cyber { display: none; }
+
       /* Loading shell shown before React hydrates */
       #shell {
         display: flex;
@@ -140,14 +143,24 @@
     <div id="shell" aria-hidden="true">
       <div id="shell-logo">RETHINK<span>3D</span></div>
       <div id="shell-sub">// Sorteio Gamificado</div>
-      <lottie-player
-        src="/Pokeball Loading.json"
-        background="transparent"
-        speed="1.2"
-        style="width: 100px; height: 100px;"
-        loop
-        autoplay
-      ></lottie-player>
+      <div id="shell-loader-cyber">
+        <lottie-player
+          src="/Pokeball Loading.json"
+          background="transparent"
+          speed="1.2"
+          style="width: 100px; height: 100px;"
+          loop
+          autoplay
+        ></lottie-player>
+      </div>
+      <svg id="shell-loader-feira" width="72" height="72" viewBox="0 0 50 50" aria-hidden="true">
+        <circle cx="25" cy="25" r="20" fill="none" stroke="#dde3f0" stroke-width="4" />
+        <circle cx="25" cy="25" r="20" fill="none" stroke="#950f29" stroke-width="4"
+                stroke-linecap="round" stroke-dasharray="90 126">
+          <animateTransform attributeName="transform" type="rotate"
+                            from="0 25 25" to="360 25 25" dur="0.9s" repeatCount="indefinite" />
+        </circle>
+      </svg>
       <div id="shell-hint">Iniciando sistema...</div>
     </div>
 

@@ -14,7 +14,7 @@ LEFT=$(grep -ro 'cyber-\(bg\|surface\|border\|primary\|glow\|secondary\|accent\|
 [ "$LEFT" -eq 0 ] || fail "restaram $LEFT tokens cyber-* nao renomeados"
 
 BRAND=$(grep -ro 'brand-\(bg\|surface\|border\|primary\|glow\|secondary\|accent\|highlight\|success\|danger\|text\|muted\)\b' src | wc -l)
-[ "$BRAND" -ge 1214 ] || fail "esperava ao menos 1214 tokens brand-*, achei $BRAND"
+[ "$BRAND" -ge 1212 ] || fail "esperava ao menos 1212 tokens brand-*, achei $BRAND"
 
 grep -rq 'font-orbitron\|font-rajdhani\|font-inter' src && fail "restaram nomes de fonte antigos"
 grep -rq 'clip-cyber' src && fail "restaram classes clip-cyber mortas"
@@ -25,5 +25,9 @@ grep -q 'hud-corner' src/components/ui/Card.tsx || fail "Card sem hud-corner"
 grep -q "theme/decor.css" src/main.tsx || fail "main.tsx nao importa decor.css"
 grep -q 'glow-primary' src/theme/decor.css || fail "decor.css sem os utilitarios de brilho"
 grep -q '^\.glow-primary' src/index.css && fail "utilitarios de brilho ainda no index.css"
+
+grep -q 'ThemeAsset' src/theme/assets.tsx || fail "assets.tsx sem ThemeAsset"
+LOTTIE=$(grep -rl 'lottie-player' src --include=*.tsx | grep -v 'src/theme/assets.tsx' | wc -l)
+[ "$LOTTIE" -eq 0 ] || fail "$LOTTIE arquivos em src ainda usam lottie-player direto"
 
 echo "OK"

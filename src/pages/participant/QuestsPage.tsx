@@ -13,6 +13,7 @@ import { useTicketRefreshStore } from '../../store/ticketRefreshStore';
 import type { Campaign, Mission } from '../../types';
 import nika from '../../assets/nika.gif';
 import agree from '../../assets/agree.gif';
+import { ThemeAsset } from '../../theme/assets';
 
 export const QuestsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -106,19 +107,7 @@ export const QuestsPage: React.FC = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] select-none pointer-events-none">
-        <div
-          style={{ width: 120, height: 120 }}
-          dangerouslySetInnerHTML={{
-            __html: `<lottie-player
-              src="/Pokeball Loading.json"
-              background="transparent"
-              speed="1.2"
-              style="width: 100%; height: 100%;"
-              loop
-              autoplay
-            ></lottie-player>`
-          }}
-        />
+        <ThemeAsset kind="loader" size={120} />
         <div className="text-brand-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
           Carregando suas missões...
         </div>

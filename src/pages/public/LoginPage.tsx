@@ -8,6 +8,7 @@ import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { Phone, Lock, LogIn } from 'lucide-react';
 import nika from '../../assets/nika.gif';
+import { ThemeAsset } from '../../theme/assets';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -88,19 +89,7 @@ export const LoginPage: React.FC = () => {
       {/* Overlay de carregamento com a Pokeball */}
       {isLoading && (
         <div className="fixed inset-0 bg-black/85 flex flex-col items-center justify-center z-50 pointer-events-auto select-none">
-          <div
-            style={{ width: 120, height: 120 }}
-            dangerouslySetInnerHTML={{
-              __html: `<lottie-player
-                src="/Pokeball Loading.json"
-                background="transparent"
-                speed="1.2"
-                style="width: 100%; height: 100%;"
-                loop
-                autoplay
-              ></lottie-player>`
-            }}
-          />
+          <ThemeAsset kind="loader" size={120} />
           <span className="text-xs font-mono text-brand-secondary tracking-[0.2em] uppercase animate-pulse mt-2">
             AUTENTICANDO CREDENCIAIS...
           </span>

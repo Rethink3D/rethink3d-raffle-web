@@ -17,6 +17,7 @@ import { getCampaignStatusLabel } from '../../utils/campaignStatus';
 import { getNextDrawTarget, getUpcomingSchedules } from '../../utils/drawSchedule';
 import type { Campaign, Draw, Mission, Prize, TicketHistoryEntry, User } from '../../types';
 import nika from '../../assets/nika.gif';
+import { ThemeAsset } from '../../theme/assets';
 
 // Cores do badge de status — mesma paleta usada nos outros indicadores da
 // campanha, pra reforçar visualmente ACTIVE (verde) vs DRAWING (roxo/aviso).
@@ -249,19 +250,7 @@ export const DashboardPage: React.FC = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] select-none pointer-events-none">
-        <div
-          style={{ width: 120, height: 120 }}
-          dangerouslySetInnerHTML={{
-            __html: `<lottie-player
-              src="/Pokeball Loading.json"
-              background="transparent"
-              speed="1.2"
-              style="width: 100%; height: 100%;"
-              loop
-              autoplay
-            ></lottie-player>`
-          }}
-        />
+        <ThemeAsset kind="loader" size={120} />
         <div className="text-brand-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
           Carregando sua aventura...
         </div>

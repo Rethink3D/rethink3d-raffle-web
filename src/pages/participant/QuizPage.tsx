@@ -10,6 +10,7 @@ import { useTicketRefreshStore } from '../../store/ticketRefreshStore';
 import type { Quiz, QuizQuestion, QuizOption, QuizSubmitResult } from '../../types';
 import agree from '../../assets/agree.gif';
 import random3 from '../../assets/random3.gif';
+import { ThemeAsset } from '../../theme/assets';
 
 export const QuizPage: React.FC = () => {
   const { missionId } = useParams<{ missionId: string }>();
@@ -170,19 +171,7 @@ export const QuizPage: React.FC = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] select-none">
-        <div
-          style={{ width: 120, height: 120 }}
-          dangerouslySetInnerHTML={{
-            __html: `<lottie-player
-              src="/Pokeball Loading.json"
-              background="transparent"
-              speed="1.2"
-              style="width: 100%; height: 100%;"
-              loop
-              autoplay
-            ></lottie-player>`
-          }}
-        />
+        <ThemeAsset kind="loader" size={120} />
         <div className="text-brand-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
           Carregando o quiz...
         </div>
@@ -230,19 +219,7 @@ export const QuizPage: React.FC = () => {
   if (submitting) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] select-none">
-        <div
-          style={{ width: 120, height: 120 }}
-          dangerouslySetInnerHTML={{
-            __html: `<lottie-player
-              src="/Pokeball Loading.json"
-              background="transparent"
-              speed="1.2"
-              style="width: 100%; height: 100%;"
-              loop
-              autoplay
-            ></lottie-player>`
-          }}
-        />
+        <ThemeAsset kind="loader" size={120} />
         <div className="text-brand-accent animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
           Enviando suas respostas...
         </div>

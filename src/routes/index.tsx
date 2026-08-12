@@ -9,6 +9,7 @@ import LoginPage from '../pages/public/LoginPage';
 import RegisterPage from '../pages/public/RegisterPage';
 import ChangePinPage from '../pages/public/ChangePinPage';
 import DashboardPage from '../pages/participant/DashboardPage';
+import { ThemeAsset } from '../theme/assets';
 const QuestsPage     = lazy(() => import('../pages/participant/QuestsPage'));
 const QuizPage       = lazy(() => import('../pages/participant/QuizPage'));
 const FeedbackPage   = lazy(() => import('../pages/participant/FeedbackPage'));
@@ -34,19 +35,7 @@ const AdminRankingPage = lazy(() => import('../pages/admin/RankingPage'));
 const PageLoader: React.FC = () => (
   <div className="flex items-center justify-center min-h-[60vh] select-none pointer-events-none">
     <div className="flex flex-col items-center gap-2">
-      <div
-        style={{ width: 100, height: 100 }}
-        dangerouslySetInnerHTML={{
-          __html: `<lottie-player
-            src="/Pokeball Loading.json"
-            background="transparent"
-            speed="1.2"
-            style="width: 100%; height: 100%;"
-            loop
-            autoplay
-          ></lottie-player>`
-        }}
-      />
+      <ThemeAsset kind="loader" size={100} />
       <span className="text-[10px] font-mono text-brand-secondary tracking-widest uppercase animate-pulse">
         CARREGANDO RECURSOS...
       </span>

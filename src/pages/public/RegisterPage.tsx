@@ -8,6 +8,7 @@ import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { User, Phone, Lock } from 'lucide-react';
 import agree from '../../assets/agree.gif';
+import { ThemeAsset } from '../../theme/assets';
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
@@ -110,19 +111,7 @@ export const RegisterPage: React.FC = () => {
       {/* Overlay de carregamento com a Pokeball */}
       {isLoading && (
         <div className="fixed inset-0 bg-black/85 flex flex-col items-center justify-center z-50 pointer-events-auto select-none">
-          <div
-            style={{ width: 120, height: 120 }}
-            dangerouslySetInnerHTML={{
-              __html: `<lottie-player
-                src="/Pokeball Loading.json"
-                background="transparent"
-                speed="1.2"
-                style="width: 100%; height: 100%;"
-                loop
-                autoplay
-              ></lottie-player>`
-            }}
-          />
+          <ThemeAsset kind="loader" size={120} />
           <span className="text-xs font-mono text-brand-primary tracking-[0.2em] uppercase animate-pulse mt-2">
             INICIALIZANDO REGISTRO...
           </span>
