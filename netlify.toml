@@ -2,6 +2,11 @@
   command = "npm run build"
   publish = "dist"
 
+# Tema visual fixado no deploy, pra não depender do que estiver configurado no
+# painel do Netlify. Trocar para "cyber" restaura o tema gamificado original.
+[build.environment]
+  VITE_THEME = "feira"
+
 # BrowserRouter (client-side routing) — sem isso, dar refresh numa rota como
 # /dashboard devolve 404 do Netlify em vez de deixar o React Router assumir.
 [[redirects]]

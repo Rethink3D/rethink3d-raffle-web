@@ -22,7 +22,15 @@ Crie um `.env` na raiz com:
 ```bash
 VITE_API_URL=
 VITE_SOCKET_URL=
+VITE_THEME=feira
 ```
+
+`VITE_THEME` escolhe a identidade visual no build:
+
+- **`feira`** (padrão) — tema sóbrio alinhado à Feira do Empreendedor do Sebrae: fundo claro, paleta vinho/navy/azul, tipografia Figtree, sem brilhos nem molduras de HUD, vocabulário sem jargão de jogo ("Desafios" no lugar de "Missões").
+- **`cyber`** — tema gamificado original: fundo escuro com papel de parede, neon roxo e ciano, Orbitron/Rajdhani, GIFs e loader de Pokébola.
+
+Ausente ou com valor desconhecido, resolve para `feira`. Trocar de tema exige novo build e novo deploy — não há troca em tempo de execução.
 
 ## Instalação e uso
 
@@ -47,6 +55,20 @@ Rotas protegidas por papel via guards dedicados: `PublicRoute`, `ParticipantRout
 - **`admin/`**: Login admin, Dashboard, Campanhas, Missões (lista + formulário), Participantes/Provas de missão, Resultados de feedback/pesquisa, Prêmios, Controle de sorteio, Ranking.
 
 A rota de acompanhamento do sorteio (`/watch/:campaignId`, `/draw/watch`) é pública, sem necessidade de login — espelha o namespace público do gateway Socket.IO do backend.
+
+### Temas (`src/theme/*`)
+
+Dois temas coexistem, selecionados no build por `VITE_THEME`.
+
+- **`tokens.css`** — um bloco de variáveis CSS por tema, sob `:root[data-theme="..."]`. As cores são guardadas como canais RGB crus (`--c-primary: 149 15 41`) porque o Tailwind as consome com `<alpha-value>`, e o código usa modificadores de opacidade em volume (`bg-brand-surface/60`).
+- **`decor.css`** — utilitários decorativos (brilhos, grade, painel) e a neutralização deles no tema feira: molduras de HUD, relâmpagos, caixa alta, espaçamento de letra, raio de canto, faixas de recesso e tamanhos mínimos de fonte. Importado pelo `main.tsx`, não por `@import` no `index.css` — a especificação de CSS exige que `@import` preceda as demais regras, e a ordem da cascata ficaria imprevisível. Pelo mesmo motivo usa CSS puro em vez de `@apply`, que só funciona em arquivos com diretivas `@tailwind`.
+- **`current.ts`** — resolve o tema ativo a partir de `import.meta.env.VITE_THEME`.
+- **`assets.tsx`** — componente `ThemeAsset`, que troca loader, estados vazios, selo de sucesso e decoração do hero conforme o tema.
+- **`copy.ts`** — rótulos textuais por tema. Guarda **frases inteiras**, não substantivos a serem interpolados: em português, colar o substantivo quebra a concordância ("Desafios congeladas", "NENHUMA DESAFIO").
+
+O atributo `data-theme` é injetado no `<html>` por um plugin do Vite (`themeHtml` em `vite.config.ts`), que também troca as fontes do Google, o favicon, as taglines do `<head>` e remove o `<script>` do lottie-player no tema feira.
+
+**Ao mexer em `tailwind.config.js`, reinicie o dev server.** O Vite não recarrega a configuração do Tailwind em processo, e as classes novas ficam ausentes da folha de estilo enquanto o build já as gera normalmente.
 
 ### Estado global (`src/store/*`)
 
