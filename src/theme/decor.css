@@ -101,15 +101,15 @@
    aparecer. */
 [data-theme="padrao"] .theme-header .brand-logo {
   filter: brightness(0) invert(1);
-  height: 2.25rem;
+  height: 2.75rem;
 }
 
 @media (min-width: 640px) {
-  [data-theme="padrao"] .theme-header .brand-logo { height: 2.5rem; }
+  [data-theme="padrao"] .theme-header .brand-logo { height: 3.5rem; }
 }
 
 @media (min-width: 768px) {
-  [data-theme="padrao"] .theme-header .brand-logo { height: 3rem; }
+  [data-theme="padrao"] .theme-header .brand-logo { height: 4rem; }
 }
 
 [data-theme="padrao"] .nav-active {
