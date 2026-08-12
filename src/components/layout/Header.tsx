@@ -231,7 +231,7 @@ export const Header: React.FC = () => {
           <img
             src={THEME === 'cyber' ? logo : '/LogoRethink3D.webp'}
             alt="Rethink3D x MageXP"
-            className="h-12 sm:h-20 md:h-24 w-auto object-contain shrink-0"
+            className="brand-logo h-12 sm:h-20 md:h-24 w-auto object-contain shrink-0"
             draggable={false}
           />
         </Link>

@@ -96,6 +96,13 @@
   color: #ffffff;
 }
 
+/* A logo é um degradê prateado. Sobre o azul o prateado lê como sujeira; o
+   filtro achata tudo em branco sólido, que é como ela foi desenhada pra
+   aparecer. */
+[data-theme="padrao"] .theme-header .brand-logo {
+  filter: brightness(0) invert(1);
+}
+
 [data-theme="padrao"] .nav-active {
   background-color: rgb(var(--c-highlight));
   border-color: transparent;
