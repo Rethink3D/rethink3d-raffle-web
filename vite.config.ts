@@ -19,6 +19,7 @@ function themeHtml(theme: string): Plugin {
             /family=Inter[^"]*/g,
             'family=Figtree:wght@400;500;600;700;800&display=swap'
           )
+          .replace('href="/favicon.svg"', 'href="/favicon-feira.svg"')
       }
       return out
     },

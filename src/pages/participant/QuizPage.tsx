@@ -8,8 +8,6 @@ import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { useTicketRefreshStore } from '../../store/ticketRefreshStore';
 import type { Quiz, QuizQuestion, QuizOption, QuizSubmitResult } from '../../types';
-import agree from '../../assets/agree.gif';
-import random3 from '../../assets/random3.gif';
 import { ThemeAsset } from '../../theme/assets';
 
 export const QuizPage: React.FC = () => {
@@ -244,11 +242,10 @@ export const QuizPage: React.FC = () => {
         >
           <div className="flex flex-col items-center py-4">
 
-            <img
-              src={isPassing ? agree : random3}
-              alt={isPassing ? "Mandou bem" : "Quiz concluído"}
-              className="w-24 h-auto animate-float"
-              draggable={false}
+            <ThemeAsset
+              kind={isPassing ? 'celebrate' : 'quizFail'}
+              size={96}
+              className="w-24 animate-float"
             />
 
             <p className="text-xs text-brand-muted text-center mt-3">

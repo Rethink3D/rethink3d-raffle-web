@@ -7,7 +7,6 @@ import { ticketService } from '../../services/ticket.service';
 import { Card } from '../../components/ui/Card';
 import { Leaderboard, MyPositionCard } from '../../components/ranking/Leaderboard';
 import type { Campaign, LeaderboardResponse, User } from '../../types';
-import nika from '../../assets/nika.gif';
 import { ThemeAsset } from '../../theme/assets';
 
 export const RankingPage: React.FC = () => {
@@ -76,7 +75,7 @@ export const RankingPage: React.FC = () => {
       <div className="max-w-xl mx-auto my-10">
         <Card variant="default" title="Nenhum sorteio rolando agora" glow className="select-none">
           <div className="flex flex-col items-center gap-4 text-center py-4">
-            <img src={nika} alt="Aguardando" className="w-24 h-auto" draggable={false} />
+            <ThemeAsset kind="waiting" size={96} className="w-24" />
             <p className="text-sm font-body text-brand-muted max-w-sm">
               O ranking aparece assim que uma campanha estiver ativa.
             </p>

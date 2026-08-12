@@ -30,4 +30,12 @@ grep -q 'ThemeAsset' src/theme/assets.tsx || fail "assets.tsx sem ThemeAsset"
 LOTTIE=$(grep -rl 'lottie-player' src --include=*.tsx | grep -v 'src/theme/assets.tsx' | wc -l)
 [ "$LOTTIE" -eq 0 ] || fail "$LOTTIE arquivos em src ainda usam lottie-player direto"
 
+for f in $(grep -rl "assets/.*\.gif" src); do
+  case "$f" in
+    src/theme/assets.tsx) continue ;;
+  esac
+  grep -q "THEME === 'cyber'" "$f" || fail "$f usa gif sem guarda de tema"
+done
+grep -q 'favicon-feira' vite.config.ts || fail "vite sem troca de favicon no tema feira"
+
 echo "OK"

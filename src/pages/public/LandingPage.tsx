@@ -33,6 +33,8 @@ import random2 from "../../assets/random2.gif";
 import random3 from "../../assets/random3.gif";
 import random4 from "../../assets/random4.gif";
 import random5 from "../../assets/random5.gif";
+import { THEME } from '../../theme/current';
+import { ThemeAsset } from '../../theme/assets';
 
 export const LandingPage: React.FC = () => {
   const { token } = useAuthStore();
@@ -152,33 +154,40 @@ export const LandingPage: React.FC = () => {
       {/* 1. HERO BANNER */}
       <section className="relative py-12 md:py-20 flex flex-col items-center justify-center text-center overflow-hidden border border-brand-primary/40 rounded-lg bg-brand-surface/60 px-4">
         {/* Elementos GIFs de fundo distribuídos nos cantos e laterais do Hero */}
-        <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0 opacity-40">
-          <img
-            src={random1}
-            alt="R1"
-            className="absolute top-[8%] left-[6%] w-12 h-auto"
-          />
-          <img
-            src={random2}
-            alt="R2"
-            className="absolute top-[18%] right-[10%] w-11 h-auto"
-          />
-          <img
-            src={random3}
-            alt="R3"
-            className="absolute bottom-[10%] left-[8%] w-14 h-auto"
-          />
-          <img
-            src={random4}
-            alt="R4"
-            className="absolute bottom-[18%] right-[12%] w-12 h-auto"
-          />
-          <img
-            src={random5}
-            alt="R5"
-            className="absolute top-[50%] left-[3%] w-11 h-auto"
-          />
-        </div>
+        {THEME === 'cyber' && (
+          <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0 opacity-40">
+            <img
+              src={random1}
+              alt=""
+              className="absolute top-[8%] left-[6%] w-12 h-auto"
+            />
+            <img
+              src={random2}
+              alt=""
+              className="absolute top-[18%] right-[10%] w-11 h-auto"
+            />
+            <img
+              src={random3}
+              alt=""
+              className="absolute bottom-[10%] left-[8%] w-14 h-auto"
+            />
+            <img
+              src={random4}
+              alt=""
+              className="absolute bottom-[18%] right-[12%] w-12 h-auto"
+            />
+            <img
+              src={random5}
+              alt=""
+              className="absolute top-[50%] left-[3%] w-11 h-auto"
+            />
+          </div>
+        )}
+
+        <ThemeAsset
+          kind="heroDecor"
+          className="absolute right-0 bottom-0 w-2/3 max-w-xl opacity-90 pointer-events-none select-none z-0"
+        />
 
         {/* Abstract Cyber Grid overlay */}
         <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />

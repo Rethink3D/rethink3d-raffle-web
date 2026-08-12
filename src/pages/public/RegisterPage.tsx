@@ -9,6 +9,7 @@ import { Button } from '../../components/ui/Button';
 import { User, Phone, Lock } from 'lucide-react';
 import agree from '../../assets/agree.gif';
 import { ThemeAsset } from '../../theme/assets';
+import { THEME } from '../../theme/current';
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
@@ -194,7 +195,7 @@ export const RegisterPage: React.FC = () => {
               variant="primary" 
               fullWidth 
               isLoading={isLoading}
-              icon={<img src={agree} alt="Agree" className="w-5 h-5 object-contain" />}
+              icon={THEME === 'cyber' ? <img src={agree} alt="" className="w-5 h-5 object-contain" /> : undefined}
             >
               CRIAR PERSONAGEM
             </Button>

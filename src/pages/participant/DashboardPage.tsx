@@ -16,7 +16,6 @@ import { Modal } from '../../components/ui/Modal';
 import { getCampaignStatusLabel } from '../../utils/campaignStatus';
 import { getNextDrawTarget, getUpcomingSchedules } from '../../utils/drawSchedule';
 import type { Campaign, Draw, Mission, Prize, TicketHistoryEntry, User } from '../../types';
-import nika from '../../assets/nika.gif';
 import { ThemeAsset } from '../../theme/assets';
 
 // Cores do badge de status — mesma paleta usada nos outros indicadores da
@@ -282,7 +281,7 @@ export const DashboardPage: React.FC = () => {
         <SignupBonusModal />
         <Card variant="default" title="Nenhum sorteio rolando agora" glow className="select-none">
           <div className="flex flex-col items-center gap-4 text-center py-4">
-            <img src={nika} alt="Aguardando" className="w-24 h-auto" draggable={false} />
+            <ThemeAsset kind="waiting" size={96} className="w-24" />
             <p className="text-sm font-body text-brand-muted max-w-sm">
               Ainda não temos uma campanha ativa. Fique de olho — assim que uma nova aventura começar, ela aparece bem aqui.
             </p>

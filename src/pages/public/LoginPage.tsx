@@ -9,6 +9,7 @@ import { Button } from '../../components/ui/Button';
 import { Phone, Lock, LogIn } from 'lucide-react';
 import nika from '../../assets/nika.gif';
 import { ThemeAsset } from '../../theme/assets';
+import { THEME } from '../../theme/current';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -139,13 +140,13 @@ export const LoginPage: React.FC = () => {
 
           <div className="mt-6 flex flex-col gap-4 relative">
             {/* Gatinho dormindo (Nika) posicionado acima e à direita do botão */}
-            <img 
-              src={nika} 
+            {THEME === 'cyber' && <img
+              src={nika}
               alt="Gatinho Nika Dormindo" 
               className="absolute bottom-full right-2 w-14 h-auto pointer-events-none select-none z-20 mb-[-20px]"
               draggable={false}
-            />
-            <Button 
+            />}
+            <Button
               type="submit" 
               variant="secondary" 
               fullWidth 

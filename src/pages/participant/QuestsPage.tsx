@@ -11,8 +11,6 @@ import { PrintUpload } from '../../components/quest/PrintUpload';
 import { ReferralRedeem } from '../../components/quest/ReferralRedeem';
 import { useTicketRefreshStore } from '../../store/ticketRefreshStore';
 import type { Campaign, Mission } from '../../types';
-import nika from '../../assets/nika.gif';
-import agree from '../../assets/agree.gif';
 import { ThemeAsset } from '../../theme/assets';
 
 export const QuestsPage: React.FC = () => {
@@ -137,7 +135,7 @@ export const QuestsPage: React.FC = () => {
       <div className="max-w-xl mx-auto my-10 select-none">
         <Card variant="default" title="Nenhuma missão disponível" glow>
           <div className="flex flex-col items-center gap-4 text-center py-4">
-            <img src={nika} alt="Aguardando" className="w-24 h-auto" draggable={false} />
+            <ThemeAsset kind="waiting" size={96} className="w-24" />
             <p className="text-sm font-body text-brand-muted max-w-sm">
               Ainda não temos uma campanha ativa. Assim que uma nova começar, suas missões aparecem aqui.
             </p>
@@ -199,7 +197,7 @@ export const QuestsPage: React.FC = () => {
       {allCompleted && (
         <Card variant="secondary" glow className="text-center">
           <div className="flex flex-col items-center gap-3 py-4 select-none">
-            <img src={agree} alt="Parabéns" className="w-20 h-auto" draggable={false} />
+            <ThemeAsset kind="celebrate" size={80} className="w-20" />
             <h3 className="text-lg font-display font-extrabold text-white uppercase tracking-wider">
               Parabéns, você completou todas as missões!
             </h3>
