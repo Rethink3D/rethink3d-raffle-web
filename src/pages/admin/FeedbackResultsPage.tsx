@@ -10,7 +10,7 @@ import { Button } from '../../components/ui/Button';
 import { getApiErrorMessage } from '../../utils/apiError';
 import { ArrowLeft, RefreshCw, Download, MessageSquare, Users, Star } from 'lucide-react';
 
-const CHART_COLORS = ['#7c3aed', '#06b6d4', '#f59e0b', '#10b981', '#ef4444', '#a855f7'];
+const CHART_COLORS = ['rgb(var(--c-primary))', 'rgb(var(--c-secondary))', 'rgb(var(--c-accent))', 'rgb(var(--c-success))', 'rgb(var(--c-danger))', 'rgb(var(--c-glow))'];
 
 const questionTypeLabels: Record<QuestionType, string> = {
   TEXT: 'Resposta Aberta',
@@ -176,19 +176,19 @@ export const FeedbackResultsPage: React.FC = () => {
             <div className="w-full" style={{ height: Math.max(question.options.length * 48, 120) }}>
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={question.options} layout="vertical" margin={{ left: 8, right: 24, top: 8, bottom: 8 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" horizontal={false} />
-                  <XAxis type="number" allowDecimals={false} stroke="#64748b" fontSize={11} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgb(var(--c-border))" horizontal={false} />
+                  <XAxis type="number" allowDecimals={false} stroke="rgb(var(--c-muted))" fontSize={11} />
                   <YAxis
                     type="category"
                     dataKey="text"
                     width={160}
-                    stroke="#e2e8f0"
+                    stroke="rgb(var(--c-text))"
                     fontSize={11}
-                    tick={{ fill: '#e2e8f0' }}
+                    tick={{ fill: 'rgb(var(--c-text))' }}
                   />
                   <Tooltip
-                    contentStyle={{ background: '#12121e', border: '1px solid #1e1e3a', borderRadius: 6 }}
-                    labelStyle={{ color: '#e2e8f0' }}
+                    contentStyle={{ background: 'rgb(var(--c-surface))', border: '1px solid rgb(var(--c-border))', borderRadius: 6 }}
+                    labelStyle={{ color: 'rgb(var(--c-text))' }}
                     formatter={(value, _name, props: any) => [`${value} (${props.payload.percentage}%)`, 'Respostas']}
                   />
                   <Bar dataKey="count" radius={[0, 4, 4, 0]}>
@@ -212,16 +212,16 @@ export const FeedbackResultsPage: React.FC = () => {
               <div className="w-full" style={{ height: 180 }}>
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={question.scale.distribution} margin={{ left: 0, right: 8, top: 8, bottom: 8 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#1e1e3a" vertical={false} />
-                    <XAxis dataKey="value" stroke="#64748b" fontSize={11} />
-                    <YAxis allowDecimals={false} stroke="#64748b" fontSize={11} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgb(var(--c-border))" vertical={false} />
+                    <XAxis dataKey="value" stroke="rgb(var(--c-muted))" fontSize={11} />
+                    <YAxis allowDecimals={false} stroke="rgb(var(--c-muted))" fontSize={11} />
                     <Tooltip
-                      contentStyle={{ background: '#12121e', border: '1px solid #1e1e3a', borderRadius: 6 }}
-                      labelStyle={{ color: '#e2e8f0' }}
+                      contentStyle={{ background: 'rgb(var(--c-surface))', border: '1px solid rgb(var(--c-border))', borderRadius: 6 }}
+                      labelStyle={{ color: 'rgb(var(--c-text))' }}
                       formatter={(value) => [`${value}`, 'Respostas']}
                       labelFormatter={(label) => `Nota ${label}`}
                     />
-                    <Bar dataKey="count" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="count" fill="rgb(var(--c-accent))" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

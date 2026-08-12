@@ -60,7 +60,7 @@ export const Button: React.FC<ButtonProps> = ({
         <div 
           className="absolute inset-0 pointer-events-none opacity-20"
           style={{
-            backgroundImage: 'repeating-linear-gradient(45deg, #1e1e3a, #1e1e3a 5px, transparent 5px, transparent 10px)'
+            backgroundImage: 'repeating-linear-gradient(45deg, rgb(var(--c-border)), rgb(var(--c-border)) 5px, transparent 5px, transparent 10px)'
           }}
         />
       )}

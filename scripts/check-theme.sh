@@ -43,4 +43,7 @@ grep -q 'Sorteio Gamificado' index.html || fail "index.html perdeu o texto do te
 grep -q 'copy.adminMenu' src/components/layout/Layout.tsx || fail "Layout nao usa copy.adminMenu"
 grep -q 'copy.loading' src/routes/index.tsx || fail "PageLoader nao usa copy.loading"
 
+HEX=$(grep -roE '#[0-9a-fA-F]{6}' src --include=*.tsx | wc -l)
+[ "$HEX" -eq 0 ] || fail "restaram $HEX cores hexadecimais fixas em .tsx"
+
 echo "OK"

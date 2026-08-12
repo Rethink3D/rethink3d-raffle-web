@@ -37,7 +37,17 @@ const ConfettiCanvas: React.FC = () => {
     };
     window.addEventListener('resize', handleResize);
 
-    const colors = ['#7c3aed', '#06b6d4', '#f59e0b', '#10b981', '#ef4444'];
+    // O canvas não resolve var() em fillStyle — só o CSS resolve. Por isso os
+    // tokens do tema são lidos aqui e convertidos em cor literal.
+    const rootStyle = getComputedStyle(document.documentElement);
+    const token = (name: string) => `rgb(${rootStyle.getPropertyValue(name).trim()})`;
+    const colors = [
+      token('--c-primary'),
+      token('--c-secondary'),
+      token('--c-accent'),
+      token('--c-success'),
+      token('--c-danger'),
+    ];
     const particles = Array.from({ length: 120 }).map(() => ({
       x: Math.random() * width,
       y: Math.random() * height - height,

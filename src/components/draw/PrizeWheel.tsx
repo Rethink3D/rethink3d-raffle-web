@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import type { DrawParticipantPreview } from '../../store/drawStore';
 
-const SLICE_COLORS = ['#7c3aed', '#06b6d4', '#f59e0b', '#10b981', '#ef4444', '#a855f7'];
+const SLICE_COLORS = ['rgb(var(--c-primary))', 'rgb(var(--c-secondary))', 'rgb(var(--c-accent))', 'rgb(var(--c-success))', 'rgb(var(--c-danger))', 'rgb(var(--c-glow))'];
 const MIN_LABEL_DEGREES = 10;
 const SPIN_SPEED_DEG_PER_SEC = 300;
 const EXTRA_SPINS = 3;
@@ -79,7 +79,7 @@ export const PrizeWheel: React.FC<PrizeWheelProps> = ({
   }, [participants, othersTickets, othersCount]);
 
   const conicGradient = useMemo(() => {
-    if (slices.length === 0) return '#1e1e3a';
+    if (slices.length === 0) return 'rgb(var(--c-border))';
     const stops = slices.map((s) => `${s.color} ${s.startDeg}deg ${s.endDeg}deg`);
     return `conic-gradient(from 0deg, ${stops.join(', ')})`;
   }, [slices]);
