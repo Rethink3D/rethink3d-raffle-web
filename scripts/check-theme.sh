@@ -10,4 +10,13 @@ grep -q 'rgb(var(--c-primary)' tailwind.config.js || fail "tailwind nao usa vari
 grep -q 'alpha-value' tailwind.config.js || fail "tailwind sem alpha-value"
 grep -q 'themeHtml' vite.config.ts || fail "vite sem plugin de tema"
 
+LEFT=$(grep -ro 'cyber-\(bg\|surface\|border\|primary\|glow\|secondary\|accent\|success\|danger\|text\|muted\)\b' src | wc -l)
+[ "$LEFT" -eq 0 ] || fail "restaram $LEFT tokens cyber-* nao renomeados"
+
+BRAND=$(grep -ro 'brand-\(bg\|surface\|border\|primary\|glow\|secondary\|accent\|highlight\|success\|danger\|text\|muted\)\b' src | wc -l)
+[ "$BRAND" -ge 1214 ] || fail "esperava ao menos 1214 tokens brand-*, achei $BRAND"
+
+grep -rq 'font-orbitron\|font-rajdhani\|font-inter' src && fail "restaram nomes de fonte antigos"
+grep -rq 'clip-cyber' src && fail "restaram classes clip-cyber mortas"
+
 echo "OK"

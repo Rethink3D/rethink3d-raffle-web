@@ -47,7 +47,7 @@ const PageLoader: React.FC = () => (
           ></lottie-player>`
         }}
       />
-      <span className="text-[10px] font-mono text-cyber-secondary tracking-widest uppercase animate-pulse">
+      <span className="text-[10px] font-mono text-brand-secondary tracking-widest uppercase animate-pulse">
         CARREGANDO RECURSOS...
       </span>
     </div>

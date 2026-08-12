@@ -148,9 +148,9 @@ export const LandingPage: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-12 font-inter text-cyber-text">
+    <div className="flex flex-col gap-12 font-body text-brand-text">
       {/* 1. HERO BANNER */}
-      <section className="relative py-12 md:py-20 flex flex-col items-center justify-center text-center overflow-hidden border border-cyber-primary/40 rounded-lg bg-cyber-surface/60 px-4">
+      <section className="relative py-12 md:py-20 flex flex-col items-center justify-center text-center overflow-hidden border border-brand-primary/40 rounded-lg bg-brand-surface/60 px-4">
         {/* Elementos GIFs de fundo distribuídos nos cantos e laterais do Hero */}
         <div className="absolute inset-0 pointer-events-none select-none overflow-hidden z-0 opacity-40">
           <img
@@ -182,21 +182,21 @@ export const LandingPage: React.FC = () => {
 
         {/* Abstract Cyber Grid overlay */}
         <div className="absolute inset-0 bg-cyber-grid opacity-10 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-cyber-bg via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-bg via-transparent to-transparent pointer-events-none" />
 
         {/* Glow corners */}
-        <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-cyber-primary" />
-        <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-cyber-primary" />
-        <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-cyber-primary" />
-        <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-cyber-primary" />
+        <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-brand-primary" />
+        <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-brand-primary" />
+        <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-brand-primary" />
+        <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-brand-primary" />
 
         <div className="relative z-10 max-w-3xl flex flex-col items-center">
-          <h1 className="font-orbitron text-3xl sm:text-5xl md:text-6xl font-black tracking-widest text-white uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] leading-tight">
+          <h1 className="font-display text-3xl sm:text-5xl md:text-6xl font-black tracking-widest text-white uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.15)] leading-tight">
             RETHINK
-            <span className="text-cyber-primary text-glow-primary">3D</span>
+            <span className="text-brand-primary text-glow-primary">3D</span>
           </h1>
 
-          <p className="font-inter text-sm sm:text-base text-cyber-muted mt-6 max-w-xl leading-relaxed">
+          <p className="font-body text-sm sm:text-base text-brand-muted mt-6 max-w-xl leading-relaxed">
             Participe das missões, acumule cupons e aumente suas chances de
             ganhar nos sorteios ao vivo. Cada missão concluída rende novos
             cupons para você aumentar suas chances.
@@ -240,14 +240,14 @@ export const LandingPage: React.FC = () => {
 
       {/* 2. DYNAMIC ACTIVE CAMPAIGN & COUNTDOWN */}
       <section className="flex flex-col gap-6">
-        <h2 className="font-orbitron text-base sm:text-xl font-bold text-white tracking-widest uppercase border-b border-cyber-border pb-2">
+        <h2 className="font-display text-base sm:text-xl font-bold text-white tracking-widest uppercase border-b border-brand-border pb-2">
           ⚡ CAMPANHAS ATIVAS
         </h2>
 
         {loading ? (
           <Card className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-cyber-secondary mb-3" />
-            <span className="font-mono text-xs text-cyber-muted tracking-widest">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-brand-secondary mb-3" />
+            <span className="font-mono text-xs text-brand-muted tracking-widest">
               CONECTANDO AO NÓ...
             </span>
           </Card>
@@ -261,7 +261,7 @@ export const LandingPage: React.FC = () => {
             >
               <div className="flex flex-col gap-4 mt-2">
                 {activeCampaign.coverImageUrl && (
-                  <div className="aspect-video relative rounded-md border border-cyber-border overflow-hidden bg-black/55">
+                  <div className="aspect-video relative rounded-md border border-brand-border overflow-hidden bg-black/55">
                     <img
                       src={activeCampaign.coverImageUrl}
                       alt={activeCampaign.name}
@@ -273,13 +273,13 @@ export const LandingPage: React.FC = () => {
                   </div>
                 )}
 
-                <p className="text-sm leading-relaxed text-cyber-text/90">
+                <p className="text-sm leading-relaxed text-brand-text/90">
                   {activeCampaign.description ||
                     "Nenhuma descrição fornecida para esta campanha."}
                 </p>
 
                 {/* Visual specs */}
-                <div className="grid grid-cols-2 gap-4 bg-black/40 border border-cyber-border/40 p-4 rounded text-xs font-mono text-cyber-muted mt-2">
+                <div className="grid grid-cols-2 gap-4 bg-black/40 border border-brand-border/40 p-4 rounded text-xs font-mono text-brand-muted mt-2">
                   <div>
                     <span className="block text-white font-bold mb-1">
                       DATA DE LANÇAMENTO
@@ -322,7 +322,7 @@ export const LandingPage: React.FC = () => {
               variant="accent"
               glow
             >
-              <div className="flex items-center gap-2 text-cyber-accent mb-4 font-orbitron font-bold uppercase tracking-wider text-sm relative z-10">
+              <div className="flex items-center gap-2 text-brand-accent mb-4 font-display font-bold uppercase tracking-wider text-sm relative z-10">
                 <Clock size={16} className="animate-pulse" />
                 <span>Tempo Restante para o Sorteio</span>
               </div>
@@ -330,10 +330,10 @@ export const LandingPage: React.FC = () => {
               <div className="relative z-10 w-full flex flex-col items-center">
                 {activeCampaign.status === "DRAWING" ? (
                   <div className="flex flex-col items-center gap-2 py-4">
-                    <span className="text-xl sm:text-2xl font-orbitron font-extrabold text-cyber-primary tracking-widest animate-pulse">
+                    <span className="text-xl sm:text-2xl font-display font-extrabold text-brand-primary tracking-widest animate-pulse">
                       🔴 SORTEIO AO VIVO AGORA!
                     </span>
-                    <p className="text-[10px] font-mono text-cyber-muted max-w-xs uppercase">
+                    <p className="text-[10px] font-mono text-brand-muted max-w-xs uppercase">
                       A transmissão está rolando agora. Clique abaixo para
                       entrar na sala.
                     </p>
@@ -347,28 +347,28 @@ export const LandingPage: React.FC = () => {
                   </div>
                 ) : activeCampaign.status === "PAUSED" ? (
                   <div className="flex flex-col items-center gap-2 py-4">
-                    <div className="flex items-center gap-2 text-cyber-accent">
+                    <div className="flex items-center gap-2 text-brand-accent">
                       <PauseCircle size={18} />
-                      <span className="text-lg sm:text-xl font-orbitron font-extrabold tracking-widest uppercase">
+                      <span className="text-lg sm:text-xl font-display font-extrabold tracking-widest uppercase">
                         Sorteio em Intervalo
                       </span>
                     </div>
-                    <p className="text-[10px] font-mono text-cyber-muted max-w-xs uppercase">
+                    <p className="text-[10px] font-mono text-brand-muted max-w-xs uppercase">
                       Já rolou uma rodada — a próxima pode começar a qualquer
                       momento. Se todos os prêmios já foram sorteados, o
                       sorteio pode ser encerrado por aqui mesmo.
                     </p>
                   </div>
                 ) : !drawTarget ? (
-                  <div className="text-cyber-muted font-mono text-sm py-4">
+                  <div className="text-brand-muted font-mono text-sm py-4">
                     A DEFINIR // DATA DO SORTEIO NÃO CONFIGURADA
                   </div>
                 ) : countdown.isExpired ? (
                   <div className="flex flex-col items-center gap-2 py-4">
-                    <span className="text-xl sm:text-2xl font-orbitron font-extrabold text-cyber-success tracking-widest animate-pulse">
+                    <span className="text-xl sm:text-2xl font-display font-extrabold text-brand-success tracking-widest animate-pulse">
                       JÁ É HORA DO SORTEIO
                     </span>
-                    <p className="text-[10px] font-mono text-cyber-muted max-w-xs uppercase">
+                    <p className="text-[10px] font-mono text-brand-muted max-w-xs uppercase">
                       A organização já pode começar a qualquer momento. Fique
                       de olho.
                     </p>
@@ -378,43 +378,43 @@ export const LandingPage: React.FC = () => {
                     {/* Digital HUD Counter */}
                     <div className="flex gap-2 sm:gap-4 justify-center select-none">
                       <div className="flex flex-col">
-                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-black/60 border border-cyber-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-orbitron font-black text-cyber-accent text-glow-accent">
+                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-black/60 border border-brand-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-display font-black text-brand-accent text-glow-accent">
                           {countdown.formatted.days}
                         </div>
-                        <span className="text-[9px] font-mono text-cyber-muted mt-1 uppercase tracking-widest">
+                        <span className="text-[9px] font-mono text-brand-muted mt-1 uppercase tracking-widest">
                           Dias
                         </span>
                       </div>
-                      <span className="text-2xl sm:text-3xl text-cyber-accent pt-2">
+                      <span className="text-2xl sm:text-3xl text-brand-accent pt-2">
                         :
                       </span>
                       <div className="flex flex-col">
-                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-black/60 border border-cyber-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-orbitron font-black text-cyber-accent text-glow-accent">
+                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-black/60 border border-brand-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-display font-black text-brand-accent text-glow-accent">
                           {countdown.formatted.hours}
                         </div>
-                        <span className="text-[9px] font-mono text-cyber-muted mt-1 uppercase tracking-widest">
+                        <span className="text-[9px] font-mono text-brand-muted mt-1 uppercase tracking-widest">
                           Horas
                         </span>
                       </div>
-                      <span className="text-2xl sm:text-3xl text-cyber-accent pt-2">
+                      <span className="text-2xl sm:text-3xl text-brand-accent pt-2">
                         :
                       </span>
                       <div className="flex flex-col">
-                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-black/60 border border-cyber-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-orbitron font-black text-cyber-accent text-glow-accent">
+                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-black/60 border border-brand-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-display font-black text-brand-accent text-glow-accent">
                           {countdown.formatted.minutes}
                         </div>
-                        <span className="text-[9px] font-mono text-cyber-muted mt-1 uppercase tracking-widest">
+                        <span className="text-[9px] font-mono text-brand-muted mt-1 uppercase tracking-widest">
                           Minutos
                         </span>
                       </div>
-                      <span className="text-2xl sm:text-3xl text-cyber-accent pt-2">
+                      <span className="text-2xl sm:text-3xl text-brand-accent pt-2">
                         :
                       </span>
                       <div className="flex flex-col">
-                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-black/60 border border-cyber-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-orbitron font-black text-cyber-accent text-glow-accent">
+                        <div className="w-14 sm:w-16 h-14 sm:h-16 bg-black/60 border border-brand-accent rounded flex items-center justify-center text-2xl sm:text-3xl font-display font-black text-brand-accent text-glow-accent">
                           {countdown.formatted.seconds}
                         </div>
-                        <span className="text-[9px] font-mono text-cyber-muted mt-1 uppercase tracking-widest">
+                        <span className="text-[9px] font-mono text-brand-muted mt-1 uppercase tracking-widest">
                           Segundos
                         </span>
                       </div>
@@ -425,11 +425,11 @@ export const LandingPage: React.FC = () => {
             </Card>
           </div>
         ) : (
-          <Card className="border-cyber-danger/40 bg-cyber-surface/40 py-12 flex flex-col items-center text-center">
-            <h3 className="font-orbitron font-bold text-white text-lg uppercase tracking-wider">
+          <Card className="border-brand-danger/40 bg-brand-surface/40 py-12 flex flex-col items-center text-center">
+            <h3 className="font-display font-bold text-white text-lg uppercase tracking-wider">
               Nenhuma campanha ativa
             </h3>
-            <p className="font-inter text-xs text-cyber-muted mt-2 max-w-sm">
+            <p className="font-body text-xs text-brand-muted mt-2 max-w-sm">
               No momento, não há nenhuma campanha de recompensas ativa. Por
               favor, volte mais tarde ou registre-se para se preparar para a
               próxima temporada.
@@ -450,7 +450,7 @@ export const LandingPage: React.FC = () => {
       {/* 2.5 RANKING PÚBLICO */}
       {activeCampaign && rankingEntries.length > 0 && (
         <section className="flex flex-col gap-6">
-          <h2 className="font-orbitron text-base sm:text-xl font-bold text-white tracking-widest uppercase border-b border-cyber-border pb-2">
+          <h2 className="font-display text-base sm:text-xl font-bold text-white tracking-widest uppercase border-b border-brand-border pb-2">
             🏆 RANKING DE CUPONS
           </h2>
 
@@ -459,10 +459,10 @@ export const LandingPage: React.FC = () => {
             title="Top 10"
             subtitle={activeCampaign.name}
             glow
-            headerExtra={<Trophy size={20} className="text-cyber-primary" />}
+            headerExtra={<Trophy size={20} className="text-brand-primary" />}
           >
             <Leaderboard entries={rankingEntries} />
-            <div className="mt-4 pt-4 border-t border-cyber-border/40">
+            <div className="mt-4 pt-4 border-t border-brand-border/40">
               <Button
                 variant="secondary"
                 size="sm"
@@ -479,7 +479,7 @@ export const LandingPage: React.FC = () => {
 
       {/* 3. HOW TO EARN TICKETS */}
       <section className="flex flex-col gap-6">
-        <h2 className="font-orbitron text-base sm:text-xl font-bold text-white tracking-widest uppercase border-b border-cyber-border pb-2">
+        <h2 className="font-display text-base sm:text-xl font-bold text-white tracking-widest uppercase border-b border-brand-border pb-2">
           💡 COMO FUNCIONA
         </h2>
 
@@ -487,24 +487,24 @@ export const LandingPage: React.FC = () => {
           {steps.map((step, index) => (
             <Card
               key={index}
-              className="flex flex-col h-full justify-between hover:border-cyber-primary/70 transition-all duration-300"
+              className="flex flex-col h-full justify-between hover:border-brand-primary/70 transition-all duration-300"
             >
               <div className="flex flex-col gap-3">
                 {/* Step header */}
                 <div className="flex items-center justify-between">
-                  <div className="w-10 h-10 border border-cyber-border flex items-center justify-center rounded bg-white p-1.5">
+                  <div className="w-10 h-10 border border-brand-border flex items-center justify-center rounded bg-white p-1.5">
                     {step.icon}
                   </div>
-                  <span className="font-mono text-xs text-cyber-muted font-bold">
+                  <span className="font-mono text-xs text-brand-muted font-bold">
                     PASSO_0{index + 1}
                   </span>
                 </div>
 
-                <h3 className="font-orbitron font-extrabold text-sm text-white uppercase tracking-wider mt-3">
+                <h3 className="font-display font-extrabold text-sm text-white uppercase tracking-wider mt-3">
                   {step.title}
                 </h3>
 
-                <p className="font-inter text-xs leading-relaxed text-cyber-muted">
+                <p className="font-body text-xs leading-relaxed text-brand-muted">
                   {step.desc}
                 </p>
               </div>
@@ -515,7 +515,7 @@ export const LandingPage: React.FC = () => {
 
       {/* 4. FAQ ACCORDION */}
       <section className="flex flex-col gap-6">
-        <h2 className="font-orbitron text-base sm:text-xl font-bold text-white tracking-widest uppercase border-b border-cyber-border pb-2">
+        <h2 className="font-display text-base sm:text-xl font-bold text-white tracking-widest uppercase border-b border-brand-border pb-2">
           ❓ PERGUNTAS FREQUENTES
         </h2>
 
@@ -525,30 +525,30 @@ export const LandingPage: React.FC = () => {
             return (
               <div
                 key={index}
-                className="border border-cyber-border rounded overflow-hidden bg-cyber-surface/50"
+                className="border border-brand-border rounded overflow-hidden bg-brand-surface/50"
               >
                 {/* Header Toggle */}
                 <button
                   onClick={() => toggleFaq(index)}
-                  className="w-full flex items-center justify-between p-4 text-left font-rajdhani font-bold text-sm sm:text-base text-white tracking-wide uppercase hover:bg-cyber-surface/60 transition-colors focus:outline-none cursor-pointer"
+                  className="w-full flex items-center justify-between p-4 text-left font-ui font-bold text-sm sm:text-base text-white tracking-wide uppercase hover:bg-brand-surface/60 transition-colors focus:outline-none cursor-pointer"
                 >
                   <span className="flex items-center gap-3">
                     <HelpCircle
                       size={16}
-                      className="text-cyber-secondary flex-shrink-0"
+                      className="text-brand-secondary flex-shrink-0"
                     />
                     {faq.q}
                   </span>
                   {isOpen ? (
-                    <ChevronUp size={16} className="text-cyber-muted" />
+                    <ChevronUp size={16} className="text-brand-muted" />
                   ) : (
-                    <ChevronDown size={16} className="text-cyber-muted" />
+                    <ChevronDown size={16} className="text-brand-muted" />
                   )}
                 </button>
 
                 {/* Body Content */}
                 {isOpen && (
-                  <div className="px-4 pb-4 pt-1 border-t border-cyber-border/40 text-xs sm:text-sm text-cyber-muted leading-relaxed font-inter bg-black/25">
+                  <div className="px-4 pb-4 pt-1 border-t border-brand-border/40 text-xs sm:text-sm text-brand-muted leading-relaxed font-body bg-black/25">
                     {faq.a}
                   </div>
                 )}
@@ -559,15 +559,15 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* 5. RULES & SECURITY GUIDELINES */}
-      <section className="flex flex-col gap-4 bg-cyber-surface/95 border border-cyber-danger/40 rounded p-6 shadow-lg">
-        <div className="flex items-center gap-3 border-b border-cyber-danger/25 pb-2 text-cyber-danger">
+      <section className="flex flex-col gap-4 bg-brand-surface/95 border border-brand-danger/40 rounded p-6 shadow-lg">
+        <div className="flex items-center gap-3 border-b border-brand-danger/25 pb-2 text-brand-danger">
           <ShieldAlert size={20} />
-          <h2 className="font-orbitron font-extrabold text-base tracking-widest uppercase">
+          <h2 className="font-display font-extrabold text-base tracking-widest uppercase">
             REGULAMENTO E PROTOCOLO
           </h2>
         </div>
 
-        <ul className="list-disc list-inside flex flex-col gap-2 font-inter text-xs leading-relaxed text-white text-justify">
+        <ul className="list-disc list-inside flex flex-col gap-2 font-body text-xs leading-relaxed text-white text-justify">
           <li>
             <strong>Contas Únicas Apenas:</strong> Os participantes estão
             estritamente limitados a uma conta associada ao seu número de
@@ -602,7 +602,7 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Footer System Specs */}
-      <div className="text-[10px] text-center font-mono text-cyber-muted mt-8 border-t border-cyber-border/30 pt-4">
+      <div className="text-[10px] text-center font-mono text-brand-muted mt-8 border-t border-brand-border/30 pt-4">
         <span>Copyright © 2026 Rethink3D</span>
       </div>
     </div>

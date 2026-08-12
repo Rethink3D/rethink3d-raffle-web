@@ -110,13 +110,13 @@ export const PrintUpload: React.FC<PrintUploadProps> = ({
   };
 
   return (
-    <div className="w-full flex flex-col gap-4 font-inter text-cyber-text">
+    <div className="w-full flex flex-col gap-4 font-body text-brand-text">
       {/* Header Info */}
       <div className="flex flex-col mb-1 select-none">
-        <span className="text-[10px] font-mono tracking-widest text-cyber-secondary uppercase">
+        <span className="text-[10px] font-mono tracking-widest text-brand-secondary uppercase">
           // INTERFACE DE ENVIO DE COMPROVAÇÃO
         </span>
-        <h3 className="text-base font-orbitron font-extrabold text-white uppercase tracking-wider mt-0.5">
+        <h3 className="text-base font-display font-extrabold text-white uppercase tracking-wider mt-0.5">
           {missionTitle}
         </h3>
       </div>
@@ -132,8 +132,8 @@ export const PrintUpload: React.FC<PrintUploadProps> = ({
             className={`
               relative min-h-[220px] rounded-lg border-2 border-dashed flex flex-col items-center justify-center p-6 text-center transition-all duration-300
               ${dragActive 
-                ? 'border-cyber-secondary bg-cyber-secondary/5 glow-secondary' 
-                : 'border-cyber-border bg-cyber-surface/40 hover:border-cyber-secondary/40 hover:bg-cyber-surface/60'}
+                ? 'border-brand-secondary bg-brand-secondary/5 glow-secondary' 
+                : 'border-brand-border bg-brand-surface/40 hover:border-brand-secondary/40 hover:bg-brand-surface/60'}
             `}
           >
             <input
@@ -150,42 +150,42 @@ export const PrintUpload: React.FC<PrintUploadProps> = ({
 
             {!file ? (
               <div className="flex flex-col items-center gap-3 relative z-10 select-none">
-                <div className="p-4 rounded bg-cyber-border/40 border border-cyber-border/80 text-cyber-muted animate-float">
+                <div className="p-4 rounded bg-brand-border/40 border border-brand-border/80 text-brand-muted animate-float">
                   <Upload size={32} />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <p className="text-sm font-rajdhani font-bold text-white tracking-wide">
+                  <p className="text-sm font-ui font-bold text-white tracking-wide">
                     ARRASTE E SOLTE A IMAGEM AQUI OU{' '}
                     <span 
                       onClick={onButtonClick} 
-                      className="text-cyber-secondary hover:text-white underline cursor-pointer transition-colors"
+                      className="text-brand-secondary hover:text-white underline cursor-pointer transition-colors"
                     >
                       PROCURAR ARQUIVOS
                     </span>
                   </p>
-                  <p className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider">
+                  <p className="text-[10px] font-mono text-brand-muted uppercase tracking-wider">
                     JPEG, PNG, WEBP (MÁX 5.0 MB)
                   </p>
                 </div>
               </div>
             ) : (
               <div className="w-full max-w-md flex flex-col items-center gap-4 relative z-10">
-                <div className="w-full flex items-center gap-3 bg-cyber-surface border border-cyber-border rounded p-3 select-none">
-                  <div className="p-2.5 rounded bg-cyber-secondary/10 border border-cyber-secondary/30 text-cyber-secondary">
+                <div className="w-full flex items-center gap-3 bg-brand-surface border border-brand-border rounded p-3 select-none">
+                  <div className="p-2.5 rounded bg-brand-secondary/10 border border-brand-secondary/30 text-brand-secondary">
                     <FileImage size={24} />
                   </div>
                   <div className="flex-1 min-w-0 text-left">
-                    <p className="text-sm font-rajdhani font-bold text-white truncate uppercase tracking-wider">
+                    <p className="text-sm font-ui font-bold text-white truncate uppercase tracking-wider">
                       {file.name}
                     </p>
-                    <p className="text-xs font-mono text-cyber-muted">
+                    <p className="text-xs font-mono text-brand-muted">
                       {formatBytes(file.size)}
                     </p>
                   </div>
                   <button
                     onClick={removeFile}
                     disabled={uploading}
-                    className="p-1 rounded hover:bg-cyber-danger/10 text-cyber-muted hover:text-cyber-danger transition-colors cursor-pointer"
+                    className="p-1 rounded hover:bg-brand-danger/10 text-brand-muted hover:text-brand-danger transition-colors cursor-pointer"
                   >
                     <X size={16} />
                   </button>
@@ -193,15 +193,15 @@ export const PrintUpload: React.FC<PrintUploadProps> = ({
 
                 {uploading && (
                   <div className="w-full flex flex-col gap-1">
-                    <div className="flex justify-between text-xs font-mono text-cyber-secondary">
+                    <div className="flex justify-between text-xs font-mono text-brand-secondary">
                       <span>ENVIANDO_DADOS...</span>
                       <span className="animate-pulse">SYS_OCUPADO</span>
                     </div>
                     {/* Barra indeterminada (não temos progresso real de upload) —
                         antes ficava travada numa largura fixa de 60%, o que parecia
                         que o envio tinha travado em vez de estar em andamento. */}
-                    <div className="w-full h-1.5 bg-cyber-border rounded overflow-hidden">
-                      <div className="h-full w-1/3 bg-cyber-secondary rounded animate-upload-indeterminate" />
+                    <div className="w-full h-1.5 bg-brand-border rounded overflow-hidden">
+                      <div className="h-full w-1/3 bg-brand-secondary rounded animate-upload-indeterminate" />
                     </div>
                   </div>
                 )}
@@ -211,7 +211,7 @@ export const PrintUpload: React.FC<PrintUploadProps> = ({
 
           {/* Validation Error Message */}
           {error && (
-            <div className="flex items-start gap-2 bg-cyber-danger/10 border border-cyber-danger/30 rounded p-3 text-cyber-danger text-xs font-rajdhani font-bold uppercase tracking-wider">
+            <div className="flex items-start gap-2 bg-brand-danger/10 border border-brand-danger/30 rounded p-3 text-brand-danger text-xs font-ui font-bold uppercase tracking-wider">
               <AlertTriangle size={15} className="shrink-0 mt-0.5" />
               <span>AVISO_DE_SEGURANÇA // {error}</span>
             </div>
@@ -240,22 +240,22 @@ export const PrintUpload: React.FC<PrintUploadProps> = ({
         </div>
       ) : (
         /* Success State Display */
-        <div className="flex flex-col gap-5 items-center justify-center p-8 bg-cyber-success/5 border border-cyber-success/30 rounded-lg text-center relative overflow-hidden">
+        <div className="flex flex-col gap-5 items-center justify-center p-8 bg-brand-success/5 border border-brand-success/30 rounded-lg text-center relative overflow-hidden">
           {/* Decorative scanline success overlay */}
           <div className="absolute inset-0 pointer-events-none bg-cyber-grid opacity-5" />
           
-          <div className="p-4 rounded-full bg-cyber-success/15 border border-cyber-success/40 text-cyber-success mb-2 animate-bounce">
+          <div className="p-4 rounded-full bg-brand-success/15 border border-brand-success/40 text-brand-success mb-2 animate-bounce">
             <CheckCircle size={36} />
           </div>
 
           <div className="flex flex-col gap-1.5 select-none">
-            <h4 className="text-base font-orbitron font-extrabold text-white tracking-widest uppercase">
+            <h4 className="text-base font-display font-extrabold text-white tracking-widest uppercase">
               ENVIO REALIZADO COM SUCESSO
             </h4>
-            <p className="text-xs font-mono text-cyber-success tracking-widest uppercase">
+            <p className="text-xs font-mono text-brand-success tracking-widest uppercase">
               MISSÃO CUMPRIDA
             </p>
-            <p className="text-xs text-cyber-muted max-w-sm mt-1 leading-relaxed">
+            <p className="text-xs text-brand-muted max-w-sm mt-1 leading-relaxed">
               Seu comprovante foi enviado e seus tickets já foram creditados na sua conta.
             </p>
           </div>

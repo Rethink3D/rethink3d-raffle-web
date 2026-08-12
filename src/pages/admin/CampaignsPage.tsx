@@ -277,14 +277,14 @@ setIsActionLoading(true);
   };
 
   return (
-    <div className="space-y-6 font-inter">
+    <div className="space-y-6 font-body">
       {/* Top Title Bar */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-cyber-border/40 pb-5">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border/40 pb-5">
         <div>
-          <h1 className="text-2xl font-orbitron font-extrabold text-white tracking-widest uppercase">
+          <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase">
             GESTOR DE CAMPANHAS
           </h1>
-          <p className="text-xs font-rajdhani font-bold text-cyber-secondary tracking-widest mt-1">
+          <p className="text-xs font-ui font-bold text-brand-secondary tracking-widest mt-1">
             Lista e configuração das campanhas de sorteio Rethink3D
           </p>
         </div>
@@ -299,20 +299,20 @@ setIsActionLoading(true);
       </div>
 
       {error && (
-        <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider">
+        <div className="p-3 bg-brand-danger/10 border border-brand-danger/30 text-brand-danger text-xs font-ui font-bold uppercase rounded tracking-wider">
           ⚠ {error}
         </div>
       )}
 
       {/* Campaigns Listing */}
       {isLoading ? (
-        <div className="flex flex-col items-center justify-center p-20 text-cyber-muted font-mono space-y-4">
-          <RefreshCw size={24} className="animate-spin text-cyber-primary" />
+        <div className="flex flex-col items-center justify-center p-20 text-brand-muted font-mono space-y-4">
+          <RefreshCw size={24} className="animate-spin text-brand-primary" />
           <span>CARREGANDO CAMPANHAS...</span>
         </div>
       ) : campaigns.length === 0 ? (
         <Card variant="default">
-          <div className="text-center py-10 font-mono text-cyber-muted">
+          <div className="text-center py-10 font-mono text-brand-muted">
             NENHUMA CAMPANHA CADASTRADA NO MOMENTO. CLIQUE EM "CRIAR CAMPANHA" PARA INICIAR.
           </div>
         </Card>
@@ -334,10 +334,10 @@ setIsActionLoading(true);
                 subtitle={`STATUS: ${getCampaignStatusLabel(campaign.status)}`}
                 headerExtra={
                   <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${
-                    isActive ? 'bg-cyber-success/10 border-cyber-success text-cyber-success' :
-                    isDrawing ? 'bg-cyber-accent/10 border-cyber-accent text-cyber-accent animate-pulse' :
-                    isFinished ? 'bg-cyber-muted/10 border-cyber-muted text-cyber-muted' :
-                    'bg-cyber-primary/10 border-cyber-primary text-cyber-primary'
+                    isActive ? 'bg-brand-success/10 border-brand-success text-brand-success' :
+                    isDrawing ? 'bg-brand-accent/10 border-brand-accent text-brand-accent animate-pulse' :
+                    isFinished ? 'bg-brand-muted/10 border-brand-muted text-brand-muted' :
+                    'bg-brand-primary/10 border-brand-primary text-brand-primary'
                   }`}>
                     {getCampaignStatusLabel(campaign.status)}
                   </span>
@@ -345,7 +345,7 @@ setIsActionLoading(true);
               >
                 <div className="flex flex-col h-full gap-4 mt-2">
                   {campaign.coverImageUrl && (
-                    <div className="aspect-video relative rounded-md border border-cyber-border overflow-hidden bg-black/55">
+                    <div className="aspect-video relative rounded-md border border-brand-border overflow-hidden bg-black/55">
                       <img
                         src={campaign.coverImageUrl}
                         alt={campaign.name}
@@ -357,11 +357,11 @@ setIsActionLoading(true);
                     </div>
                   )}
 
-                  <p className="text-xs text-cyber-text/80 line-clamp-3 min-h-[48px] font-inter">
+                  <p className="text-xs text-brand-text/80 line-clamp-3 min-h-[48px] font-body">
                     {campaign.description || 'Nenhuma descrição fornecida.'}
                   </p>
 
-                  <div className="space-y-2 border-t border-b border-cyber-border/40 py-3 text-xs font-rajdhani font-bold text-cyber-muted tracking-wide">
+                  <div className="space-y-2 border-t border-b border-brand-border/40 py-3 text-xs font-ui font-bold text-brand-muted tracking-wide">
                     <div className="flex justify-between">
                       <span className="flex items-center gap-1 uppercase"><Calendar size={12} /> INÍCIO:</span>
                       <span className="font-mono text-white">
@@ -451,12 +451,12 @@ setIsActionLoading(true);
             required
           />
 
-          <div className="flex flex-col gap-1.5 font-inter">
-            <label className="text-xs font-rajdhani font-bold tracking-wider text-cyber-text uppercase px-1">
+          <div className="flex flex-col gap-1.5 font-body">
+            <label className="text-xs font-ui font-bold tracking-wider text-brand-text uppercase px-1">
               Descrição
             </label>
             <textarea
-              className="w-full bg-cyber-bg border border-cyber-border rounded px-4 py-2.5 text-sm font-rajdhani font-semibold text-white tracking-wide placeholder-cyber-muted focus:border-cyber-secondary focus:ring-1 focus:ring-cyber-secondary focus:outline-none"
+              className="w-full bg-brand-bg border border-brand-border rounded px-4 py-2.5 text-sm font-ui font-semibold text-white tracking-wide placeholder-brand-muted focus:border-brand-secondary focus:ring-1 focus:ring-brand-secondary focus:outline-none"
               rows={4}
               placeholder="Descreva a campanha, regras de participação, prêmios especiais..."
               value={formData.description}
@@ -486,12 +486,12 @@ setIsActionLoading(true);
             />
           </div>
 
-          <p className="text-[11px] text-cyber-muted -mt-2 px-1">
+          <p className="text-[11px] text-brand-muted -mt-2 px-1">
             "Data de Sorteio" é só um horário de referência único. Pra agendar vários horários de sorteio (um por
             rodada) use o botão "Horários" no card da campanha, depois de salvá-la.
           </p>
 
-          <div className="flex justify-end gap-3 mt-4 border-t border-cyber-border/40 pt-4">
+          <div className="flex justify-end gap-3 mt-4 border-t border-brand-border/40 pt-4">
             <Button
               type="button"
               variant="secondary"
@@ -519,18 +519,18 @@ setIsActionLoading(true);
         size="sm"
       >
         <div className="space-y-4">
-          <div className="flex items-center gap-3 p-3 bg-cyber-danger/10 border border-cyber-danger/30 rounded text-cyber-danger text-xs font-rajdhani font-bold tracking-wider uppercase">
+          <div className="flex items-center gap-3 p-3 bg-brand-danger/10 border border-brand-danger/30 rounded text-brand-danger text-xs font-ui font-bold tracking-wider uppercase">
             <AlertTriangle size={20} className="shrink-0" />
             <span>ALERTA: ESTA AÇÃO NÃO PODE SER DESFEITA!</span>
           </div>
 
-          <p className="text-sm font-inter text-cyber-text">
+          <p className="text-sm font-body text-brand-text">
             Você tem certeza de que deseja deletar permanentemente a campanha{' '}
             <strong className="text-white font-semibold">"{campaignToDelete?.name}"</strong>? 
             Esta operação apagará todos os dados, missões, prêmios e cupons associados a esta campanha.
           </p>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-cyber-border/40">
+          <div className="flex justify-end gap-3 pt-4 border-t border-brand-border/40">
             <Button
               type="button"
               variant="secondary"
@@ -559,12 +559,12 @@ setIsActionLoading(true);
         size="sm"
       >
         <div className="space-y-4">
-          <div className="flex items-center gap-3 p-3 bg-cyber-accent/10 border border-cyber-accent/30 rounded text-cyber-accent text-xs font-rajdhani font-bold tracking-wider uppercase">
+          <div className="flex items-center gap-3 p-3 bg-brand-accent/10 border border-brand-accent/30 rounded text-brand-accent text-xs font-ui font-bold tracking-wider uppercase">
             <AlertTriangle size={20} className="shrink-0" />
             <span>ESTA AÇÃO NÃO PODE SER DESFEITA</span>
           </div>
 
-          <p className="text-sm font-inter text-cyber-text">
+          <p className="text-sm font-body text-brand-text">
             Encerrar <strong className="text-white font-semibold">"{campaignToFinish?.name}"</strong> impede
             novos cupons e participações. Digite sua senha para confirmar.
           </p>
@@ -579,7 +579,7 @@ setIsActionLoading(true);
             required
           />
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-cyber-border/40">
+          <div className="flex justify-end gap-3 pt-4 border-t border-brand-border/40">
             <Button
               type="button"
               variant="secondary"
@@ -609,21 +609,21 @@ setIsActionLoading(true);
         size="md"
       >
         <div className="space-y-5">
-          <p className="text-xs text-cyber-muted leading-relaxed">
+          <p className="text-xs text-brand-muted leading-relaxed">
             Defina quando cada sorteio deve acontecer. Isso só agenda o horário mostrado pro participante — o que
             será sorteado (prêmio, avulso ou em cadeia) continua sendo configurado por você na tela de Controle de
             Sorteio, na hora de executar.
           </p>
 
           {scheduleError && (
-            <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider">
+            <div className="p-3 bg-brand-danger/10 border border-brand-danger/30 text-brand-danger text-xs font-ui font-bold uppercase rounded tracking-wider">
               ⚠ {scheduleError}
             </div>
           )}
 
           {/* Formulário de adicionar/editar */}
-          <form onSubmit={handleSubmitSchedule} className="flex flex-col gap-3 p-3 border border-cyber-border/60 rounded-lg bg-black/20">
-            <span className="text-[10px] font-mono text-cyber-secondary uppercase tracking-widest">
+          <form onSubmit={handleSubmitSchedule} className="flex flex-col gap-3 p-3 border border-brand-border/60 rounded-lg bg-black/20">
+            <span className="text-[10px] font-mono text-brand-secondary uppercase tracking-widest">
               {editingScheduleId ? 'Editando horário' : 'Novo horário'}
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -655,15 +655,15 @@ setIsActionLoading(true);
 
           {/* Lista de horários já agendados */}
           <div className="flex flex-col gap-2">
-            <span className="text-xs font-rajdhani font-bold text-cyber-text uppercase tracking-wider px-1">
+            <span className="text-xs font-ui font-bold text-brand-text uppercase tracking-wider px-1">
               Horários agendados ({schedules.length})
             </span>
             {isLoadingSchedules ? (
-              <div className="text-center py-6 text-cyber-muted font-mono text-xs flex items-center justify-center gap-2">
+              <div className="text-center py-6 text-brand-muted font-mono text-xs flex items-center justify-center gap-2">
                 <RefreshCw size={14} className="animate-spin" /> CARREGANDO...
               </div>
             ) : schedules.length === 0 ? (
-              <div className="text-center py-6 text-cyber-muted font-mono text-xs">
+              <div className="text-center py-6 text-brand-muted font-mono text-xs">
                 NENHUM HORÁRIO AGENDADO AINDA.
               </div>
             ) : (
@@ -671,15 +671,15 @@ setIsActionLoading(true);
                 {schedules.map((schedule) => (
                   <div
                     key={schedule.id}
-                    className="flex items-center justify-between gap-3 px-3 py-2.5 rounded bg-black/25 border border-cyber-border/50"
+                    className="flex items-center justify-between gap-3 px-3 py-2.5 rounded bg-black/25 border border-brand-border/50"
                   >
                     <div className="min-w-0">
-                      <div className="text-sm font-rajdhani font-bold text-white flex items-center gap-1.5">
-                        <Clock size={12} className="text-cyber-secondary shrink-0" />
+                      <div className="text-sm font-ui font-bold text-white flex items-center gap-1.5">
+                        <Clock size={12} className="text-brand-secondary shrink-0" />
                         {new Date(schedule.scheduledAt).toLocaleString('pt-BR')}
                       </div>
                       {schedule.label && (
-                        <div className="text-[10px] text-cyber-muted mt-0.5 truncate">{schedule.label}</div>
+                        <div className="text-[10px] text-brand-muted mt-0.5 truncate">{schedule.label}</div>
                       )}
                     </div>
                     <div className="flex gap-1.5 shrink-0">
@@ -687,7 +687,7 @@ setIsActionLoading(true);
                         type="button"
                         onClick={() => handleEditScheduleClick(schedule)}
                         disabled={isScheduleActionLoading}
-                        className="p-1.5 rounded text-cyber-muted hover:text-cyber-primary hover:bg-cyber-primary/10 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                        className="p-1.5 rounded text-brand-muted hover:text-brand-primary hover:bg-brand-primary/10 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                       >
                         <Edit2 size={13} />
                       </button>
@@ -695,7 +695,7 @@ setIsActionLoading(true);
                         type="button"
                         onClick={() => handleDeleteSchedule(schedule)}
                         disabled={isScheduleActionLoading}
-                        className="p-1.5 rounded text-cyber-muted hover:text-cyber-danger hover:bg-cyber-danger/10 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                        className="p-1.5 rounded text-brand-muted hover:text-brand-danger hover:bg-brand-danger/10 disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                       >
                         <X size={13} />
                       </button>
@@ -706,7 +706,7 @@ setIsActionLoading(true);
             )}
           </div>
 
-          <div className="flex justify-end pt-2 border-t border-cyber-border/40">
+          <div className="flex justify-end pt-2 border-t border-brand-border/40">
             <Button type="button" variant="secondary" onClick={() => setIsScheduleOpen(false)}>
               Fechar
             </Button>

@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        cyber: {
+        brand: {
           bg:        'rgb(var(--c-bg) / <alpha-value>)',
           surface:   'rgb(var(--c-surface) / <alpha-value>)',
           border:    'rgb(var(--c-border) / <alpha-value>)',
@@ -23,9 +23,9 @@ export default {
         }
       },
       fontFamily: {
-        orbitron: 'var(--font-display)',
-        rajdhani: 'var(--font-ui)',
-        inter:    'var(--font-body)',
+        display: 'var(--font-display)',
+        ui:      'var(--font-ui)',
+        body:    'var(--font-body)',
       },
       borderRadius: {
         theme: 'var(--radius)',

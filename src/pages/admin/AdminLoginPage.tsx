@@ -40,7 +40,7 @@ export const AdminLoginPage: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[70vh] px-4 font-inter">
+    <div className="flex items-center justify-center min-h-[70vh] px-4 font-body">
       <div className="w-full max-w-md">
         <Card
           variant="primary"
@@ -48,7 +48,7 @@ export const AdminLoginPage: React.FC = () => {
           title="Login Administrativo"
           subtitle="Painel Rethink3D"
           headerExtra={
-            <div className="p-1 rounded bg-cyber-primary/10 text-cyber-primary border border-cyber-primary/30">
+            <div className="p-1 rounded bg-brand-primary/10 text-brand-primary border border-brand-primary/30">
               <Shield size={16} />
             </div>
           }
@@ -56,7 +56,7 @@ export const AdminLoginPage: React.FC = () => {
           <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-2">
 
             {error && (
-              <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/50 text-cyber-danger text-xs font-rajdhani font-semibold tracking-wider uppercase rounded">
+              <div className="p-3 bg-brand-danger/10 border border-brand-danger/50 text-brand-danger text-xs font-ui font-semibold tracking-wider uppercase rounded">
                 ⚠ {error}
               </div>
             )}
@@ -67,7 +67,7 @@ export const AdminLoginPage: React.FC = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              icon={<Mail size={16} className="text-cyber-primary" />}
+              icon={<Mail size={16} className="text-brand-primary" />}
               required
               disabled={isLoading}
             />
@@ -78,7 +78,7 @@ export const AdminLoginPage: React.FC = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              icon={<Lock size={16} className="text-cyber-primary" />}
+              icon={<Lock size={16} className="text-brand-primary" />}
               required
               disabled={isLoading}
             />
@@ -95,7 +95,7 @@ export const AdminLoginPage: React.FC = () => {
             </Button>
 
             <div className="text-center mt-2">
-              <span className="text-[10px] font-mono text-cyber-muted uppercase tracking-widest">
+              <span className="text-[10px] font-mono text-brand-muted uppercase tracking-widest">
                 Sessões administrativas são auditadas e registradas.
               </span>
             </div>

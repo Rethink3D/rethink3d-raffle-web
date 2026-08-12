@@ -12,7 +12,7 @@
 /* ─── Base ──────────────────────────────────────────────────────────────── */
 @layer base {
   body {
-    @apply bg-cyber-bg text-cyber-text font-inter antialiased overflow-x-hidden min-h-screen;
+    @apply bg-brand-bg text-brand-text font-body antialiased overflow-x-hidden min-h-screen;
   }
 
   [data-theme="cyber"] body {
@@ -53,7 +53,7 @@
 }
 
 .cyber-panel {
-  @apply bg-cyber-surface border border-cyber-border rounded-xl relative overflow-hidden;
+  @apply bg-brand-surface border border-brand-border rounded-xl relative overflow-hidden;
 }
 
 .cyber-panel::before {

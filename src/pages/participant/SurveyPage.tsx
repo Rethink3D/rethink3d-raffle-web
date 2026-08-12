@@ -198,7 +198,7 @@ export const SurveyPage: React.FC = () => {
             ></lottie-player>`
           }}
         />
-        <div className="text-cyber-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
+        <div className="text-brand-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
           Carregando pesquisa...
         </div>
       </div>
@@ -210,8 +210,8 @@ export const SurveyPage: React.FC = () => {
       <div className="max-w-md mx-auto my-10 select-none">
         <Card variant="danger" title="Ops, algo deu errado" glow>
           <div className="flex flex-col items-center gap-4 text-center">
-            <ShieldAlert size={48} className="text-cyber-danger" />
-            <p className="text-sm font-rajdhani font-bold text-white tracking-wider">
+            <ShieldAlert size={48} className="text-brand-danger" />
+            <p className="text-sm font-ui font-bold text-white tracking-wider">
               {error}
             </p>
             <Button variant="danger" size="md" onClick={() => navigate('/dashboard')} icon={<ArrowLeft size={14} />}>
@@ -226,29 +226,29 @@ export const SurveyPage: React.FC = () => {
   // ─── SUCCESS SCREEN VIEW ───
   if (submittedSuccess) {
     return (
-      <div className="max-w-md mx-auto my-10 select-none font-inter">
+      <div className="max-w-md mx-auto my-10 select-none font-body">
         <Card variant="primary" title="Pesquisa enviada" glow>
           <div className="flex flex-col items-center py-5 text-center">
 
-            <div className="p-4 rounded-full bg-cyber-success/10 border border-cyber-success text-cyber-success mb-4 animate-float">
+            <div className="p-4 rounded-full bg-brand-success/10 border border-brand-success text-brand-success mb-4 animate-float">
               <CheckCircle2 size={40} />
             </div>
 
-            <h3 className="text-lg font-orbitron font-extrabold uppercase tracking-wider text-white">
+            <h3 className="text-lg font-display font-extrabold uppercase tracking-wider text-white">
               Missão cumprida!
             </h3>
 
-            <p className="text-[10px] font-mono text-cyber-muted uppercase tracking-widest mt-1">
+            <p className="text-[10px] font-mono text-brand-muted uppercase tracking-widest mt-1">
               Suas respostas foram registradas
             </p>
 
-            <div className="w-full bg-cyber-accent/15 border border-cyber-accent/40 rounded p-4 mt-5 flex items-center justify-center gap-2.5 animate-pulse-glow">
-              <span className="font-orbitron font-black text-sm tracking-widest text-cyber-accent uppercase">
+            <div className="w-full bg-brand-accent/15 border border-brand-accent/40 rounded p-4 mt-5 flex items-center justify-center gap-2.5 animate-pulse-glow">
+              <span className="font-display font-black text-sm tracking-widest text-brand-accent uppercase">
                 +{rewardAmount} cupons ganhos
               </span>
             </div>
 
-            <p className="text-xs text-cyber-muted mt-5 leading-relaxed max-w-xs">
+            <p className="text-xs text-brand-muted mt-5 leading-relaxed max-w-xs">
               Muito obrigado pela sua honestidade e pelo seu tempo. Seus cupons já foram creditados na sua conta.
             </p>
 
@@ -272,8 +272,8 @@ export const SurveyPage: React.FC = () => {
       <div className="max-w-md mx-auto my-10 select-none">
         <Card title="Nenhuma pesquisa disponível">
           <div className="text-center py-4 flex flex-col gap-4">
-            <ClipboardList size={40} className="text-cyber-muted mx-auto" />
-            <p className="text-sm text-cyber-muted">
+            <ClipboardList size={40} className="text-brand-muted mx-auto" />
+            <p className="text-sm text-brand-muted">
               Não há pesquisa configurada para esta missão.
             </p>
             <Button variant="primary" size="md" onClick={() => navigate('/dashboard')}>
@@ -288,18 +288,18 @@ export const SurveyPage: React.FC = () => {
   // ─── AVISO DE HONESTIDADE (antes de começar) ───
   if (!introAcknowledged) {
     return (
-      <div className="max-w-md mx-auto my-10 select-none font-inter">
+      <div className="max-w-md mx-auto my-10 select-none font-body">
         <Card variant="secondary" title="Antes de começar" glow>
           <div className="flex flex-col items-center py-4 text-center gap-4">
-            <div className="p-4 rounded-full bg-cyber-secondary/10 border border-cyber-secondary text-cyber-secondary animate-float">
+            <div className="p-4 rounded-full bg-brand-secondary/10 border border-brand-secondary text-brand-secondary animate-float">
               <HeartHandshake size={36} />
             </div>
 
-            <p className="text-sm font-rajdhani font-semibold text-cyber-text leading-relaxed">
+            <p className="text-sm font-ui font-semibold text-brand-text leading-relaxed">
               Queremos conhecer melhor o público de impressão 3D! Fique à vontade
               para responder com total honestidade, pois não há respostas certas
               ou erradas por aqui. Como nosso "muito obrigado" pelo seu tempo,
-              você receberá <strong className="text-cyber-accent">{rewardAmount} pontos</strong> ao
+              você receberá <strong className="text-brand-accent">{rewardAmount} pontos</strong> ao
               finalizar a pesquisa. Agradecemos imensamente o seu apoio!
             </p>
 
@@ -323,13 +323,13 @@ export const SurveyPage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto my-6 font-inter">
+    <div className="max-w-2xl mx-auto my-6 font-body">
       {/* Header Info */}
       <div className="flex flex-col gap-1 mb-4 select-none">
-        <span className="text-[10px] font-mono tracking-widest text-cyber-secondary uppercase">
+        <span className="text-[10px] font-mono tracking-widest text-brand-secondary uppercase">
           Pesquisa
         </span>
-        <h2 className="text-lg font-orbitron font-extrabold text-white uppercase tracking-wider break-words">
+        <h2 className="text-lg font-display font-extrabold text-white uppercase tracking-wider break-words">
           {survey.title}
         </h2>
       </div>
@@ -347,9 +347,8 @@ export const SurveyPage: React.FC = () => {
               variant={error ? "danger" : "default"}
               title={q.text}
               subtitle={q.required ? "Obrigatória" : "Opcional"}
-              clipCorner={false}
             >
-              <div className="mt-2 font-inter text-cyber-text">
+              <div className="mt-2 font-body text-brand-text">
 
                 {/* 1. TEXT TYPE */}
                 {q.type === 'TEXT' && (
@@ -358,7 +357,7 @@ export const SurveyPage: React.FC = () => {
                     value={(answers[q.id] as string) || ''}
                     onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                     placeholder="Escreva sua resposta..."
-                    className="w-full bg-cyber-bg border border-cyber-border/80 focus:border-cyber-secondary rounded p-3 text-sm font-rajdhani font-semibold text-white tracking-wide placeholder-cyber-muted/60 transition-all outline-none"
+                    className="w-full bg-brand-bg border border-brand-border/80 focus:border-brand-secondary rounded p-3 text-sm font-ui font-semibold text-white tracking-wide placeholder-brand-muted/60 transition-all outline-none"
                   />
                 )}
 
@@ -370,7 +369,7 @@ export const SurveyPage: React.FC = () => {
                     value={(answers[q.id] as string) || ''}
                     onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                     placeholder="Digite um número..."
-                    className="w-full bg-cyber-bg border border-cyber-border/80 focus:border-cyber-secondary rounded p-3 text-sm font-rajdhani font-semibold text-white tracking-wide placeholder-cyber-muted/60 transition-all outline-none"
+                    className="w-full bg-brand-bg border border-brand-border/80 focus:border-brand-secondary rounded p-3 text-sm font-ui font-semibold text-white tracking-wide placeholder-brand-muted/60 transition-all outline-none"
                   />
                 )}
 
@@ -384,8 +383,8 @@ export const SurveyPage: React.FC = () => {
                           key={opt.id}
                           className={`flex items-center gap-3 p-3 rounded border transition-all duration-150 cursor-pointer select-none
                             ${isSelected
-                              ? 'bg-cyber-secondary/10 border-cyber-secondary text-white glow-secondary'
-                              : 'bg-cyber-surface/60 border-cyber-border text-cyber-muted hover:border-cyber-secondary/40 hover:text-white'}`}
+                              ? 'bg-brand-secondary/10 border-brand-secondary text-white glow-secondary'
+                              : 'bg-brand-surface/60 border-brand-border text-brand-muted hover:border-brand-secondary/40 hover:text-white'}`}
                         >
                           <input
                             type="radio"
@@ -393,9 +392,9 @@ export const SurveyPage: React.FC = () => {
                             value={opt.value}
                             checked={isSelected}
                             onChange={() => handleAnswerChange(q.id, opt.value)}
-                            className="w-4 h-4 accent-cyber-secondary"
+                            className="w-4 h-4 accent-brand-secondary"
                           />
-                          <span className="font-rajdhani font-bold text-sm tracking-wider uppercase">
+                          <span className="font-ui font-bold text-sm tracking-wider uppercase">
                             {opt.text}
                           </span>
                         </label>
@@ -415,8 +414,8 @@ export const SurveyPage: React.FC = () => {
                           key={opt.id}
                           className={`flex items-center gap-3 p-3 rounded border transition-all duration-150 cursor-pointer select-none
                             ${isChecked
-                              ? 'bg-cyber-secondary/15 border-cyber-secondary text-white glow-secondary'
-                              : 'bg-cyber-surface/60 border-cyber-border text-cyber-muted hover:border-cyber-secondary/40 hover:text-white'}`}
+                              ? 'bg-brand-secondary/15 border-brand-secondary text-white glow-secondary'
+                              : 'bg-brand-surface/60 border-brand-border text-brand-muted hover:border-brand-secondary/40 hover:text-white'}`}
                         >
                           <input
                             type="checkbox"
@@ -427,9 +426,9 @@ export const SurveyPage: React.FC = () => {
                                 : currentSelection.filter((item) => item !== opt.value);
                               handleAnswerChange(q.id, updated);
                             }}
-                            className="w-4 h-4 accent-cyber-secondary"
+                            className="w-4 h-4 accent-brand-secondary"
                           />
-                          <span className="font-rajdhani font-bold text-sm tracking-wider uppercase">
+                          <span className="font-ui font-bold text-sm tracking-wider uppercase">
                             {opt.text}
                           </span>
                         </label>
@@ -441,7 +440,7 @@ export const SurveyPage: React.FC = () => {
                 {/* 4. SCALE TYPE (1-5 click chips) */}
                 {q.type === 'SCALE' && (
                   <div className="flex flex-col gap-3">
-                    <div className="flex justify-between text-[10px] font-mono text-cyber-muted select-none uppercase tracking-widest px-1">
+                    <div className="flex justify-between text-[10px] font-mono text-brand-muted select-none uppercase tracking-widest px-1">
                       <span>Discordo</span>
                       <span>Concordo</span>
                     </div>
@@ -455,10 +454,10 @@ export const SurveyPage: React.FC = () => {
                             type="button"
                             key={val}
                             onClick={() => handleAnswerChange(q.id, scoreStr)}
-                            className={`py-3.5 rounded border font-orbitron font-extrabold text-sm tracking-wider transition-all duration-150 cursor-pointer
+                            className={`py-3.5 rounded border font-display font-extrabold text-sm tracking-wider transition-all duration-150 cursor-pointer
                               ${isSelected
-                                ? 'bg-cyber-primary/20 border-cyber-primary text-cyber-primary glow-primary'
-                                : 'bg-cyber-surface/60 border-cyber-border text-cyber-muted hover:border-cyber-primary/45 hover:text-white'}`}
+                                ? 'bg-brand-primary/20 border-brand-primary text-brand-primary glow-primary'
+                                : 'bg-brand-surface/60 border-brand-border text-brand-muted hover:border-brand-primary/45 hover:text-white'}`}
                           >
                             {val}
                           </button>
@@ -469,7 +468,7 @@ export const SurveyPage: React.FC = () => {
                 )}
 
                 {error && (
-                  <div className="flex items-center gap-1.5 mt-3 text-cyber-danger text-xs font-rajdhani font-bold uppercase tracking-wider">
+                  <div className="flex items-center gap-1.5 mt-3 text-brand-danger text-xs font-ui font-bold uppercase tracking-wider">
                     <AlertTriangle size={14} className="shrink-0" />
                     <span>{error}</span>
                   </div>
@@ -481,7 +480,7 @@ export const SurveyPage: React.FC = () => {
         })}
 
         {/* Action Row */}
-        <div className="flex justify-end gap-3 mt-4 border-t border-cyber-border/40 pt-5">
+        <div className="flex justify-end gap-3 mt-4 border-t border-brand-border/40 pt-5">
           <Button
             type="button"
             variant="danger"

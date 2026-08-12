@@ -149,7 +149,7 @@ export const PrizeWheel: React.FC<PrizeWheelProps> = ({
 
   if (slices.length === 0) {
     return (
-      <div className="w-64 h-64 rounded-full border-4 border-cyber-border bg-cyber-surface/60 flex items-center justify-center text-cyber-muted text-xs font-mono text-center px-6">
+      <div className="w-64 h-64 rounded-full border-4 border-brand-border bg-brand-surface/60 flex items-center justify-center text-brand-muted text-xs font-mono text-center px-6">
         Aguardando participantes com tickets...
       </div>
     );
@@ -158,10 +158,10 @@ export const PrizeWheel: React.FC<PrizeWheelProps> = ({
   return (
     <div className="relative w-72 h-72 select-none">
       {/* Ponteiro fixo no topo */}
-      <div className="absolute -top-2 left-1/2 -translate-x-1/2 z-10 w-0 h-0 border-l-[10px] border-r-[10px] border-t-[18px] border-l-transparent border-r-transparent border-t-cyber-accent drop-shadow-lg" />
+      <div className="absolute -top-2 left-1/2 -translate-x-1/2 z-10 w-0 h-0 border-l-[10px] border-r-[10px] border-t-[18px] border-l-transparent border-r-transparent border-t-brand-accent drop-shadow-lg" />
 
       <div
-        className="w-full h-full rounded-full border-4 border-cyber-border relative overflow-hidden shadow-[0_0_30px_rgba(124,58,237,0.35)]"
+        className="w-full h-full rounded-full border-4 border-brand-border relative overflow-hidden shadow-[0_0_30px_rgba(124,58,237,0.35)]"
         style={{ background: conicGradient, transform: `rotate(${displayRotation}deg)` }}
       >
         {slices.map((s) => {
@@ -174,7 +174,7 @@ export const PrizeWheel: React.FC<PrizeWheelProps> = ({
               style={{ transform: `rotate(${s.midDeg}deg)` }}
             >
               <span
-                className="mt-3 text-[9px] font-orbitron font-bold text-white uppercase tracking-wide truncate max-w-[70px] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
+                className="mt-3 text-[9px] font-display font-bold text-white uppercase tracking-wide truncate max-w-[70px] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
                 title={s.label}
               >
                 {s.label}
@@ -186,7 +186,7 @@ export const PrizeWheel: React.FC<PrizeWheelProps> = ({
 
       {/* Centro decorativo */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-10 h-10 rounded-full bg-cyber-bg border-2 border-cyber-accent shadow-lg" />
+        <div className="w-10 h-10 rounded-full bg-brand-bg border-2 border-brand-accent shadow-lg" />
       </div>
     </div>
   );

@@ -84,12 +84,12 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
       </div>
 
       {error && (
-        <span className="text-xs font-rajdhani font-semibold text-cyber-danger">⚠ {error}</span>
+        <span className="text-xs font-ui font-semibold text-brand-danger">⚠ {error}</span>
       )}
 
       {value && (
-        <div className="rounded border border-cyber-border p-2 bg-black/45 flex flex-col gap-2">
-          <span className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider">Pré-visualização:</span>
+        <div className="rounded border border-brand-border p-2 bg-black/45 flex flex-col gap-2">
+          <span className="text-[10px] font-mono text-brand-muted uppercase tracking-wider">Pré-visualização:</span>
           <img
             src={value}
             alt="Preview"

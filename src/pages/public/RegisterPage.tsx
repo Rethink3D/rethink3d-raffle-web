@@ -123,7 +123,7 @@ export const RegisterPage: React.FC = () => {
               ></lottie-player>`
             }}
           />
-          <span className="text-xs font-mono text-cyber-primary tracking-[0.2em] uppercase animate-pulse mt-2">
+          <span className="text-xs font-mono text-brand-primary tracking-[0.2em] uppercase animate-pulse mt-2">
             INICIALIZANDO REGISTRO...
           </span>
         </div>
@@ -136,7 +136,7 @@ export const RegisterPage: React.FC = () => {
       >
 
         {serverError && (
-          <div className="mb-4 bg-cyber-danger/10 border border-cyber-danger rounded p-3 text-xs font-mono text-cyber-danger uppercase">
+          <div className="mb-4 bg-brand-danger/10 border border-brand-danger rounded p-3 text-xs font-mono text-brand-danger uppercase">
             ⚡ CADASTRO REJEITADO // {serverError}
           </div>
         )}
@@ -210,9 +210,9 @@ export const RegisterPage: React.FC = () => {
               CRIAR PERSONAGEM
             </Button>
 
-            <div className="text-center text-xs font-mono text-cyber-muted mt-2 uppercase">
+            <div className="text-center text-xs font-mono text-brand-muted mt-2 uppercase">
               Já possui save?{' '}
-              <Link to="/login" className="text-cyber-secondary hover:underline tracking-wide">
+              <Link to="/login" className="text-brand-secondary hover:underline tracking-wide">
                 Acessar &gt;
               </Link>
             </div>

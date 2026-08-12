@@ -47,8 +47,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       <div className="flex flex-1 relative z-10">
         {/* Admin Navigation Sidebar (Desktop) */}
         {isAdmin && user && (
-          <aside className="hidden md:flex flex-col w-64 bg-cyber-surface/90 border-r border-cyber-border/80 p-5 shrink-0">
-            <div className="text-[10px] font-mono tracking-widest text-cyber-accent uppercase mb-5">
+          <aside className="hidden md:flex flex-col w-64 bg-brand-surface/90 border-r border-brand-border/80 p-5 shrink-0">
+            <div className="text-[10px] font-mono tracking-widest text-brand-accent uppercase mb-5">
               Menu Administrativo
             </div>
 
@@ -60,10 +60,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     key={link.path}
                     to={link.path}
                     className={`
-                      flex items-center gap-3 px-4 py-3 rounded font-rajdhani font-bold text-sm tracking-wider uppercase transition-all duration-200 border
+                      flex items-center gap-3 px-4 py-3 rounded font-ui font-bold text-sm tracking-wider uppercase transition-all duration-200 border
                       ${active 
-                        ? 'bg-cyber-primary/10 border-cyber-primary text-white glow-primary' 
-                        : 'border-transparent text-cyber-muted hover:text-cyber-text hover:bg-cyber-surface/50 hover:border-cyber-border/50'}
+                        ? 'bg-brand-primary/10 border-brand-primary text-white glow-primary' 
+                        : 'border-transparent text-brand-muted hover:text-brand-text hover:bg-brand-surface/50 hover:border-brand-border/50'}
                     `}
                   >
                     {link.icon}
@@ -81,7 +81,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           <div className="md:hidden fixed bottom-6 right-6 z-50">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-3.5 rounded-full bg-cyber-primary text-white glow-primary border border-cyber-primary focus:outline-none shadow-lg cursor-pointer"
+              className="p-3.5 rounded-full bg-brand-primary text-white glow-primary border border-brand-primary focus:outline-none shadow-lg cursor-pointer"
             >
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -98,8 +98,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             />
 
             {/* Sidebar drawer content */}
-            <aside className="relative flex flex-col w-64 max-w-xs bg-cyber-surface border-r border-cyber-border h-full p-5 z-50">
-              <div className="text-[10px] font-mono tracking-widest text-cyber-accent uppercase mb-6">
+            <aside className="relative flex flex-col w-64 max-w-xs bg-brand-surface border-r border-brand-border h-full p-5 z-50">
+              <div className="text-[10px] font-mono tracking-widest text-brand-accent uppercase mb-6">
                 Menu Administrativo
               </div>
 
@@ -112,10 +112,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                       to={link.path}
                       onClick={() => setSidebarOpen(false)}
                       className={`
-                        flex items-center gap-3 px-4 py-3 rounded font-rajdhani font-bold text-sm tracking-wider uppercase transition-all duration-200 border
+                        flex items-center gap-3 px-4 py-3 rounded font-ui font-bold text-sm tracking-wider uppercase transition-all duration-200 border
                         ${active 
-                          ? 'bg-cyber-primary/10 border-cyber-primary text-white glow-primary' 
-                          : 'border-transparent text-cyber-muted hover:text-cyber-text hover:bg-cyber-surface/50 hover:border-cyber-border/50'}
+                          ? 'bg-brand-primary/10 border-brand-primary text-white glow-primary' 
+                          : 'border-transparent text-brand-muted hover:text-brand-text hover:bg-brand-surface/50 hover:border-brand-border/50'}
                       `}
                     >
                       {link.icon}

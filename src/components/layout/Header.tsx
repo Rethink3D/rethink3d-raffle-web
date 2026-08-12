@@ -208,11 +208,11 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className={`fixed top-0 left-0 w-full overflow-x-hidden bg-cyber-surface/70 border-b border-cyber-border/80 backdrop-blur-md z-40 select-none transition-transform duration-300 ${
+    <header className={`fixed top-0 left-0 w-full overflow-x-hidden bg-brand-surface/70 border-b border-brand-border/80 backdrop-blur-md z-40 select-none transition-transform duration-300 ${
       visible ? "translate-y-0" : "-translate-y-full"
     }`}>
       {/* Visual cyber line under Header */}
-      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyber-secondary to-transparent" />
+      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-brand-secondary to-transparent" />
 
       {/*
         min-w-0 é essencial aqui: sem ele, itens flex nunca encolhem abaixo do
@@ -240,18 +240,18 @@ export const Header: React.FC = () => {
           <div className="flex items-center gap-2 sm:gap-4 min-w-0">
             {/* User Profile Summary */}
             <div className="hidden sm:flex flex-col text-right min-w-0">
-              <span className="text-xs font-rajdhani font-bold text-white tracking-wide uppercase truncate">
+              <span className="text-xs font-ui font-bold text-white tracking-wide uppercase truncate">
                 {user.name}
               </span>
-              <span className="text-[9px] font-mono tracking-widest text-cyber-muted -mt-0.5 uppercase flex items-center justify-end gap-1">
+              <span className="text-[9px] font-mono tracking-widest text-brand-muted -mt-0.5 uppercase flex items-center justify-end gap-1">
                 {role === "admin" ? (
                   <>
-                    <Shield size={10} className="text-cyber-accent" />
+                    <Shield size={10} className="text-brand-accent" />
                     Administrador
                   </>
                 ) : (
                   <>
-                    <UserIcon size={10} className="text-cyber-secondary" />
+                    <UserIcon size={10} className="text-brand-secondary" />
                     Participante
                   </>
                 )}
@@ -261,7 +261,7 @@ export const Header: React.FC = () => {
             {/* Ticket / Coin Display (Participant only) */}
             {role === "participant" && (
               <div
-                className={`relative overflow-visible min-w-0 whitespace-nowrap flex items-center gap-1.5 sm:gap-2 bg-cyber-success/10 border border-cyber-success/50 rounded px-2 sm:px-3 py-1.5 text-cyber-success ${
+                className={`relative overflow-visible min-w-0 whitespace-nowrap flex items-center gap-1.5 sm:gap-2 bg-brand-success/10 border border-brand-success/50 rounded px-2 sm:px-3 py-1.5 text-brand-success ${
                   // pulse-glow-ticket anima box-shadow (repintura cara) — desligado
                   // durante o bump pra não competir com as animações de
                   // transform/opacity do brilho e travar a suavidade.
@@ -270,7 +270,7 @@ export const Header: React.FC = () => {
               >
                 {/* "+N" flutuante quando ganha tickets */}
                 {ticketBump && (
-                  <span className="pointer-events-none absolute -top-4 right-1 font-orbitron font-extrabold text-xs text-cyber-success animate-float-up-fade will-change-transform">
+                  <span className="pointer-events-none absolute -top-4 right-1 font-display font-extrabold text-xs text-brand-success animate-float-up-fade will-change-transform">
                     +{ticketBump.amount}
                   </span>
                 )}
@@ -282,10 +282,10 @@ export const Header: React.FC = () => {
 
                 <TicketIcon size={15} className="shrink-0" />
                 <div className="flex items-baseline gap-1">
-                  <span className="font-orbitron font-extrabold text-sm tracking-tighter">
+                  <span className="font-display font-extrabold text-sm tracking-tighter">
                     {displayedTicketCount}
                   </span>
-                  <span className="hidden sm:inline font-rajdhani text-[9px] uppercase font-bold tracking-widest">
+                  <span className="hidden sm:inline font-ui text-[9px] uppercase font-bold tracking-widest">
                     TKTS
                   </span>
                 </div>
@@ -296,23 +296,23 @@ export const Header: React.FC = () => {
             <button
               onClick={handleLogout}
               title="Sair"
-              className="shrink-0 relative p-2 rounded border border-cyber-border hover:border-cyber-danger/50 text-cyber-muted hover:text-cyber-danger hover:bg-cyber-danger/10 transition-all duration-200 cursor-pointer"
+              className="shrink-0 relative p-2 rounded border border-brand-border hover:border-brand-danger/50 text-brand-muted hover:text-brand-danger hover:bg-brand-danger/10 transition-all duration-200 cursor-pointer"
             >
               <LogOut size={16} />
-              <span className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-cyber-danger rounded-full opacity-0 hover:opacity-100 transition-opacity" />
+              <span className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-brand-danger rounded-full opacity-0 hover:opacity-100 transition-opacity" />
             </button>
           </div>
         ) : (
           <div className="flex gap-2 shrink-0">
             <Link
               to="/login"
-              className="text-xs font-orbitron uppercase border border-cyber-border text-cyber-muted px-3 sm:px-4 py-2 hover:border-cyber-secondary hover:text-cyber-secondary transition-all rounded shrink-0 whitespace-nowrap"
+              className="text-xs font-display uppercase border border-brand-border text-brand-muted px-3 sm:px-4 py-2 hover:border-brand-secondary hover:text-brand-secondary transition-all rounded shrink-0 whitespace-nowrap"
             >
               Entrar
             </Link>
             <Link
               to="/register"
-              className="text-xs font-orbitron uppercase border border-cyber-primary bg-cyber-primary/10 text-white px-3 sm:px-4 py-2 hover:bg-cyber-primary hover:glow-primary transition-all rounded shrink-0 whitespace-nowrap"
+              className="text-xs font-display uppercase border border-brand-primary bg-brand-primary/10 text-white px-3 sm:px-4 py-2 hover:bg-brand-primary hover:glow-primary transition-all rounded shrink-0 whitespace-nowrap"
             >
               Cadastrar
             </Link>

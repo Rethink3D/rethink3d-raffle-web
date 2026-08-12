@@ -101,7 +101,7 @@ export const LoginPage: React.FC = () => {
               ></lottie-player>`
             }}
           />
-          <span className="text-xs font-mono text-cyber-secondary tracking-[0.2em] uppercase animate-pulse mt-2">
+          <span className="text-xs font-mono text-brand-secondary tracking-[0.2em] uppercase animate-pulse mt-2">
             AUTENTICANDO CREDENCIAIS...
           </span>
         </div>
@@ -114,7 +114,7 @@ export const LoginPage: React.FC = () => {
       >
 
         {serverError && (
-          <div className="mb-4 bg-cyber-danger/10 border border-cyber-danger rounded p-3 text-xs font-mono text-cyber-danger uppercase">
+          <div className="mb-4 bg-brand-danger/10 border border-brand-danger rounded p-3 text-xs font-mono text-brand-danger uppercase">
             ⚡ ERRO // {serverError}
           </div>
         )}
@@ -166,10 +166,10 @@ export const LoginPage: React.FC = () => {
               RETORNAR AO JOGO
             </Button>
 
-            <div className="flex justify-center items-center gap-2 mt-4 text-xs font-mono text-cyber-muted uppercase">
+            <div className="flex justify-center items-center gap-2 mt-4 text-xs font-mono text-brand-muted uppercase">
               <span>
                 SEM SAVE?{' '}
-                <Link to="/register" className="text-cyber-primary hover:underline font-bold">
+                <Link to="/register" className="text-brand-primary hover:underline font-bold">
                   CRIAR NOVO &gt;
                 </Link>
               </span>

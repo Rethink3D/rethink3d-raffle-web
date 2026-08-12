@@ -7,7 +7,6 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   subtitle?: string;
   headerExtra?: React.ReactNode;
   footer?: React.ReactNode;
-  clipCorner?: boolean;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -18,17 +17,16 @@ export const Card: React.FC<CardProps> = ({
   subtitle,
   headerExtra,
   footer,
-  clipCorner = true,
   className = '',
   ...props
 }) => {
   // Border colors matching the variant
   const borderColors = {
-    default: 'border-cyber-border',
-    primary: 'border-cyber-primary/60',
-    secondary: 'border-cyber-secondary/60',
-    accent: 'border-cyber-accent/60',
-    danger: 'border-cyber-danger/60',
+    default: 'border-brand-border',
+    primary: 'border-brand-primary/60',
+    secondary: 'border-brand-secondary/60',
+    accent: 'border-brand-accent/60',
+    danger: 'border-brand-danger/60',
   };
 
   const glowEffects = {
@@ -40,20 +38,19 @@ export const Card: React.FC<CardProps> = ({
   };
 
   const cornerTextColors = {
-    default: 'border-cyber-muted',
-    primary: 'border-cyber-primary',
-    secondary: 'border-cyber-secondary',
-    accent: 'border-cyber-accent',
-    danger: 'border-cyber-danger',
+    default: 'border-brand-muted',
+    primary: 'border-brand-primary',
+    secondary: 'border-brand-secondary',
+    accent: 'border-brand-accent',
+    danger: 'border-brand-danger',
   };
 
   return (
     <div
       className={`
-        relative bg-cyber-surface/85 border ${borderColors[variant]} 
+        relative bg-brand-surface/85 border ${borderColors[variant]} 
         rounded-lg p-5 transition-all duration-300
         ${glow ? glowEffects[variant] : ''}
-        ${clipCorner ? 'clip-cyber-card' : ''}
         ${className}
       `}
       {...props}
@@ -69,15 +66,15 @@ export const Card: React.FC<CardProps> = ({
 
       {/* Card Header */}
       {(title || subtitle || headerExtra) && (
-        <div className="border-b border-cyber-border/40 pb-3 mb-4 flex justify-between items-start gap-4">
+        <div className="border-b border-brand-border/40 pb-3 mb-4 flex justify-between items-start gap-4">
           <div className="min-w-0">
             {title && (
-              <h3 className="text-base font-orbitron font-bold tracking-widest text-white uppercase break-words">
+              <h3 className="text-base font-display font-bold tracking-widest text-white uppercase break-words">
                 {title}
               </h3>
             )}
             {subtitle && (
-              <p className="text-xs font-rajdhani font-semibold text-cyber-muted tracking-wider mt-0.5 uppercase break-words">
+              <p className="text-xs font-ui font-semibold text-brand-muted tracking-wider mt-0.5 uppercase break-words">
                 {subtitle}
               </p>
             )}
@@ -87,13 +84,13 @@ export const Card: React.FC<CardProps> = ({
       )}
 
       {/* Card Body */}
-      <div className="relative z-10 text-sm font-inter text-cyber-text/90">
+      <div className="relative z-10 text-sm font-body text-brand-text/90">
         {children}
       </div>
 
       {/* Card Footer */}
       {footer && (
-        <div className="border-t border-cyber-border/40 pt-3 mt-4 flex justify-between items-center text-xs">
+        <div className="border-t border-brand-border/40 pt-3 mt-4 flex justify-between items-center text-xs">
           {footer}
         </div>
       )}

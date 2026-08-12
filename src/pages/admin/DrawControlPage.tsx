@@ -373,14 +373,14 @@ export const DrawControlPage: React.FC = () => {
   const showSetupPanel = !isLiveDrawRunning && !pendingDraw && !activeSession;
 
   return (
-    <div className="space-y-8 font-inter">
+    <div className="space-y-8 font-body">
       {/* Title Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-cyber-border/40 pb-5">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border/40 pb-5">
         <div>
-          <h1 className="text-2xl font-orbitron font-extrabold text-white tracking-widest uppercase">
+          <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase">
             CONTROLE DE SORTEIO
           </h1>
-          <p className="text-xs font-rajdhani font-bold text-cyber-secondary tracking-widest mt-1">
+          <p className="text-xs font-ui font-bold text-brand-secondary tracking-widest mt-1">
             Inicie, execute e acompanhe os sorteios de prêmios em tempo real
           </p>
         </div>
@@ -397,7 +397,7 @@ export const DrawControlPage: React.FC = () => {
       </div>
 
       {error && (
-        <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider">
+        <div className="p-3 bg-brand-danger/10 border border-brand-danger/30 text-brand-danger text-xs font-ui font-bold uppercase rounded tracking-wider">
           ⚠ {error}
         </div>
       )}
@@ -407,13 +407,13 @@ export const DrawControlPage: React.FC = () => {
           {/* Campaign selector (always visible) */}
           <Card variant="default">
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-rajdhani font-bold text-cyber-text uppercase tracking-wider px-1">
+              <label className="text-xs font-ui font-bold text-brand-text uppercase tracking-wider px-1">
                 Campanha de Destino
               </label>
               <select
                 value={selectedCampaignId}
                 onChange={(e) => setSelectedCampaignId(e.target.value)}
-                className="w-full bg-cyber-bg border border-cyber-border rounded px-3 py-2.5 text-sm font-rajdhani font-bold text-white tracking-wide focus:border-cyber-secondary focus:outline-none"
+                className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2.5 text-sm font-ui font-bold text-white tracking-wide focus:border-brand-secondary focus:outline-none"
                 disabled={isLoadingCampaigns || isActionLoading || !!pendingDraw || !!drawId || !!activeSession}
               >
                 {isLoadingCampaigns ? (
@@ -438,14 +438,14 @@ export const DrawControlPage: React.FC = () => {
             <Card variant="secondary" glow>
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-start gap-3">
-                  <div className="p-1.5 rounded bg-cyber-secondary/15 text-cyber-secondary border border-cyber-secondary/30 shrink-0">
+                  <div className="p-1.5 rounded bg-brand-secondary/15 text-brand-secondary border border-brand-secondary/30 shrink-0">
                     <PauseCircle size={16} />
                   </div>
                   <div>
-                    <h3 className="text-xs font-orbitron font-bold text-white tracking-wider uppercase">
+                    <h3 className="text-xs font-display font-bold text-white tracking-wider uppercase">
                       Campanha em intervalo
                     </h3>
-                    <p className="text-[10px] text-cyber-muted mt-0.5 leading-relaxed max-w-md">
+                    <p className="text-[10px] text-brand-muted mt-0.5 leading-relaxed max-w-md">
                       Já rolou uma rodada. Os participantes veem "sorteio em intervalo" no painel deles. Retome pra
                       "Ativa" pra sinalizar que a próxima rodada vem em breve e reabrir as missões, pra quem quiser
                       ganhar mais cupons antes da próxima rodada.
@@ -474,17 +474,17 @@ export const DrawControlPage: React.FC = () => {
                   type="button"
                   onClick={() => setChained((v) => !v)}
                   className={`text-left p-3 rounded-lg border transition-colors cursor-pointer flex items-start gap-3 ${
-                    chained ? 'border-cyber-accent bg-cyber-accent/10' : 'border-cyber-border bg-black/20 hover:border-cyber-accent/50'
+                    chained ? 'border-brand-accent bg-brand-accent/10' : 'border-brand-border bg-black/20 hover:border-brand-accent/50'
                   }`}
                 >
-                  <div className={`mt-0.5 p-1.5 rounded shrink-0 ${chained ? 'bg-cyber-accent/20 text-cyber-accent' : 'bg-cyber-border/40 text-cyber-muted'}`}>
+                  <div className={`mt-0.5 p-1.5 rounded shrink-0 ${chained ? 'bg-brand-accent/20 text-brand-accent' : 'bg-brand-border/40 text-brand-muted'}`}>
                     <Repeat size={14} />
                   </div>
                   <div>
-                    <span className="text-xs font-orbitron font-bold text-white uppercase tracking-wider block mb-1">
+                    <span className="text-xs font-display font-bold text-white uppercase tracking-wider block mb-1">
                       Prêmio em Cadeia
                     </span>
-                    <span className="text-[10px] text-cyber-muted leading-relaxed block">
+                    <span className="text-[10px] text-brand-muted leading-relaxed block">
                       Continua sorteando ganhadores diferentes, um prêmio do cofre por vez, sem sair da live — até o cofre esgotar ou você encerrar.
                     </span>
                   </div>
@@ -495,17 +495,17 @@ export const DrawControlPage: React.FC = () => {
                     type="button"
                     onClick={() => setOrderStrategy((s) => (s === 'FIXED_ORDER' ? 'RANDOM' : 'FIXED_ORDER'))}
                     className={`text-left p-3 rounded-lg border transition-colors cursor-pointer flex items-start gap-3 ${
-                      orderStrategy === 'FIXED_ORDER' ? 'border-cyber-secondary bg-cyber-secondary/10' : 'border-cyber-border bg-black/20 hover:border-cyber-secondary/50'
+                      orderStrategy === 'FIXED_ORDER' ? 'border-brand-secondary bg-brand-secondary/10' : 'border-brand-border bg-black/20 hover:border-brand-secondary/50'
                     }`}
                   >
-                    <div className={`mt-0.5 p-1.5 rounded shrink-0 ${orderStrategy === 'FIXED_ORDER' ? 'bg-cyber-secondary/20 text-cyber-secondary' : 'bg-cyber-border/40 text-cyber-muted'}`}>
+                    <div className={`mt-0.5 p-1.5 rounded shrink-0 ${orderStrategy === 'FIXED_ORDER' ? 'bg-brand-secondary/20 text-brand-secondary' : 'bg-brand-border/40 text-brand-muted'}`}>
                       <ListOrdered size={14} />
                     </div>
                     <div>
-                      <span className="text-xs font-orbitron font-bold text-white uppercase tracking-wider block mb-1">
+                      <span className="text-xs font-display font-bold text-white uppercase tracking-wider block mb-1">
                         Escolher Ordem
                       </span>
-                      <span className="text-[10px] text-cyber-muted leading-relaxed block">
+                      <span className="text-[10px] text-brand-muted leading-relaxed block">
                         Você define de antemão a ordem em que os prêmios da cadeia vão saindo. Desligado: cada rodada sorteia um prêmio aleatório entre os disponíveis.
                       </span>
                     </div>
@@ -513,7 +513,7 @@ export const DrawControlPage: React.FC = () => {
                 )}
 
                 {!vault && (
-                  <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider flex items-center gap-2">
+                  <div className="p-3 bg-brand-danger/10 border border-brand-danger/30 text-brand-danger text-xs font-ui font-bold uppercase rounded tracking-wider flex items-center gap-2">
                     <VaultIcon size={16} />
                     <span>ESTA CAMPANHA AINDA NÃO TEM UM COFRE. CADASTRE PRÊMIOS PRIMEIRO.</span>
                   </div>
@@ -521,11 +521,11 @@ export const DrawControlPage: React.FC = () => {
 
                 {vault && chained && orderStrategy === 'FIXED_ORDER' && (
                   <div className="flex flex-col gap-3">
-                    <span className="text-xs font-rajdhani font-bold text-cyber-text uppercase tracking-wider px-1">
+                    <span className="text-xs font-ui font-bold text-brand-text uppercase tracking-wider px-1">
                       Clique nos prêmios na ordem em que devem sair
                     </span>
                     {availablePrizes.length === 0 ? (
-                      <span className="text-xs text-cyber-danger font-mono">Nenhum item disponível no cofre.</span>
+                      <span className="text-xs text-brand-danger font-mono">Nenhum item disponível no cofre.</span>
                     ) : (
                       <div className="flex flex-wrap gap-2">
                         {availablePrizes.map((p) => {
@@ -540,8 +540,8 @@ export const DrawControlPage: React.FC = () => {
                               onClick={() => handleToggleOrderPrize(p.id, available)}
                               className={`px-2.5 py-1.5 rounded text-[10px] font-mono border transition-colors ${
                                 exhausted
-                                  ? 'bg-cyber-border/20 border-cyber-border text-cyber-muted cursor-not-allowed'
-                                  : 'bg-cyber-secondary/10 border-cyber-secondary/30 text-cyber-secondary hover:bg-cyber-secondary/20 cursor-pointer'
+                                  ? 'bg-brand-border/20 border-brand-border text-brand-muted cursor-not-allowed'
+                                  : 'bg-brand-secondary/10 border-brand-secondary/30 text-brand-secondary hover:bg-brand-secondary/20 cursor-pointer'
                               }`}
                             >
                               + {p.name} ({used}/{available})
@@ -552,21 +552,21 @@ export const DrawControlPage: React.FC = () => {
                     )}
 
                     <div className="flex flex-col gap-1.5">
-                      <span className="text-xs font-rajdhani font-bold text-cyber-text uppercase tracking-wider px-1">
+                      <span className="text-xs font-ui font-bold text-brand-text uppercase tracking-wider px-1">
                         Ordem definida ({prizeOrder.length})
                       </span>
                       {prizeOrder.length === 0 ? (
-                        <span className="text-[10px] font-mono text-cyber-muted px-1">Nenhum prêmio adicionado à ordem ainda.</span>
+                        <span className="text-[10px] font-mono text-brand-muted px-1">Nenhum prêmio adicionado à ordem ainda.</span>
                       ) : (
                         <div className="flex flex-col gap-1.5">
                           {prizeOrder.map((prizeId, index) => {
                             const prize = availablePrizes.find((p) => p.id === prizeId) ?? vault?.prizes?.find((p) => p.id === prizeId);
                             return (
-                              <div key={`${prizeId}-${index}`} className="flex items-center justify-between px-3 py-1.5 rounded bg-black/30 border border-cyber-border/40">
-                                <span className="text-[11px] font-rajdhani font-bold text-white">
+                              <div key={`${prizeId}-${index}`} className="flex items-center justify-between px-3 py-1.5 rounded bg-black/30 border border-brand-border/40">
+                                <span className="text-[11px] font-ui font-bold text-white">
                                   {index + 1}º — {prize?.name ?? 'Prêmio'}
                                 </span>
-                                <button type="button" onClick={() => handleRemoveOrderEntry(index)} className="text-cyber-danger hover:text-cyber-danger/70 cursor-pointer">
+                                <button type="button" onClick={() => handleRemoveOrderEntry(index)} className="text-brand-danger hover:text-brand-danger/70 cursor-pointer">
                                   <X size={13} />
                                 </button>
                               </div>
@@ -580,15 +580,15 @@ export const DrawControlPage: React.FC = () => {
 
                 {vault && (!chained || orderStrategy === 'RANDOM') && (
                   <div className="flex flex-col gap-2">
-                    <span className="text-xs font-rajdhani font-bold text-cyber-text uppercase tracking-wider px-1">
+                    <span className="text-xs font-ui font-bold text-brand-text uppercase tracking-wider px-1">
                       Itens disponíveis no cofre
                     </span>
                     {availablePrizes.length === 0 ? (
-                      <span className="text-xs text-cyber-danger font-mono">Nenhum item disponível no cofre.</span>
+                      <span className="text-xs text-brand-danger font-mono">Nenhum item disponível no cofre.</span>
                     ) : (
                       <div className="flex flex-wrap gap-2">
                         {availablePrizes.map((p) => (
-                          <span key={p.id} className="px-2 py-1 rounded text-[10px] font-mono bg-cyber-secondary/10 border border-cyber-secondary/30 text-cyber-secondary">
+                          <span key={p.id} className="px-2 py-1 rounded text-[10px] font-mono bg-brand-secondary/10 border border-brand-secondary/30 text-brand-secondary">
                             {p.name} × {p.available ?? p.quantity - p.claimed}
                           </span>
                         ))}
@@ -598,7 +598,7 @@ export const DrawControlPage: React.FC = () => {
                 )}
 
                 {vault && !isSetupReady && selectedCampaignId && !isLoadingStats && (
-                  <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider flex items-center gap-2 select-none">
+                  <div className="p-3 bg-brand-danger/10 border border-brand-danger/30 text-brand-danger text-xs font-ui font-bold uppercase rounded tracking-wider flex items-center gap-2 select-none">
                     <AlertTriangle size={16} />
                     <span>
                       {chained && orderStrategy === 'FIXED_ORDER' && prizeOrder.length === 0
@@ -608,7 +608,7 @@ export const DrawControlPage: React.FC = () => {
                   </div>
                 )}
 
-                <div className="pt-3 border-t border-cyber-border/40 flex justify-end">
+                <div className="pt-3 border-t border-brand-border/40 flex justify-end">
                   {chained ? (
                     <Button variant="accent" icon={<Repeat size={15} />} onClick={handleStartChainSession} isLoading={isActionLoading} disabled={!isSetupReady}>
                       Iniciar Sorteio em Cadeia
@@ -634,13 +634,13 @@ export const DrawControlPage: React.FC = () => {
               <div className="mt-2 flex flex-col gap-6">
                 {!drawId && pendingDraw && !winner && (
                   <div className="space-y-4">
-                    <div className="p-4 bg-cyber-primary/10 border border-cyber-primary/40 rounded flex flex-col gap-1.5">
-                      <span className="font-orbitron font-bold text-white text-xs uppercase tracking-wider">STATUS: AGUARDANDO INÍCIO</span>
-                      <p className="text-xs font-inter text-cyber-text/90 leading-relaxed">
+                    <div className="p-4 bg-brand-primary/10 border border-brand-primary/40 rounded flex flex-col gap-1.5">
+                      <span className="font-display font-bold text-white text-xs uppercase tracking-wider">STATUS: AGUARDANDO INÍCIO</span>
+                      <p className="text-xs font-body text-brand-text/90 leading-relaxed">
                         A tela de sorteio ao vivo já está aberta para os participantes conectados. Clique em "Sortear Agora" para iniciar.
                       </p>
                     </div>
-                    <div className="flex justify-end gap-3 pt-3 border-t border-cyber-border/30">
+                    <div className="flex justify-end gap-3 pt-3 border-t border-brand-border/30">
                       <Button variant="secondary" onClick={handleCancelDraw} disabled={isActionLoading}>Cancelar</Button>
                       <Button variant="accent" icon={<Play size={15} />} onClick={handleExecuteDraw} isLoading={isActionLoading}>
                         Sortear Agora!
@@ -652,15 +652,15 @@ export const DrawControlPage: React.FC = () => {
                 {isSpinning && (
                   <div className="flex flex-col items-center justify-center py-12 space-y-6">
                     <div className="relative w-28 h-28 flex items-center justify-center">
-                      <div className="absolute inset-0 rounded-full border-4 border-cyber-accent border-t-transparent animate-spin glow-accent" />
-                      <div className="absolute inset-2 rounded-full border-2 border-cyber-secondary border-b-transparent animate-spin-reverse glow-secondary" />
-                      <Activity className="text-cyber-accent animate-pulse" size={32} />
+                      <div className="absolute inset-0 rounded-full border-4 border-brand-accent border-t-transparent animate-spin glow-accent" />
+                      <div className="absolute inset-2 rounded-full border-2 border-brand-secondary border-b-transparent animate-spin-reverse glow-secondary" />
+                      <Activity className="text-brand-accent animate-pulse" size={32} />
                     </div>
                     <div className="text-center space-y-2 select-none">
-                      <h3 className="font-orbitron font-extrabold text-white text-lg tracking-widest uppercase animate-pulse">
+                      <h3 className="font-display font-extrabold text-white text-lg tracking-widest uppercase animate-pulse">
                         SELECIONANDO O VENCEDOR
                       </h3>
-                      <p className="text-xs font-mono text-cyber-muted tracking-widest uppercase">
+                      <p className="text-xs font-mono text-brand-muted tracking-widest uppercase">
                         Sorteando entre os cupons disponíveis...
                       </p>
                     </div>
@@ -669,30 +669,30 @@ export const DrawControlPage: React.FC = () => {
 
                 {winner && !isSpinning && (
                   <div className="space-y-6 text-center">
-                    <div className="p-3 bg-cyber-success/15 border border-cyber-success/40 rounded text-cyber-success text-xs font-rajdhani font-bold uppercase tracking-wider inline-flex items-center gap-1.5 mx-auto">
+                    <div className="p-3 bg-brand-success/15 border border-brand-success/40 rounded text-brand-success text-xs font-ui font-bold uppercase tracking-wider inline-flex items-center gap-1.5 mx-auto">
                       <ShieldCheck size={16} />
                       <span>VENCEDOR SELECIONADO</span>
                     </div>
-                    <div className="relative p-6 bg-black/45 border border-cyber-border rounded-lg max-w-lg mx-auto overflow-hidden">
+                    <div className="relative p-6 bg-black/45 border border-brand-border rounded-lg max-w-lg mx-auto overflow-hidden">
                       <div className="absolute inset-0 pointer-events-none bg-cyber-grid opacity-15" />
-                      <span className="text-[10px] font-mono text-cyber-muted block mb-1 uppercase tracking-widest">NOME DO SORTEADO</span>
-                      <h2 className="text-3xl font-orbitron font-extrabold text-white text-glow-primary tracking-wide uppercase truncate">
+                      <span className="text-[10px] font-mono text-brand-muted block mb-1 uppercase tracking-widest">NOME DO SORTEADO</span>
+                      <h2 className="text-3xl font-display font-extrabold text-white text-glow-primary tracking-wide uppercase truncate">
                         {winner.winnerName}
                       </h2>
-                      <div className="mt-3 flex justify-center gap-4 text-xs font-mono text-cyber-muted">
-                        <span>GANHOU COM: <strong className="text-cyber-secondary">{winner.winnerTickets} cupom{winner.winnerTickets === 1 ? '' : 's'}</strong></span>
+                      <div className="mt-3 flex justify-center gap-4 text-xs font-mono text-brand-muted">
+                        <span>GANHOU COM: <strong className="text-brand-secondary">{winner.winnerTickets} cupom{winner.winnerTickets === 1 ? '' : 's'}</strong></span>
                         <span>•</span>
                         <span>CUPONS NO TOTAL: {winner.totalTickets}</span>
                         <span>•</span>
                         <span>CÓDIGO ID: {winner.winnerId?.slice(0, 8)}</span>
                       </div>
                       {winner.prize && (
-                        <div className="mt-3 text-xs font-rajdhani font-bold text-cyber-accent uppercase">
+                        <div className="mt-3 text-xs font-ui font-bold text-brand-accent uppercase">
                           Prêmio: {winner.prize.name}
                         </div>
                       )}
                     </div>
-                    <div className="flex justify-center gap-3 pt-3 border-t border-cyber-border/30">
+                    <div className="flex justify-center gap-3 pt-3 border-t border-brand-border/30">
                       <Button variant="secondary" onClick={handleResetDrawDesk}>Concluir e Reiniciar</Button>
                     </div>
                   </div>
@@ -711,7 +711,7 @@ export const DrawControlPage: React.FC = () => {
             >
               <div className="mt-2 flex flex-col gap-6">
                 {sessionEndedReason === 'exhausted' && !winner && (
-                  <div className="p-3 bg-cyber-accent/15 border border-cyber-accent/40 rounded text-cyber-accent text-xs font-rajdhani font-bold uppercase tracking-wider flex items-center gap-2">
+                  <div className="p-3 bg-brand-accent/15 border border-brand-accent/40 rounded text-brand-accent text-xs font-ui font-bold uppercase tracking-wider flex items-center gap-2">
                     <ShieldCheck size={16} />
                     <span>O COFRE ACABOU — A CADEIA SE ENCERROU SOZINHA.</span>
                   </div>
@@ -719,13 +719,13 @@ export const DrawControlPage: React.FC = () => {
 
                 {!drawId && !winner && !isSpinning && sessionEndedReason !== 'exhausted' && (
                   <div className="space-y-4">
-                    <div className="p-4 bg-cyber-primary/10 border border-cyber-primary/40 rounded flex flex-col gap-1.5">
-                      <span className="font-orbitron font-bold text-white text-xs uppercase tracking-wider">CADEIA ATIVA</span>
-                      <p className="text-xs font-inter text-cyber-text/90 leading-relaxed">
+                    <div className="p-4 bg-brand-primary/10 border border-brand-primary/40 rounded flex flex-col gap-1.5">
+                      <span className="font-display font-bold text-white text-xs uppercase tracking-wider">CADEIA ATIVA</span>
+                      <p className="text-xs font-body text-brand-text/90 leading-relaxed">
                         Clique em "Sortear Próxima Rodada" pra sortear mais um ganhador e prêmio. A cadeia continua até o cofre esgotar ou você encerrar.
                       </p>
                     </div>
-                    <div className="flex justify-end gap-3 pt-3 border-t border-cyber-border/30">
+                    <div className="flex justify-end gap-3 pt-3 border-t border-brand-border/30">
                       <Button variant="secondary" icon={<Square size={13} />} onClick={handleEndSession} disabled={isActionLoading}>
                         Encerrar Cadeia
                       </Button>
@@ -739,10 +739,10 @@ export const DrawControlPage: React.FC = () => {
                 {isSpinning && (
                   <div className="flex flex-col items-center justify-center py-12 space-y-6">
                     <div className="relative w-28 h-28 flex items-center justify-center">
-                      <div className="absolute inset-0 rounded-full border-4 border-cyber-accent border-t-transparent animate-spin glow-accent" />
-                      <Activity className="text-cyber-accent animate-pulse" size={32} />
+                      <div className="absolute inset-0 rounded-full border-4 border-brand-accent border-t-transparent animate-spin glow-accent" />
+                      <Activity className="text-brand-accent animate-pulse" size={32} />
                     </div>
-                    <h3 className="font-orbitron font-extrabold text-white text-lg tracking-widest uppercase animate-pulse">
+                    <h3 className="font-display font-extrabold text-white text-lg tracking-widest uppercase animate-pulse">
                       SELECIONANDO A PRÓXIMA RODADA
                     </h3>
                   </div>
@@ -750,28 +750,28 @@ export const DrawControlPage: React.FC = () => {
 
                 {winner && !isSpinning && (
                   <div className="space-y-6 text-center">
-                    <div className="p-3 bg-cyber-success/15 border border-cyber-success/40 rounded text-cyber-success text-xs font-rajdhani font-bold uppercase tracking-wider inline-flex items-center gap-1.5 mx-auto">
+                    <div className="p-3 bg-brand-success/15 border border-brand-success/40 rounded text-brand-success text-xs font-ui font-bold uppercase tracking-wider inline-flex items-center gap-1.5 mx-auto">
                       <ShieldCheck size={16} />
                       <span>RODADA CONCLUÍDA</span>
                     </div>
-                    <div className="relative p-6 bg-black/45 border border-cyber-border rounded-lg max-w-lg mx-auto">
-                      <span className="text-[10px] font-mono text-cyber-muted block mb-1 uppercase tracking-widest">GANHADOR DESTA RODADA</span>
-                      <h2 className="text-3xl font-orbitron font-extrabold text-white uppercase tracking-wide truncate">{winner.winnerName}</h2>
-                      <span className="text-xs font-mono text-cyber-muted">GANHOU COM: {winner.winnerTickets} cupom{winner.winnerTickets === 1 ? '' : 's'} (total: {winner.totalTickets})</span>
+                    <div className="relative p-6 bg-black/45 border border-brand-border rounded-lg max-w-lg mx-auto">
+                      <span className="text-[10px] font-mono text-brand-muted block mb-1 uppercase tracking-widest">GANHADOR DESTA RODADA</span>
+                      <h2 className="text-3xl font-display font-extrabold text-white uppercase tracking-wide truncate">{winner.winnerName}</h2>
+                      <span className="text-xs font-mono text-brand-muted">GANHOU COM: {winner.winnerTickets} cupom{winner.winnerTickets === 1 ? '' : 's'} (total: {winner.totalTickets})</span>
                       {winner.prize && (
-                        <div className="mt-3 text-xs font-rajdhani font-bold text-cyber-accent uppercase">
+                        <div className="mt-3 text-xs font-ui font-bold text-brand-accent uppercase">
                           Prêmio: {winner.prize.name}
                         </div>
                       )}
                     </div>
 
                     {revealCooldownSecs > 0 && !sessionEndedReason && (
-                      <div className="flex items-center justify-center gap-2 text-cyber-accent text-[11px] font-rajdhani font-bold uppercase tracking-wider">
+                      <div className="flex items-center justify-center gap-2 text-brand-accent text-[11px] font-ui font-bold uppercase tracking-wider">
                         <Hourglass size={13} className="animate-pulse" />
                         <span>Aguarde a roleta parar pra quem está assistindo ({revealCooldownSecs}s)</span>
                       </div>
                     )}
-                    <div className="flex justify-center gap-3 pt-3 border-t border-cyber-border/30">
+                    <div className="flex justify-center gap-3 pt-3 border-t border-brand-border/30">
                       {sessionEndedReason ? (
                         <Button variant="secondary" onClick={handleFinishSessionUi}>Concluir e Reiniciar</Button>
                       ) : (
@@ -800,9 +800,9 @@ export const DrawControlPage: React.FC = () => {
 
         {/* Right Stats Column */}
         <div className="space-y-6">
-          <div className="flex items-center gap-2 border-b border-cyber-border/40 pb-3">
-            <Activity size={18} className="text-cyber-secondary" />
-            <h2 className="text-sm font-orbitron font-extrabold text-white tracking-widest uppercase">
+          <div className="flex items-center gap-2 border-b border-brand-border/40 pb-3">
+            <Activity size={18} className="text-brand-secondary" />
+            <h2 className="text-sm font-display font-extrabold text-white tracking-widest uppercase">
               MÉTRICAS DA CAMPANHA
             </h2>
           </div>
@@ -810,52 +810,52 @@ export const DrawControlPage: React.FC = () => {
           <Card variant="accent" glow={onlineCount > 0}>
             <div className="flex justify-between items-center">
               <div>
-                <p className="text-xs font-rajdhani font-bold text-cyber-muted tracking-wider uppercase">USUÁRIOS CONECTADOS</p>
-                <p className="text-[9px] font-mono text-cyber-muted uppercase mt-0.5">Conexões em tempo real ativas</p>
+                <p className="text-xs font-ui font-bold text-brand-muted tracking-wider uppercase">USUÁRIOS CONECTADOS</p>
+                <p className="text-[9px] font-mono text-brand-muted uppercase mt-0.5">Conexões em tempo real ativas</p>
               </div>
-              <div className="p-2 rounded bg-cyber-accent/10 border border-cyber-accent/30 text-cyber-accent">
+              <div className="p-2 rounded bg-brand-accent/10 border border-brand-accent/30 text-brand-accent">
                 <Activity size={18} className="animate-pulse" />
               </div>
             </div>
             <div className="mt-4 flex items-baseline gap-2">
-              <span className="text-3xl font-orbitron font-extrabold text-white text-glow-accent">{onlineCount}</span>
-              <span className="text-[10px] font-mono text-cyber-muted uppercase tracking-widest">dispositivos ativos</span>
+              <span className="text-3xl font-display font-extrabold text-white text-glow-accent">{onlineCount}</span>
+              <span className="text-[10px] font-mono text-brand-muted uppercase tracking-widest">dispositivos ativos</span>
             </div>
           </Card>
 
           <Card variant="default">
             <div className="flex justify-between items-center">
               <div>
-                <p className="text-xs font-rajdhani font-bold text-cyber-muted tracking-wider uppercase">PARTICIPANTES COM TICKET</p>
-                <p className="text-[9px] font-mono text-cyber-muted uppercase mt-0.5">Elegíveis nesta campanha</p>
+                <p className="text-xs font-ui font-bold text-brand-muted tracking-wider uppercase">PARTICIPANTES COM TICKET</p>
+                <p className="text-[9px] font-mono text-brand-muted uppercase mt-0.5">Elegíveis nesta campanha</p>
               </div>
-              <div className="p-2 rounded bg-cyber-border/40 text-cyber-muted">
+              <div className="p-2 rounded bg-brand-border/40 text-brand-muted">
                 <Users size={18} />
               </div>
             </div>
             <div className="mt-4 flex items-baseline gap-2">
-              <span className="text-3xl font-orbitron font-extrabold text-white">
+              <span className="text-3xl font-display font-extrabold text-white">
                 {isLoadingStats ? '...' : campaignStats?.totalParticipants ?? 0}
               </span>
-              <span className="text-[10px] font-mono text-cyber-muted uppercase tracking-widest">usuários aptos</span>
+              <span className="text-[10px] font-mono text-brand-muted uppercase tracking-widest">usuários aptos</span>
             </div>
           </Card>
 
           <Card variant="secondary">
             <div className="flex justify-between items-center">
               <div>
-                <p className="text-xs font-rajdhani font-bold text-cyber-secondary tracking-wider uppercase">CUPONS CONCORRENDO</p>
-                <p className="text-[9px] font-mono text-cyber-muted uppercase mt-0.5">Total de cupons acumulados</p>
+                <p className="text-xs font-ui font-bold text-brand-secondary tracking-wider uppercase">CUPONS CONCORRENDO</p>
+                <p className="text-[9px] font-mono text-brand-muted uppercase mt-0.5">Total de cupons acumulados</p>
               </div>
-              <div className="p-2 rounded bg-cyber-secondary/10 border border-cyber-secondary/30 text-cyber-secondary">
+              <div className="p-2 rounded bg-brand-secondary/10 border border-brand-secondary/30 text-brand-secondary">
                 <Ticket size={18} />
               </div>
             </div>
             <div className="mt-4 flex items-baseline gap-2">
-              <span className="text-3xl font-orbitron font-extrabold text-white text-glow-secondary">
+              <span className="text-3xl font-display font-extrabold text-white text-glow-secondary">
                 {isLoadingStats ? '...' : campaignStats?.totalTickets ?? 0}
               </span>
-              <span className="text-[10px] font-mono text-cyber-muted uppercase tracking-widest">tickets válidos</span>
+              <span className="text-[10px] font-mono text-brand-muted uppercase tracking-widest">tickets válidos</span>
             </div>
           </Card>
         </div>
@@ -864,15 +864,15 @@ export const DrawControlPage: React.FC = () => {
       {/* History table */}
       <div className="space-y-4">
         <div className="flex items-center gap-2">
-          <Gift size={18} className="text-cyber-primary" />
-          <h2 className="text-base font-orbitron font-bold text-white tracking-widest uppercase">HISTÓRICO RECENTE DE SORTEIOS</h2>
+          <Gift size={18} className="text-brand-primary" />
+          <h2 className="text-base font-display font-bold text-white tracking-widest uppercase">HISTÓRICO RECENTE DE SORTEIOS</h2>
         </div>
 
-        <div className="border border-cyber-border bg-cyber-surface/60 rounded-lg overflow-hidden">
+        <div className="border border-brand-border bg-brand-surface/60 rounded-lg overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left">
               <thead>
-                <tr className="border-b border-cyber-border bg-black/45 text-[11px] font-mono tracking-wider text-cyber-muted uppercase select-none">
+                <tr className="border-b border-brand-border bg-black/45 text-[11px] font-mono tracking-wider text-brand-muted uppercase select-none">
                   <th className="p-4 font-normal">Data / Hora</th>
                   <th className="p-4 font-normal">Tipo</th>
                   <th className="p-4 font-normal">Prêmio</th>
@@ -883,20 +883,20 @@ export const DrawControlPage: React.FC = () => {
                   <th className="p-4 font-normal text-center">Ações</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-cyber-border/40 text-xs font-rajdhani font-bold text-white tracking-wider">
+              <tbody className="divide-y divide-brand-border/40 text-xs font-ui font-bold text-white tracking-wider">
                 {history.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="p-8 text-center text-cyber-muted font-mono select-none">
+                    <td colSpan={8} className="p-8 text-center text-brand-muted font-mono select-none">
                       NENHUM SORTEIO REGISTRADO NESTA CAMPANHA AINDA.
                     </td>
                   </tr>
                 ) : (
                   history.map((draw) => (
-                    <tr key={draw.id} className="hover:bg-cyber-surface/30 transition-colors">
-                      <td className="p-4 font-mono text-[11px] text-cyber-text/85">
+                    <tr key={draw.id} className="hover:bg-brand-surface/30 transition-colors">
+                      <td className="p-4 font-mono text-[11px] text-brand-text/85">
                         {draw.drawnAt ? new Date(draw.drawnAt).toLocaleString('pt-BR') : new Date(draw.createdAt).toLocaleString('pt-BR')}
                       </td>
-                      <td className="p-4 text-[10px] font-mono text-cyber-secondary">{draw.sessionId ? 'Em cadeia' : 'Avulso'}</td>
+                      <td className="p-4 text-[10px] font-mono text-brand-secondary">{draw.sessionId ? 'Em cadeia' : 'Avulso'}</td>
                       <td className="p-4">
                         <span className="text-sm font-semibold text-white">{draw.prize?.name || 'Prêmio'}</span>
                       </td>
@@ -904,26 +904,26 @@ export const DrawControlPage: React.FC = () => {
                         {draw.winnerName ? (
                           <div className="flex flex-col">
                             <span className="text-white font-semibold">{draw.winnerName}</span>
-                            <span className="text-[9px] text-cyber-muted font-mono lowercase">ID: {draw.winnerId?.slice(0, 8)}</span>
+                            <span className="text-[9px] text-brand-muted font-mono lowercase">ID: {draw.winnerId?.slice(0, 8)}</span>
                           </div>
                         ) : (
-                          <span className="text-cyber-danger font-mono font-semibold">SEM GANHADOR</span>
+                          <span className="text-brand-danger font-mono font-semibold">SEM GANHADOR</span>
                         )}
                       </td>
-                      <td className="p-4 text-center font-mono text-cyber-secondary">
+                      <td className="p-4 text-center font-mono text-brand-secondary">
                         {draw.winnerTickets ?? '—'}
                       </td>
-                      <td className="p-4 text-center font-mono text-cyber-text/80">{draw.totalTickets || 0}</td>
+                      <td className="p-4 text-center font-mono text-brand-text/80">{draw.totalTickets || 0}</td>
                       <td className="p-4 text-center">
                         <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${
-                          draw.status === 'COMPLETED' ? 'bg-cyber-success/10 border-cyber-success text-cyber-success' :
-                          draw.status === 'CANCELLED' ? 'bg-cyber-danger/10 border-cyber-danger text-cyber-danger' :
-                          'bg-cyber-border/40 border border-cyber-border text-white'
+                          draw.status === 'COMPLETED' ? 'bg-brand-success/10 border-brand-success text-brand-success' :
+                          draw.status === 'CANCELLED' ? 'bg-brand-danger/10 border-brand-danger text-brand-danger' :
+                          'bg-brand-border/40 border border-brand-border text-white'
                         }`}>
                           {draw.status}
                         </span>
                         {draw.status === 'CANCELLED' && draw.cancelReason && (
-                          <div className="text-[9px] text-cyber-danger/80 font-mono mt-1 normal-case max-w-[160px] mx-auto">
+                          <div className="text-[9px] text-brand-danger/80 font-mono mt-1 normal-case max-w-[160px] mx-auto">
                             Motivo: {draw.cancelReason}
                           </div>
                         )}
@@ -958,14 +958,14 @@ export const DrawControlPage: React.FC = () => {
       >
         {revokeTarget && (
           <div className="flex flex-col gap-4">
-            <p className="text-xs text-cyber-text/90 leading-relaxed">
+            <p className="text-xs text-brand-text/90 leading-relaxed">
               O prêmio <strong className="text-white">{revokeTarget.prize?.name ?? 'sorteado'}</strong> volta pro
               estoque do cofre e <strong className="text-white">{revokeTarget.winnerName ?? 'o vencedor'}</strong> volta
               a ser elegível pra próxima rodada. Essa ação não pode ser desfeita.
             </p>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-rajdhani font-bold text-cyber-text uppercase tracking-wider px-1">
+              <label className="text-xs font-ui font-bold text-brand-text uppercase tracking-wider px-1">
                 Motivo
               </label>
               <div className="flex flex-wrap gap-2">
@@ -976,8 +976,8 @@ export const DrawControlPage: React.FC = () => {
                     onClick={() => setRevokeReason(preset)}
                     className={`px-2.5 py-1.5 rounded text-[10px] font-mono border transition-colors cursor-pointer ${
                       revokeReason === preset
-                        ? 'bg-cyber-danger/15 border-cyber-danger text-cyber-danger'
-                        : 'bg-cyber-border/20 border-cyber-border text-cyber-muted hover:border-cyber-danger/50'
+                        ? 'bg-brand-danger/15 border-brand-danger text-brand-danger'
+                        : 'bg-brand-border/20 border-brand-border text-brand-muted hover:border-brand-danger/50'
                     }`}
                   >
                     {preset}
@@ -990,11 +990,11 @@ export const DrawControlPage: React.FC = () => {
                 rows={3}
                 maxLength={300}
                 placeholder="Descreva o motivo da revogação..."
-                className="w-full bg-cyber-bg border border-cyber-border rounded px-3 py-2.5 text-sm font-rajdhani font-bold text-white tracking-wide focus:border-cyber-danger focus:outline-none resize-none"
+                className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2.5 text-sm font-ui font-bold text-white tracking-wide focus:border-brand-danger focus:outline-none resize-none"
               />
             </div>
 
-            <div className="flex justify-end gap-3 pt-3 border-t border-cyber-border/40">
+            <div className="flex justify-end gap-3 pt-3 border-t border-brand-border/40">
               <Button variant="secondary" onClick={closeRevokeModal} disabled={isRevoking}>
                 Cancelar
               </Button>

@@ -65,7 +65,7 @@ export const RankingPage: React.FC = () => {
             ></lottie-player>`
           }}
         />
-        <div className="text-cyber-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
+        <div className="text-brand-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
           Carregando ranking...
         </div>
       </div>
@@ -76,7 +76,7 @@ export const RankingPage: React.FC = () => {
     return (
       <div className="max-w-md mx-auto my-10">
         <Card variant="danger" title="Ops, algo deu errado" glow>
-          <p className="text-sm font-rajdhani font-bold text-white tracking-wider text-center">{error}</p>
+          <p className="text-sm font-ui font-bold text-white tracking-wider text-center">{error}</p>
         </Card>
       </div>
     );
@@ -88,7 +88,7 @@ export const RankingPage: React.FC = () => {
         <Card variant="default" title="Nenhum sorteio rolando agora" glow className="select-none">
           <div className="flex flex-col items-center gap-4 text-center py-4">
             <img src={nika} alt="Aguardando" className="w-24 h-auto" draggable={false} />
-            <p className="text-sm font-inter text-cyber-muted max-w-sm">
+            <p className="text-sm font-body text-brand-muted max-w-sm">
               O ranking aparece assim que uma campanha estiver ativa.
             </p>
           </div>
@@ -100,8 +100,8 @@ export const RankingPage: React.FC = () => {
   const isMeInTop = leaderboard?.me && leaderboard.top.some((e) => e.userId === leaderboard.me?.userId);
 
   return (
-    <div className="max-w-2xl mx-auto flex flex-col gap-6 font-inter text-cyber-text">
-      <Link to="/dashboard" className="inline-flex items-center gap-1.5 text-xs font-mono text-cyber-muted hover:text-cyber-secondary uppercase tracking-widest w-fit">
+    <div className="max-w-2xl mx-auto flex flex-col gap-6 font-body text-brand-text">
+      <Link to="/dashboard" className="inline-flex items-center gap-1.5 text-xs font-mono text-brand-muted hover:text-brand-secondary uppercase tracking-widest w-fit">
         <ArrowLeft size={14} /> Voltar
       </Link>
 
@@ -110,7 +110,7 @@ export const RankingPage: React.FC = () => {
         title="Ranking de Cupons"
         subtitle={activeCampaign.name}
         glow
-        headerExtra={<Trophy size={22} className="text-cyber-primary" />}
+        headerExtra={<Trophy size={22} className="text-brand-primary" />}
       >
         <Leaderboard entries={leaderboard?.top ?? []} highlightUserId={userId} />
       </Card>

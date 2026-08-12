@@ -78,7 +78,7 @@ export const ChangePinPage: React.FC = () => {
               ></lottie-player>`
             }}
           />
-          <span className="text-xs font-mono text-cyber-secondary tracking-[0.2em] uppercase animate-pulse mt-2">
+          <span className="text-xs font-mono text-brand-secondary tracking-[0.2em] uppercase animate-pulse mt-2">
             ATUALIZANDO CREDENCIAIS...
           </span>
         </div>
@@ -90,13 +90,13 @@ export const ChangePinPage: React.FC = () => {
         glow
       >
         {mustChangePin && (
-          <div className="mb-4 bg-cyber-primary/10 border border-cyber-primary/40 rounded p-3 text-xs font-mono text-cyber-text uppercase">
+          <div className="mb-4 bg-brand-primary/10 border border-brand-primary/40 rounded p-3 text-xs font-mono text-brand-text uppercase">
             ⚠ Por segurança, defina um novo PIN antes de continuar.
           </div>
         )}
 
         {serverError && (
-          <div className="mb-4 bg-cyber-danger/10 border border-cyber-danger rounded p-3 text-xs font-mono text-cyber-danger uppercase">
+          <div className="mb-4 bg-brand-danger/10 border border-brand-danger rounded p-3 text-xs font-mono text-brand-danger uppercase">
             ⚡ ERRO // {serverError}
           </div>
         )}

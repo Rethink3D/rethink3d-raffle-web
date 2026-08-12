@@ -58,8 +58,8 @@ export const Modal: React.FC<ModalProps> = ({
         aria-labelledby="modal-title"
         className={`
           relative w-full ${sizeClasses[size]}
-          bg-cyber-surface/95 border border-cyber-border rounded-lg
-          shadow-2xl overflow-hidden z-10 flex flex-col clip-cyber-card
+          bg-brand-surface/95 border border-brand-border rounded-lg
+          shadow-2xl overflow-hidden z-10 flex flex-col
           animate-modal-in
         `}
       >
@@ -67,15 +67,15 @@ export const Modal: React.FC<ModalProps> = ({
         <div className="absolute inset-0 pointer-events-none bg-cyber-grid opacity-10" />
 
         {/* Corner Bracket Details */}
-        <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-cyber-secondary" />
-        <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-cyber-secondary" />
-        <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-cyber-secondary" />
-        <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-cyber-secondary" />
+        <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-brand-secondary" />
+        <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-brand-secondary" />
+        <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-brand-secondary" />
+        <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-brand-secondary" />
 
         {/* Header */}
-        <div className="relative border-b border-cyber-border p-4 flex items-center justify-between bg-black/20">
+        <div className="relative border-b border-brand-border p-4 flex items-center justify-between bg-black/20">
           <div className="flex flex-col">
-            <h2 id="modal-title" className="text-lg font-orbitron font-extrabold tracking-widest text-white uppercase">
+            <h2 id="modal-title" className="text-lg font-display font-extrabold tracking-widest text-white uppercase">
               {title}
             </h2>
           </div>
@@ -84,14 +84,14 @@ export const Modal: React.FC<ModalProps> = ({
           <button
             onClick={onClose}
             aria-label="Fechar modal"
-            className="p-1.5 rounded border border-cyber-border/80 hover:border-cyber-danger text-cyber-muted hover:text-cyber-danger hover:bg-cyber-danger/10 transition-colors cursor-pointer"
+            className="p-1.5 rounded border border-brand-border/80 hover:border-brand-danger text-brand-muted hover:text-brand-danger hover:bg-brand-danger/10 transition-colors cursor-pointer"
           >
             <X size={16} />
           </button>
         </div>
 
         {/* Content */}
-        <div className="relative p-6 overflow-y-auto max-h-[75vh] font-inter text-cyber-text/90">
+        <div className="relative p-6 overflow-y-auto max-h-[75vh] font-body text-brand-text/90">
           {children}
         </div>
       </div>

@@ -20,13 +20,13 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   // Styles for different variants
-  const baseStyles = 'relative inline-flex items-center justify-center font-orbitron uppercase tracking-wider font-bold transition-all duration-200 border focus:outline-none clip-cyber-btn overflow-hidden select-none';
+  const baseStyles = 'relative inline-flex items-center justify-center font-display uppercase tracking-wider font-bold transition-all duration-200 border focus:outline-none overflow-hidden select-none';
   
   const variantStyles = {
-    primary: 'bg-cyber-primary/10 border-cyber-primary text-white hover:bg-cyber-primary hover:text-white hover:glow-primary focus:glow-primary',
-    secondary: 'bg-cyber-secondary/10 border-cyber-secondary text-cyber-secondary hover:bg-cyber-secondary hover:text-black hover:glow-secondary focus:glow-secondary',
-    accent: 'bg-cyber-accent/10 border-cyber-accent text-cyber-accent hover:bg-cyber-accent hover:text-black hover:glow-accent focus:glow-accent',
-    danger: 'bg-cyber-danger/10 border-cyber-danger text-cyber-danger hover:bg-cyber-danger hover:text-white focus:shadow-[0_0_15px_rgba(239,68,68,0.4)]',
+    primary: 'bg-brand-primary/10 border-brand-primary text-white hover:bg-brand-primary hover:text-white hover:glow-primary focus:glow-primary',
+    secondary: 'bg-brand-secondary/10 border-brand-secondary text-brand-secondary hover:bg-brand-secondary hover:text-black hover:glow-secondary focus:glow-secondary',
+    accent: 'bg-brand-accent/10 border-brand-accent text-brand-accent hover:bg-brand-accent hover:text-black hover:glow-accent focus:glow-accent',
+    danger: 'bg-brand-danger/10 border-brand-danger text-brand-danger hover:bg-brand-danger hover:text-white focus:shadow-[0_0_15px_rgba(239,68,68,0.4)]',
   };
 
   const sizeStyles = {

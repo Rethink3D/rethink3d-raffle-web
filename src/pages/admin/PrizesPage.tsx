@@ -195,14 +195,14 @@ export const PrizesPage: React.FC = () => {
         title={prize.name}
         subtitle={`DISPONÍVEL: ${prize.available ?? prize.quantity - prize.claimed}/${prize.quantity}`}
         headerExtra={
-          <div className={`p-1 rounded border ${alreadyDrawn ? 'bg-cyber-accent/15 text-cyber-accent border-cyber-accent/30' : 'bg-cyber-secondary/15 text-cyber-secondary border-cyber-secondary/30'}`}>
+          <div className={`p-1 rounded border ${alreadyDrawn ? 'bg-brand-accent/15 text-brand-accent border-brand-accent/30' : 'bg-brand-secondary/15 text-brand-secondary border-brand-secondary/30'}`}>
             {alreadyDrawn ? <Award size={16} /> : <Gift size={16} />}
           </div>
         }
       >
         <div className="flex flex-col gap-4 mt-2">
           {/* Image Container */}
-          <div className="aspect-video relative rounded-md border border-cyber-border overflow-hidden bg-black/55 flex items-center justify-center">
+          <div className="aspect-video relative rounded-md border border-brand-border overflow-hidden bg-black/55 flex items-center justify-center">
             {prize.imageUrl ? (
               <img
                 src={prize.imageUrl}
@@ -214,27 +214,27 @@ export const PrizesPage: React.FC = () => {
                 }}
               />
             ) : (
-              <div className="flex flex-col items-center justify-center text-cyber-muted font-mono text-xs gap-2 select-none">
+              <div className="flex flex-col items-center justify-center text-brand-muted font-mono text-xs gap-2 select-none">
                 <Image size={24} />
                 <span>Sem Imagem Definida</span>
               </div>
             )}
           </div>
 
-          <p className="text-xs text-cyber-text/80 line-clamp-3 min-h-[48px] font-inter">
+          <p className="text-xs text-brand-text/80 line-clamp-3 min-h-[48px] font-body">
             {prize.description || 'Nenhuma descrição detalhada deste prêmio.'}
           </p>
 
-          <div className="flex justify-between items-center border-t border-cyber-border/40 pt-3 text-[11px] font-mono text-cyber-muted">
+          <div className="flex justify-between items-center border-t border-brand-border/40 pt-3 text-[11px] font-mono text-brand-muted">
             <span>ENTREGUES: <strong className="text-white font-bold">{prize.claimed}</strong> / {prize.quantity}</span>
             {prize.claimed >= prize.quantity && (
-              <span className="flex items-center gap-1 text-cyber-danger text-[9px] uppercase font-bold">
+              <span className="flex items-center gap-1 text-brand-danger text-[9px] uppercase font-bold">
                 <Lock size={11} /> Esgotado
               </span>
             )}
           </div>
 
-          <div className="flex gap-2 justify-end pt-2 border-t border-cyber-border/20">
+          <div className="flex gap-2 justify-end pt-2 border-t border-brand-border/20">
             <Button
               variant="primary"
               size="sm"
@@ -259,14 +259,14 @@ export const PrizesPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 font-inter">
+    <div className="space-y-6 font-body">
       {/* Header Panel */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-cyber-border/40 pb-5">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border/40 pb-5">
         <div>
-          <h1 className="text-2xl font-orbitron font-extrabold text-white tracking-widest uppercase">
+          <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase">
             COFRE DE PRÊMIOS
           </h1>
-          <p className="text-xs font-rajdhani font-bold text-cyber-secondary tracking-widest mt-1">
+          <p className="text-xs font-ui font-bold text-brand-secondary tracking-widest mt-1">
             Cadastro e controle dos prêmios guardados no cofre da campanha
           </p>
         </div>
@@ -287,7 +287,7 @@ export const PrizesPage: React.FC = () => {
       </div>
 
       {error && (
-        <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider">
+        <div className="p-3 bg-brand-danger/10 border border-brand-danger/30 text-brand-danger text-xs font-ui font-bold uppercase rounded tracking-wider">
           ⚠ {error}
         </div>
       )}
@@ -296,10 +296,10 @@ export const PrizesPage: React.FC = () => {
       <Card variant="default">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h3 className="text-sm font-orbitron font-bold text-white tracking-wider uppercase">
+            <h3 className="text-sm font-display font-bold text-white tracking-wider uppercase">
               CAMPANHA ATIVA
             </h3>
-            <p className="text-[10px] font-mono text-cyber-muted uppercase mt-0.5">
+            <p className="text-[10px] font-mono text-brand-muted uppercase mt-0.5">
               Selecione a campanha para visualizar e gerenciar os prêmios disponíveis
             </p>
           </div>
@@ -308,7 +308,7 @@ export const PrizesPage: React.FC = () => {
             <select
               value={selectedCampaignId}
               onChange={(e) => setSelectedCampaignId(e.target.value)}
-              className="w-full bg-cyber-bg border border-cyber-border rounded px-3 py-2 text-sm font-rajdhani font-bold text-white tracking-wide focus:border-cyber-secondary focus:outline-none"
+              className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-sm font-ui font-bold text-white tracking-wide focus:border-brand-secondary focus:outline-none"
               disabled={isLoadingCampaigns}
             >
               {isLoadingCampaigns ? (
@@ -329,27 +329,27 @@ export const PrizesPage: React.FC = () => {
 
       {/* Prizes Listing */}
       {isLoadingVault ? (
-        <div className="flex flex-col items-center justify-center p-20 text-cyber-muted font-mono space-y-4">
-          <RefreshCw size={24} className="animate-spin text-cyber-primary" />
+        <div className="flex flex-col items-center justify-center p-20 text-brand-muted font-mono space-y-4">
+          <RefreshCw size={24} className="animate-spin text-brand-primary" />
           <span>CARREGANDO COFRE...</span>
         </div>
       ) : !selectedCampaignId ? (
         <Card variant="default">
-          <div className="text-center py-10 font-mono text-cyber-muted">
+          <div className="text-center py-10 font-mono text-brand-muted">
             SELECIONE OU CRIE UMA CAMPANHA PRIMEIRO PARA GERENCIAR O COFRE.
           </div>
         </Card>
       ) : !vault ? (
         <Card variant="accent" glow>
           <div className="flex flex-col items-center gap-4 py-10 text-center">
-            <div className="w-16 h-16 rounded-full bg-cyber-accent/10 border-2 border-cyber-accent flex items-center justify-center text-cyber-accent">
+            <div className="w-16 h-16 rounded-full bg-brand-accent/10 border-2 border-brand-accent flex items-center justify-center text-brand-accent">
               <VaultIcon size={28} />
             </div>
             <div>
-              <h3 className="text-base font-orbitron font-bold text-white uppercase tracking-wider">
+              <h3 className="text-base font-display font-bold text-white uppercase tracking-wider">
                 Esta campanha ainda não tem um cofre
               </h3>
-              <p className="text-xs text-cyber-muted mt-1 max-w-sm">
+              <p className="text-xs text-brand-muted mt-1 max-w-sm">
                 Crie o cofre pra começar a guardar os prêmios que serão sorteados nesta campanha.
               </p>
             </div>
@@ -360,22 +360,22 @@ export const PrizesPage: React.FC = () => {
         </Card>
       ) : prizes.length === 0 ? (
         <Card variant="default">
-          <div className="text-center py-10 font-mono text-cyber-muted">
+          <div className="text-center py-10 font-mono text-brand-muted">
             O COFRE ESTÁ VAZIO. ADICIONE UM PRÊMIO PARA SORTEAR.
           </div>
         </Card>
       ) : (
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2 text-cyber-secondary">
+            <div className="flex items-center gap-2 text-brand-secondary">
               <Gift size={15} />
-              <h3 className="text-xs font-orbitron font-bold uppercase tracking-widest">
+              <h3 className="text-xs font-display font-bold uppercase tracking-widest">
                 Disponíveis pra Sorteio ({availablePrizes.length})
               </h3>
             </div>
             {availablePrizes.length === 0 ? (
               <Card variant="default">
-                <div className="text-center py-6 font-mono text-cyber-muted text-xs">
+                <div className="text-center py-6 font-mono text-brand-muted text-xs">
                   NENHUM PRÊMIO DISPONÍVEL — TODOS JÁ FORAM SORTEADOS OU O COFRE ESTÁ VAZIO.
                 </div>
               </Card>
@@ -388,13 +388,13 @@ export const PrizesPage: React.FC = () => {
 
           {drawnPrizes.length > 0 && (
             <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2 text-cyber-accent">
+              <div className="flex items-center gap-2 text-brand-accent">
                 <Award size={15} />
-                <h3 className="text-xs font-orbitron font-bold uppercase tracking-widest">
+                <h3 className="text-xs font-display font-bold uppercase tracking-widest">
                   Já Sorteados ({drawnPrizes.length})
                 </h3>
               </div>
-              <p className="text-[10px] font-mono text-cyber-muted uppercase -mt-1">
+              <p className="text-[10px] font-mono text-brand-muted uppercase -mt-1">
                 Preservados pra manter o histórico dos sorteios — só podem ser editados, não excluídos.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -421,12 +421,12 @@ export const PrizesPage: React.FC = () => {
             required
           />
 
-          <div className="flex flex-col gap-1.5 font-inter">
-            <label className="text-xs font-rajdhani font-bold tracking-wider text-cyber-text uppercase px-1">
+          <div className="flex flex-col gap-1.5 font-body">
+            <label className="text-xs font-ui font-bold tracking-wider text-brand-text uppercase px-1">
               Descrição / Características
             </label>
             <textarea
-              className="w-full bg-cyber-bg border border-cyber-border rounded px-4 py-2.5 text-sm font-rajdhani font-semibold text-white tracking-wide placeholder-cyber-muted focus:border-cyber-secondary focus:ring-1 focus:ring-cyber-secondary focus:outline-none"
+              className="w-full bg-brand-bg border border-brand-border rounded px-4 py-2.5 text-sm font-ui font-semibold text-white tracking-wide placeholder-brand-muted focus:border-brand-secondary focus:ring-1 focus:ring-brand-secondary focus:outline-none"
               rows={3}
               placeholder="Descreva detalhes como cor, voltagem, marca, etc."
               value={formData.description}
@@ -450,7 +450,7 @@ export const PrizesPage: React.FC = () => {
             onChange={(url) => setFormData({ ...formData, imageUrl: url })}
           />
 
-          <div className="flex justify-end gap-3 mt-4 border-t border-cyber-border/40 pt-4">
+          <div className="flex justify-end gap-3 mt-4 border-t border-brand-border/40 pt-4">
             <Button
               type="button"
               variant="secondary"
@@ -478,18 +478,18 @@ export const PrizesPage: React.FC = () => {
         size="sm"
       >
         <div className="space-y-4">
-          <div className="flex items-center gap-3 p-3 bg-cyber-danger/10 border border-cyber-danger/30 rounded text-cyber-danger text-xs font-rajdhani font-bold tracking-wider uppercase">
+          <div className="flex items-center gap-3 p-3 bg-brand-danger/10 border border-brand-danger/30 rounded text-brand-danger text-xs font-ui font-bold tracking-wider uppercase">
             <AlertTriangle size={20} className="shrink-0" />
             <span>ALERTA DE SEGURANÇA</span>
           </div>
 
-          <p className="text-sm font-inter text-cyber-text">
+          <p className="text-sm font-body text-brand-text">
             Você tem certeza de que deseja excluir permanentemente o prêmio{' '}
             <strong className="text-white font-semibold">"{prizeToDelete?.name}"</strong>?
             Essa ação não pode ser desfeita.
           </p>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-cyber-border/40">
+          <div className="flex justify-end gap-3 pt-4 border-t border-brand-border/40">
             <Button
               type="button"
               variant="secondary"

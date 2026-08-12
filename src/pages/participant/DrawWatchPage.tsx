@@ -153,7 +153,7 @@ export const DrawWatchPage: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col gap-6 font-inter text-cyber-text">
+    <div className="flex flex-col gap-6 font-body text-brand-text">
       {isWinnerState && <ConfettiCanvas />}
 
       <Button
@@ -167,19 +167,19 @@ export const DrawWatchPage: React.FC = () => {
       </Button>
 
       {/* ─── Cabeçalho ao vivo ─── */}
-      <div className="flex items-center justify-between bg-cyber-surface/60 border border-cyber-border rounded-lg p-4 select-none relative overflow-hidden">
+      <div className="flex items-center justify-between bg-brand-surface/60 border border-brand-border rounded-lg p-4 select-none relative overflow-hidden">
         <div className="absolute top-0 right-0 w-24 h-24 pointer-events-none opacity-5 bg-cyber-grid" />
 
         <div className="flex items-center gap-3">
-          <div className="relative w-8 h-8 rounded border border-cyber-primary bg-cyber-primary/10 flex items-center justify-center animate-pulse">
-            <Tv size={16} className="text-cyber-primary" />
-            <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-cyber-primary rounded-full animate-ping" />
+          <div className="relative w-8 h-8 rounded border border-brand-primary bg-brand-primary/10 flex items-center justify-center animate-pulse">
+            <Tv size={16} className="text-brand-primary" />
+            <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-brand-primary rounded-full animate-ping" />
           </div>
           <div>
-            <h2 className="text-base font-orbitron font-extrabold uppercase text-white tracking-widest leading-none">
+            <h2 className="text-base font-display font-extrabold uppercase text-white tracking-widest leading-none">
               Sorteio Ao Vivo
             </h2>
-            <div className="text-[9px] font-mono text-cyber-secondary tracking-widest mt-1">
+            <div className="text-[9px] font-mono text-brand-secondary tracking-widest mt-1">
               Fique de olho, pode começar a qualquer momento
             </div>
           </div>
@@ -187,10 +187,10 @@ export const DrawWatchPage: React.FC = () => {
 
         <div className="flex items-center gap-4 text-right">
           <div className="hidden sm:flex items-center gap-2">
-            <Users size={14} className="text-cyber-secondary" />
+            <Users size={14} className="text-brand-secondary" />
             <div className="flex flex-col">
-              <span className="text-[9px] font-mono text-cyber-muted uppercase">Assistindo</span>
-              <span className="font-orbitron font-bold text-xs text-white">{onlineCount || 1}</span>
+              <span className="text-[9px] font-mono text-brand-muted uppercase">Assistindo</span>
+              <span className="font-display font-bold text-xs text-white">{onlineCount || 1}</span>
             </div>
           </div>
         </div>
@@ -198,7 +198,7 @@ export const DrawWatchPage: React.FC = () => {
 
       <div className="max-w-3xl mx-auto w-full flex flex-col gap-6">
         {activeCampaign?.coverImageUrl && (
-          <div className="aspect-video relative rounded-lg border border-cyber-border overflow-hidden bg-black/55 select-none">
+          <div className="aspect-video relative rounded-lg border border-brand-border overflow-hidden bg-black/55 select-none">
             <img
               src={activeCampaign.coverImageUrl}
               alt={activeCampaign.name}
@@ -213,42 +213,42 @@ export const DrawWatchPage: React.FC = () => {
         {isWinnerState ? (
           <Card variant="primary" title="Temos um vencedor! 🎉" subtitle="Parabéns pra quem levou" glow>
             <div className="flex flex-col items-center py-6 text-center select-none">
-              <div className="relative w-28 h-28 mx-auto mb-6 flex items-center justify-center rounded-full bg-cyber-primary/15 border-2 border-cyber-primary glow-primary animate-float">
-                <PartyPopper size={48} className="text-cyber-primary animate-pulse" />
+              <div className="relative w-28 h-28 mx-auto mb-6 flex items-center justify-center rounded-full bg-brand-primary/15 border-2 border-brand-primary glow-primary animate-float">
+                <PartyPopper size={48} className="text-brand-primary animate-pulse" />
               </div>
 
-              <span className="text-[11px] font-mono text-cyber-secondary tracking-widest uppercase font-bold">
+              <span className="text-[11px] font-mono text-brand-secondary tracking-widest uppercase font-bold">
                 O sorteado foi
               </span>
 
-              <h3 className="text-3xl font-orbitron font-black text-white uppercase mt-2 tracking-wide text-glow-primary">
+              <h3 className="text-3xl font-display font-black text-white uppercase mt-2 tracking-wide text-glow-primary">
                 {winner.winnerName}
               </h3>
 
-              <div className="w-full max-w-sm border-t border-b border-cyber-border/40 py-3.5 my-5">
+              <div className="w-full max-w-sm border-t border-b border-brand-border/40 py-3.5 my-5">
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <span className="text-[9px] font-mono text-cyber-muted uppercase block">Prêmio</span>
-                    <span className="font-rajdhani font-bold text-sm text-white mt-0.5 block">
+                    <span className="text-[9px] font-mono text-brand-muted uppercase block">Prêmio</span>
+                    <span className="font-ui font-bold text-sm text-white mt-0.5 block">
                       {winner.prize?.name || 'Grande Prêmio'}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[9px] font-mono text-cyber-muted uppercase block">Ganhou com</span>
-                    <span className="font-rajdhani font-bold text-sm text-cyber-accent mt-0.5 block">
+                    <span className="text-[9px] font-mono text-brand-muted uppercase block">Ganhou com</span>
+                    <span className="font-ui font-bold text-sm text-brand-accent mt-0.5 block">
                       {winner.winnerTickets} cupom{winner.winnerTickets === 1 ? '' : 's'}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[9px] font-mono text-cyber-muted uppercase block">Tickets no total</span>
-                    <span className="font-rajdhani font-bold text-sm text-white mt-0.5 block">
+                    <span className="text-[9px] font-mono text-brand-muted uppercase block">Tickets no total</span>
+                    <span className="font-ui font-bold text-sm text-white mt-0.5 block">
                       {winner.totalTickets}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <p className="text-xs text-cyber-muted max-w-md leading-relaxed px-4">
+              <p className="text-xs text-brand-muted max-w-md leading-relaxed px-4">
                 {winner.sessionId && !sessionEndedReason
                   ? 'Fica ligado, o sorteio em cadeia continua — mais um prêmio pode sair a qualquer momento!'
                   : 'Nossa equipe vai entrar em contato com o vencedor em breve. Obrigado por participar e fica de olho na próxima campanha!'}
@@ -274,10 +274,10 @@ export const DrawWatchPage: React.FC = () => {
               />
 
               <div className="flex flex-col gap-1 items-center">
-                <span className="text-xs font-rajdhani font-bold text-white uppercase tracking-wider">
+                <span className="text-xs font-ui font-bold text-white uppercase tracking-wider">
                   Cada fatia é uma chance real — quanto mais tickets, maior o pedaço
                 </span>
-                <span className="text-[10px] font-mono text-cyber-muted uppercase tracking-widest">
+                <span className="text-[10px] font-mono text-brand-muted uppercase tracking-widest">
                   {participants.length + (othersCount > 0 ? othersCount : 0)} participante(s) concorrendo · {totalTickets + othersTickets} tickets no total
                 </span>
               </div>
@@ -287,15 +287,15 @@ export const DrawWatchPage: React.FC = () => {
           <div className="flex flex-col gap-6">
             <Card variant="secondary" title="Sorteio em intervalo" subtitle="Já rolou uma rodada — aguarde a próxima" glow>
               <div className="flex flex-col items-center py-6 text-center select-none">
-                <div className="w-16 h-16 rounded border border-cyber-secondary bg-cyber-secondary/10 flex items-center justify-center mb-5 text-cyber-secondary">
+                <div className="w-16 h-16 rounded border border-brand-secondary bg-brand-secondary/10 flex items-center justify-center mb-5 text-brand-secondary">
                   <Clock size={28} />
                 </div>
 
-                <h3 className="text-lg font-orbitron font-extrabold uppercase text-white tracking-widest">
+                <h3 className="text-lg font-display font-extrabold uppercase text-white tracking-widest">
                   Aguardando a próxima rodada
                 </h3>
 
-                <p className="text-xs text-cyber-muted mt-3 leading-relaxed max-w-sm">
+                <p className="text-xs text-brand-muted mt-3 leading-relaxed max-w-sm">
                   A organização já sorteou pelo menos um prêmio nesta campanha. Fica de olho — a próxima rodada pode
                   começar a qualquer momento. Se todos os prêmios já foram sorteados, o sorteio pode ser encerrado
                   por aqui mesmo.
@@ -307,39 +307,39 @@ export const DrawWatchPage: React.FC = () => {
           <div className="flex flex-col gap-6">
             <Card variant="danger" title="O sorteio ainda não começou" subtitle="Prepare-se, tá quase!">
               <div className="flex flex-col items-center py-6 text-center select-none">
-                <div className="w-16 h-16 rounded border border-cyber-danger bg-cyber-danger/10 flex items-center justify-center mb-5 animate-pulse text-cyber-danger">
+                <div className="w-16 h-16 rounded border border-brand-danger bg-brand-danger/10 flex items-center justify-center mb-5 animate-pulse text-brand-danger">
                   <Lock size={28} />
                 </div>
 
-                <h3 className="text-lg font-orbitron font-extrabold uppercase text-white tracking-widest">
+                <h3 className="text-lg font-display font-extrabold uppercase text-white tracking-widest">
                   Missões congeladas por enquanto
                 </h3>
 
-                <p className="text-[10px] font-mono text-cyber-muted uppercase tracking-widest mt-1">
+                <p className="text-[10px] font-mono text-brand-muted uppercase tracking-widest mt-1">
                   Inscrições encerradas pra esta campanha
                 </p>
 
                 {!countdown.isExpired ? (
                   <div className="mt-6 flex flex-col gap-2 items-center">
-                    <span className="text-[10px] font-mono text-cyber-danger tracking-widest uppercase flex items-center gap-1.5">
+                    <span className="text-[10px] font-mono text-brand-danger tracking-widest uppercase flex items-center gap-1.5">
                       <Clock size={12} /> Falta pouco pro sorteio
                     </span>
-                    <div className="font-orbitron font-black text-3xl text-white tracking-widest">
+                    <div className="font-display font-black text-3xl text-white tracking-widest">
                       {countdown.hudDisplay}
                     </div>
                   </div>
                 ) : (
                   <div className="mt-6 flex flex-col items-center gap-2">
-                    <span className="text-[10px] font-mono text-cyber-primary tracking-widest uppercase animate-pulse">
+                    <span className="text-[10px] font-mono text-brand-primary tracking-widest uppercase animate-pulse">
                       Já já a organização começa o sorteio...
                     </span>
-                    <div className="text-xs font-rajdhani font-bold text-white uppercase tracking-wider bg-cyber-border rounded px-4 py-1.5 mt-1 border border-cyber-border/80">
+                    <div className="text-xs font-ui font-bold text-white uppercase tracking-wider bg-brand-border rounded px-4 py-1.5 mt-1 border border-brand-border/80">
                       Fica ligado nesta tela
                     </div>
                   </div>
                 )}
 
-                <p className="text-xs text-cyber-muted mt-5 leading-relaxed max-w-sm">
+                <p className="text-xs text-brand-muted mt-5 leading-relaxed max-w-sm">
                   Ninguém mais pode enviar comprovantes ou responder tarefas agora — mas seus tickets estão seguros e prontos pra concorrer. Mantenha essa página aberta.
                 </p>
               </div>
@@ -347,23 +347,23 @@ export const DrawWatchPage: React.FC = () => {
 
             {vaultPrizes.length > 0 && (
               <Card title="O Que Está no Cofre" subtitle="Prêmios que podem ser seus">
-                <div className="flex flex-col gap-3.5 select-none font-inter text-cyber-text">
+                <div className="flex flex-col gap-3.5 select-none font-body text-brand-text">
                   {vaultPrizes.map((p) => (
-                    <div key={p.id} className="flex justify-between items-center bg-cyber-surface/50 border border-cyber-border/40 rounded p-3">
+                    <div key={p.id} className="flex justify-between items-center bg-brand-surface/50 border border-brand-border/40 rounded p-3">
                       <div className="flex items-center gap-3">
-                        <div className="p-1.5 rounded bg-cyber-secondary/10 border border-cyber-secondary/30 text-cyber-secondary shrink-0">
+                        <div className="p-1.5 rounded bg-brand-secondary/10 border border-brand-secondary/30 text-brand-secondary shrink-0">
                           <Gift size={14} />
                         </div>
                         <div>
-                          <h4 className="font-orbitron font-bold text-xs text-white uppercase tracking-wider">{p.name}</h4>
-                          <p className="text-[10px] text-cyber-muted mt-0.5 normal-case font-inter">
+                          <h4 className="font-display font-bold text-xs text-white uppercase tracking-wider">{p.name}</h4>
+                          <p className="text-[10px] text-brand-muted mt-0.5 normal-case font-body">
                             {p.description || 'Recompensa exclusiva da campanha'}
                           </p>
                         </div>
                       </div>
                       <div className="text-right shrink-0">
-                        <span className="text-[9px] font-mono text-cyber-muted block uppercase">Disponível</span>
-                        <span className="font-orbitron font-bold text-xs text-cyber-secondary">
+                        <span className="text-[9px] font-mono text-brand-muted block uppercase">Disponível</span>
+                        <span className="font-display font-bold text-xs text-brand-secondary">
                           {p.available ?? p.quantity - p.claimed} un.
                         </span>
                       </div>
@@ -373,9 +373,9 @@ export const DrawWatchPage: React.FC = () => {
               </Card>
             )}
 
-            <div className="bg-cyber-surface/30 border border-cyber-border/40 rounded-lg p-4 flex gap-3 select-none">
-              <PartyPopper size={16} className="text-cyber-secondary shrink-0 mt-0.5" />
-              <div className="font-mono text-[10px] text-cyber-muted uppercase tracking-wider leading-relaxed">
+            <div className="bg-brand-surface/30 border border-brand-border/40 rounded-lg p-4 flex gap-3 select-none">
+              <PartyPopper size={16} className="text-brand-secondary shrink-0 mt-0.5" />
+              <div className="font-mono text-[10px] text-brand-muted uppercase tracking-wider leading-relaxed">
                 Sorteio transparente: cada ticket é uma chance real, e o resultado sai na hora, ao vivo — sem enrolação.
               </div>
             </div>
@@ -385,17 +385,17 @@ export const DrawWatchPage: React.FC = () => {
         {/* ─── GANHADORES RECENTES DA CAMPANHA ─── */}
         {recentDraws.length > 0 && (
           <Card variant="secondary" title="Ganhadores Recentes" subtitle="Tudo que já saiu nesta campanha, até agora">
-            <div className="flex flex-col divide-y divide-cyber-border/40">
+            <div className="flex flex-col divide-y divide-brand-border/40">
               {recentDraws.map((draw) => (
                 <div key={draw.id} className="flex items-center gap-3 py-3 first:pt-1 last:pb-1">
-                  <div className="p-1.5 rounded shrink-0 bg-cyber-accent/10 border border-cyber-accent/30 text-cyber-accent">
+                  <div className="p-1.5 rounded shrink-0 bg-brand-accent/10 border border-brand-accent/30 text-brand-accent">
                     <Trophy size={14} />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-rajdhani font-bold text-white truncate">
+                    <p className="text-sm font-ui font-bold text-white truncate">
                       {draw.winnerName ?? 'Ganhador'}
                     </p>
-                    <p className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider mt-0.5 truncate">
+                    <p className="text-[10px] font-mono text-brand-muted uppercase tracking-wider mt-0.5 truncate">
                       {draw.prize?.name ?? 'Prêmio'}
                       {draw.winnerTickets != null ? ` · ganhou com ${draw.winnerTickets} cupom${draw.winnerTickets === 1 ? '' : 's'}` : ''}
                     </p>

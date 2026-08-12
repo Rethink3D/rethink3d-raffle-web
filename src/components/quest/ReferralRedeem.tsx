@@ -44,24 +44,24 @@ export const ReferralRedeem: React.FC<ReferralRedeemProps> = ({
   };
 
   return (
-    <div className="w-full flex flex-col gap-4 font-inter text-cyber-text">
+    <div className="w-full flex flex-col gap-4 font-body text-brand-text">
       <div className="flex flex-col mb-1 select-none">
-        <span className="text-[10px] font-mono tracking-widest text-cyber-secondary uppercase">
+        <span className="text-[10px] font-mono tracking-widest text-brand-secondary uppercase">
           Indique um Amigo
         </span>
-        <h3 className="text-base font-orbitron font-extrabold text-white uppercase tracking-wider mt-0.5">
+        <h3 className="text-base font-display font-extrabold text-white uppercase tracking-wider mt-0.5">
           {missionTitle}
         </h3>
       </div>
 
       {!success ? (
         <div className="flex flex-col gap-4">
-          <p className="text-xs text-cyber-muted leading-relaxed">
+          <p className="text-xs text-brand-muted leading-relaxed">
             Peça o código de 6 dígitos do seu amigo (ele encontra no painel dele) e digite abaixo. Os dois ganham cupons na hora!
           </p>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-rajdhani font-bold text-cyber-text uppercase tracking-wider px-1">
+            <label className="text-xs font-ui font-bold text-brand-text uppercase tracking-wider px-1">
               Código do amigo
             </label>
             <input
@@ -71,12 +71,12 @@ export const ReferralRedeem: React.FC<ReferralRedeemProps> = ({
               placeholder="000000"
               maxLength={6}
               disabled={submitting}
-              className="w-full bg-cyber-bg border border-cyber-border rounded px-3 py-3 text-center text-2xl font-orbitron font-black tracking-[0.4em] text-white focus:border-cyber-secondary focus:outline-none"
+              className="w-full bg-brand-bg border border-brand-border rounded px-3 py-3 text-center text-2xl font-display font-black tracking-[0.4em] text-white focus:border-brand-secondary focus:outline-none"
             />
           </div>
 
           {error && (
-            <div className="flex items-start gap-2 bg-cyber-danger/10 border border-cyber-danger/30 rounded p-3 text-cyber-danger text-xs font-rajdhani font-bold uppercase tracking-wider">
+            <div className="flex items-start gap-2 bg-brand-danger/10 border border-brand-danger/30 rounded p-3 text-brand-danger text-xs font-ui font-bold uppercase tracking-wider">
               <AlertTriangle size={15} className="shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
@@ -98,21 +98,21 @@ export const ReferralRedeem: React.FC<ReferralRedeemProps> = ({
           </div>
         </div>
       ) : (
-        <div className="flex flex-col gap-5 items-center justify-center p-8 bg-cyber-success/5 border border-cyber-success/30 rounded-lg text-center relative overflow-hidden">
+        <div className="flex flex-col gap-5 items-center justify-center p-8 bg-brand-success/5 border border-brand-success/30 rounded-lg text-center relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none bg-cyber-grid opacity-5" />
 
-          <div className="p-4 rounded-full bg-cyber-success/15 border border-cyber-success/40 text-cyber-success mb-2 animate-bounce">
+          <div className="p-4 rounded-full bg-brand-success/15 border border-brand-success/40 text-brand-success mb-2 animate-bounce">
             <CheckCircle size={36} />
           </div>
 
           <div className="flex flex-col gap-1.5 select-none">
-            <h4 className="text-base font-orbitron font-extrabold text-white tracking-widest uppercase">
+            <h4 className="text-base font-display font-extrabold text-white tracking-widest uppercase">
               Código validado!
             </h4>
-            <p className="text-xs font-mono text-cyber-success tracking-widest uppercase flex items-center gap-1.5 justify-center">
+            <p className="text-xs font-mono text-brand-success tracking-widest uppercase flex items-center gap-1.5 justify-center">
               <Users size={13} /> Missão cumprida
             </p>
-            <p className="text-xs text-cyber-muted max-w-sm mt-1 leading-relaxed">
+            <p className="text-xs text-brand-muted max-w-sm mt-1 leading-relaxed">
               Seus cupons já foram creditados — e seu amigo também ganhou os dele.
             </p>
           </div>

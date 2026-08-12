@@ -19,15 +19,15 @@ export const ConfirmDialogHost: React.FC = () => {
   return (
     <Modal isOpen={isOpen} onClose={() => handle(false)} title={title} size="sm">
       <div className="space-y-4">
-        <div className="flex items-start gap-3 text-sm font-inter text-cyber-text">
+        <div className="flex items-start gap-3 text-sm font-body text-brand-text">
           <AlertTriangle
             size={18}
-            className={`shrink-0 mt-0.5 ${variant === 'danger' ? 'text-cyber-danger' : 'text-cyber-accent'}`}
+            className={`shrink-0 mt-0.5 ${variant === 'danger' ? 'text-brand-danger' : 'text-brand-accent'}`}
           />
           <p>{message}</p>
         </div>
 
-        <div className="flex justify-end gap-3 pt-4 border-t border-cyber-border/40">
+        <div className="flex justify-end gap-3 pt-4 border-t border-brand-border/40">
           <Button type="button" variant="secondary" onClick={() => handle(false)}>
             {cancelLabel}
           </Button>

@@ -119,7 +119,7 @@ export const QuestsPage: React.FC = () => {
             ></lottie-player>`
           }}
         />
-        <div className="text-cyber-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
+        <div className="text-brand-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
           Carregando suas missões...
         </div>
       </div>
@@ -131,7 +131,7 @@ export const QuestsPage: React.FC = () => {
       <div className="max-w-md mx-auto my-10 select-none">
         <Card variant="danger" title="Ops, algo deu errado" glow>
           <div className="flex flex-col items-center gap-4 text-center">
-            <p className="text-sm font-rajdhani font-bold text-white tracking-wider">
+            <p className="text-sm font-ui font-bold text-white tracking-wider">
               {error}
             </p>
             <Button variant="danger" size="md" onClick={fetchQuests}>
@@ -149,7 +149,7 @@ export const QuestsPage: React.FC = () => {
         <Card variant="default" title="Nenhuma missão disponível" glow>
           <div className="flex flex-col items-center gap-4 text-center py-4">
             <img src={nika} alt="Aguardando" className="w-24 h-auto" draggable={false} />
-            <p className="text-sm font-inter text-cyber-muted max-w-sm">
+            <p className="text-sm font-body text-brand-muted max-w-sm">
               Ainda não temos uma campanha ativa. Assim que uma nova começar, suas missões aparecem aqui.
             </p>
           </div>
@@ -180,26 +180,26 @@ export const QuestsPage: React.FC = () => {
       </Button>
 
       {/* ─── HEADER ─── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-cyber-surface/90 border border-cyber-border/80 rounded-lg p-5 relative overflow-hidden select-none">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-brand-surface/90 border border-brand-border/80 rounded-lg p-5 relative overflow-hidden select-none">
         <div className="absolute top-0 right-0 w-24 h-24 pointer-events-none opacity-5 bg-cyber-grid" />
 
         <div className="flex flex-col">
-          <h2 className="text-xl font-orbitron font-extrabold text-white uppercase tracking-wider">
+          <h2 className="text-xl font-display font-extrabold text-white uppercase tracking-wider">
             Suas Missões
           </h2>
-          <p className="text-xs text-cyber-muted mt-1 leading-relaxed max-w-2xl">
+          <p className="text-xs text-brand-muted mt-1 leading-relaxed max-w-2xl">
             Complete as missões abaixo para ganhar cupons e aumentar suas chances no sorteio.
           </p>
         </div>
 
         <div className="shrink-0">
           {allCompleted ? (
-            <span className="inline-flex items-center gap-1.5 text-xs font-rajdhani font-bold text-cyber-success uppercase bg-cyber-success/15 border border-cyber-success/50 px-3 py-1.5 rounded">
+            <span className="inline-flex items-center gap-1.5 text-xs font-ui font-bold text-brand-success uppercase bg-brand-success/15 border border-brand-success/50 px-3 py-1.5 rounded">
               <PartyPopper size={14} />
               Todas concluídas!
             </span>
           ) : (
-            <span className="text-xs font-rajdhani font-bold text-white uppercase bg-cyber-border/80 border border-cyber-border/90 px-3 py-1.5 rounded">
+            <span className="text-xs font-ui font-bold text-white uppercase bg-brand-border/80 border border-brand-border/90 px-3 py-1.5 rounded">
               {quests.length} missõe{quests.length === 1 ? '' : 's'} disponíve{quests.length === 1 ? 'l' : 'is'}
             </span>
           )}
@@ -211,10 +211,10 @@ export const QuestsPage: React.FC = () => {
         <Card variant="secondary" glow className="text-center">
           <div className="flex flex-col items-center gap-3 py-4 select-none">
             <img src={agree} alt="Parabéns" className="w-20 h-auto" draggable={false} />
-            <h3 className="text-lg font-orbitron font-extrabold text-white uppercase tracking-wider">
+            <h3 className="text-lg font-display font-extrabold text-white uppercase tracking-wider">
               Parabéns, você completou todas as missões!
             </h3>
-            <p className="text-sm text-cyber-muted max-w-md">
+            <p className="text-sm text-brand-muted max-w-md">
               Seus cupons já estão garantidos. Agora é só aguardar o sorteio — boa sorte!
             </p>
           </div>
@@ -223,13 +223,13 @@ export const QuestsPage: React.FC = () => {
 
       {/* ─── AVISO DE BLOQUEIO ─── */}
       {isLocked && (
-        <div className="flex items-center gap-3.5 bg-cyber-danger/10 border border-cyber-danger/40 rounded-lg p-4 select-none">
-          <Lock size={18} className="shrink-0 text-cyber-danger" />
+        <div className="flex items-center gap-3.5 bg-brand-danger/10 border border-brand-danger/40 rounded-lg p-4 select-none">
+          <Lock size={18} className="shrink-0 text-brand-danger" />
           <div className="flex-1">
-            <div className="text-sm font-rajdhani font-bold uppercase tracking-wider text-cyber-danger">
+            <div className="text-sm font-ui font-bold uppercase tracking-wider text-brand-danger">
               Missões encerradas
             </div>
-            <div className="text-[11px] text-cyber-muted mt-0.5 font-inter leading-relaxed">
+            <div className="text-[11px] text-brand-muted mt-0.5 font-body leading-relaxed">
               O sorteio já começou, então não dá mais pra enviar missões. Acompanhe a transmissão ao vivo para saber o resultado!
             </div>
           </div>
@@ -240,11 +240,11 @@ export const QuestsPage: React.FC = () => {
       <div className="flex flex-col gap-4">
         {quests.length === 0 ? (
           <Card className="text-center py-10 select-none">
-            <HelpCircle size={36} className="text-cyber-muted mx-auto mb-2" />
-            <p className="text-sm font-rajdhani font-bold text-white uppercase tracking-wider">
+            <HelpCircle size={36} className="text-brand-muted mx-auto mb-2" />
+            <p className="text-sm font-ui font-bold text-white uppercase tracking-wider">
               Nenhuma missão cadastrada ainda
             </p>
-            <p className="text-xs text-cyber-muted mt-1">
+            <p className="text-xs text-brand-muted mt-1">
               Volte em breve, novas missões podem aparecer a qualquer momento.
             </p>
           </Card>

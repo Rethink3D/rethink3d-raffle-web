@@ -22,37 +22,37 @@ export const QuestCard: React.FC<QuestCardProps> = ({
       case 'PROOF_UPLOAD':
         return {
           label: 'Comprovante',
-          classes: 'text-cyber-primary border-cyber-primary/40 bg-cyber-primary/5',
+          classes: 'text-brand-primary border-brand-primary/40 bg-brand-primary/5',
           icon: <UploadCloud size={12} />,
         };
       case 'QUIZ':
         return {
           label: 'Quiz',
-          classes: 'text-cyber-secondary border-cyber-secondary/40 bg-cyber-secondary/5',
+          classes: 'text-brand-secondary border-brand-secondary/40 bg-brand-secondary/5',
           icon: <HelpCircle size={12} />,
         };
       case 'FEEDBACK_FORM':
         return {
           label: 'Feedback',
-          classes: 'text-cyber-accent border-cyber-accent/40 bg-cyber-accent/5',
+          classes: 'text-brand-accent border-brand-accent/40 bg-brand-accent/5',
           icon: <FileText size={12} />,
         };
       case 'REFERRAL':
         return {
           label: 'Indicação',
-          classes: 'text-cyber-success border-cyber-success/40 bg-cyber-success/5',
+          classes: 'text-brand-success border-brand-success/40 bg-brand-success/5',
           icon: <Users size={12} />,
         };
       case 'SURVEY':
         return {
           label: 'Pesquisa',
-          classes: 'text-cyber-accent border-cyber-accent/40 bg-cyber-accent/5',
+          classes: 'text-brand-accent border-brand-accent/40 bg-brand-accent/5',
           icon: <ClipboardList size={12} />,
         };
       default:
         return {
           label: 'Missão',
-          classes: 'text-cyber-success border-cyber-success/40 bg-cyber-success/5',
+          classes: 'text-brand-success border-brand-success/40 bg-brand-success/5',
           icon: <CheckCircle2 size={12} />,
         };
     }
@@ -65,15 +65,15 @@ export const QuestCard: React.FC<QuestCardProps> = ({
   const renderStatus = () => {
     if (isCompleted) {
       return (
-        <div className="flex items-center gap-1.5 text-cyber-success font-mono text-xs font-bold bg-cyber-success/10 border border-cyber-success/40 px-2.5 py-1 rounded">
-          <CheckCircle2 size={13} className="text-cyber-success" />
+        <div className="flex items-center gap-1.5 text-brand-success font-mono text-xs font-bold bg-brand-success/10 border border-brand-success/40 px-2.5 py-1 rounded">
+          <CheckCircle2 size={13} className="text-brand-success" />
           <span>Concluída</span>
         </div>
       );
     }
 
     return (
-      <div className="flex items-center gap-1.5 text-cyber-muted font-mono text-xs bg-cyber-border/30 border border-cyber-border/80 px-2.5 py-1 rounded">
+      <div className="flex items-center gap-1.5 text-brand-muted font-mono text-xs bg-brand-border/30 border border-brand-border/80 px-2.5 py-1 rounded">
         <Clock size={13} />
         <span>Disponível</span>
       </div>
@@ -107,23 +107,23 @@ export const QuestCard: React.FC<QuestCardProps> = ({
   return (
     <div
       className={`
-        relative bg-cyber-surface/90 border rounded-lg p-5 transition-all duration-300 flex flex-col gap-4 clip-cyber-card
+        relative bg-brand-surface/90 border rounded-lg p-5 transition-all duration-300 flex flex-col gap-4
         ${isCompleted
-          ? 'border-cyber-success/30 bg-gradient-to-r from-cyber-success/5 to-transparent'
-          : 'border-cyber-border hover:border-cyber-secondary/50'}
+          ? 'border-brand-success/30 bg-gradient-to-r from-brand-success/5 to-transparent'
+          : 'border-brand-border hover:border-brand-secondary/50'}
       `}
     >
       {/* Decorative vertical accent bar */}
       <div
         className={`absolute left-0 top-0 bottom-0 w-1 rounded-l-lg
-          ${isCompleted ? 'bg-cyber-success' : 'bg-cyber-secondary'}
+          ${isCompleted ? 'bg-brand-success' : 'bg-brand-secondary'}
         `}
       />
 
       {/* Top row: image (esquerda) + badges/título + botão de ação (desktop) */}
       <div className="flex flex-row items-start gap-4">
         {imageUrl && (
-          <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 self-start rounded-md overflow-hidden border border-cyber-border/60 bg-black/40 flex items-center justify-center">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 self-start rounded-md overflow-hidden border border-brand-border/60 bg-black/40 flex items-center justify-center">
             <img
               src={imageUrl}
               alt={title}
@@ -145,13 +145,13 @@ export const QuestCard: React.FC<QuestCardProps> = ({
             </span>
 
             {/* Reward Tickets Badge */}
-            <span className="inline-flex items-center gap-1 text-cyber-accent font-orbitron font-black text-[11px] tracking-wide bg-cyber-accent/5 border border-cyber-accent/30 px-2 py-0.5 rounded">
+            <span className="inline-flex items-center gap-1 text-brand-accent font-display font-black text-[11px] tracking-wide bg-brand-accent/5 border border-brand-accent/30 px-2 py-0.5 rounded">
               {type === 'QUIZ' ? `+${reward} por acerto` : `+${reward} cupons`}
             </span>
           </div>
 
           {/* Quest Title */}
-          <h4 className="text-base font-orbitron font-bold text-white uppercase tracking-wide break-words">
+          <h4 className="text-base font-display font-bold text-white uppercase tracking-wide break-words">
             {title}
           </h4>
         </div>
@@ -173,7 +173,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({
       </div>
 
       {/* Description */}
-      <p className="text-xs text-cyber-muted font-inter leading-relaxed break-words">
+      <p className="text-xs text-brand-muted font-body leading-relaxed break-words">
         {description}
       </p>
 
@@ -186,7 +186,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({
               href={link}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 text-[11px] font-rajdhani font-bold text-cyber-secondary border border-cyber-secondary/40 bg-cyber-secondary/5 px-2.5 py-1 rounded hover:bg-cyber-secondary/15 transition-colors"
+              className="inline-flex items-center gap-1.5 text-[11px] font-ui font-bold text-brand-secondary border border-brand-secondary/40 bg-brand-secondary/5 px-2.5 py-1 rounded hover:bg-brand-secondary/15 transition-colors"
             >
               <ExternalLink size={11} />
               Abrir Link {links.length > 1 ? index + 1 : ''}

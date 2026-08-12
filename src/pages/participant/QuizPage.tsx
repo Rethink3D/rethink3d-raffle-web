@@ -183,7 +183,7 @@ export const QuizPage: React.FC = () => {
             ></lottie-player>`
           }}
         />
-        <div className="text-cyber-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
+        <div className="text-brand-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
           Carregando o quiz...
         </div>
       </div>
@@ -195,8 +195,8 @@ export const QuizPage: React.FC = () => {
       <div className="max-w-md mx-auto my-10 select-none">
         <Card variant="danger" title="Ops, algo deu errado" glow>
           <div className="flex flex-col items-center gap-4 text-center">
-            <XCircle size={48} className="text-cyber-danger" />
-            <p className="text-sm font-rajdhani font-bold text-white tracking-wider">
+            <XCircle size={48} className="text-brand-danger" />
+            <p className="text-sm font-ui font-bold text-white tracking-wider">
               {error}
             </p>
             <Button variant="danger" size="md" onClick={() => navigate('/dashboard')} icon={<ArrowLeft size={14} />}>
@@ -213,8 +213,8 @@ export const QuizPage: React.FC = () => {
       <div className="max-w-md mx-auto my-10 select-none">
         <Card title="Nenhum quiz disponível">
           <div className="text-center py-4 flex flex-col gap-4">
-            <HelpCircle size={40} className="text-cyber-muted mx-auto" />
-            <p className="text-sm text-cyber-muted">
+            <HelpCircle size={40} className="text-brand-muted mx-auto" />
+            <p className="text-sm text-brand-muted">
               Não há perguntas configuradas para este quiz.
             </p>
             <Button variant="primary" size="md" onClick={() => navigate('/dashboard')}>
@@ -243,7 +243,7 @@ export const QuizPage: React.FC = () => {
             ></lottie-player>`
           }}
         />
-        <div className="text-cyber-accent animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
+        <div className="text-brand-accent animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
           Enviando suas respostas...
         </div>
       </div>
@@ -259,7 +259,7 @@ export const QuizPage: React.FC = () => {
     const isPassing = accuracy >= 70;
 
     return (
-      <div className="max-w-lg mx-auto my-6 select-none font-inter">
+      <div className="max-w-lg mx-auto my-6 select-none font-body">
         <Card
           variant={isPassing ? "primary" : "secondary"}
           title={isPassing ? "Mandou bem!" : "Quiz concluído!"}
@@ -274,41 +274,41 @@ export const QuizPage: React.FC = () => {
               draggable={false}
             />
 
-            <p className="text-xs text-cyber-muted text-center mt-3">
+            <p className="text-xs text-brand-muted text-center mt-3">
               Suas respostas foram registradas.
             </p>
 
             {/* Stats Block */}
             <div className="grid grid-cols-3 gap-3 w-full mt-6 text-center">
-              <div className="bg-cyber-surface border border-cyber-border p-3 rounded">
-                <span className="text-[9px] font-mono text-cyber-muted block uppercase">Acertos</span>
-                <span className="font-orbitron font-bold text-lg text-white mt-1 block">
+              <div className="bg-brand-surface border border-brand-border p-3 rounded">
+                <span className="text-[9px] font-mono text-brand-muted block uppercase">Acertos</span>
+                <span className="font-display font-bold text-lg text-white mt-1 block">
                   {accuracy}%
                 </span>
               </div>
-              <div className="bg-cyber-surface border border-cyber-border p-3 rounded">
-                <span className="text-[9px] font-mono text-cyber-muted block uppercase">Certas</span>
-                <span className="font-orbitron font-bold text-lg text-cyber-success mt-1 block">
+              <div className="bg-brand-surface border border-brand-border p-3 rounded">
+                <span className="text-[9px] font-mono text-brand-muted block uppercase">Certas</span>
+                <span className="font-display font-bold text-lg text-brand-success mt-1 block">
                   {score}
                 </span>
               </div>
-              <div className="bg-cyber-surface border border-cyber-border p-3 rounded">
-                <span className="text-[9px] font-mono text-cyber-muted block uppercase">Erradas</span>
-                <span className="font-orbitron font-bold text-lg text-cyber-danger mt-1 block">
+              <div className="bg-brand-surface border border-brand-border p-3 rounded">
+                <span className="text-[9px] font-mono text-brand-muted block uppercase">Erradas</span>
+                <span className="font-display font-bold text-lg text-brand-danger mt-1 block">
                   {errors}
                 </span>
               </div>
             </div>
 
             {/* Tickets Earned Banner */}
-            <div className="w-full bg-cyber-accent/10 border border-cyber-accent/30 rounded p-4 mt-5 text-center flex items-center justify-center gap-3 animate-pulse-glow">
-              <Zap size={18} className="text-cyber-accent animate-bounce" />
-              <div className="font-rajdhani font-bold text-sm tracking-widest text-cyber-accent uppercase">
+            <div className="w-full bg-brand-accent/10 border border-brand-accent/30 rounded p-4 mt-5 text-center flex items-center justify-center gap-3 animate-pulse-glow">
+              <Zap size={18} className="text-brand-accent animate-bounce" />
+              <div className="font-ui font-bold text-sm tracking-widest text-brand-accent uppercase">
                 +{quizResult.ticketsEarned} cupons ganhos
               </div>
             </div>
 
-            <p className="text-xs text-cyber-muted text-center mt-5 leading-relaxed">
+            <p className="text-xs text-brand-muted text-center mt-5 leading-relaxed">
               Seus cupons já foram creditados e você já está concorrendo no sorteio.
             </p>
 
@@ -335,51 +335,51 @@ export const QuizPage: React.FC = () => {
   const progressPercent = Math.round(((currentQuestionIndex + 1) / questions.length) * 100);
 
   return (
-    <div className="max-w-2xl mx-auto my-6 font-inter">
+    <div className="max-w-2xl mx-auto my-6 font-body">
       {/* Quiz Title Header */}
       <div className="flex flex-col gap-1 mb-4 select-none">
-        <h2 className="text-lg font-orbitron font-extrabold text-white uppercase tracking-wider break-words">
+        <h2 className="text-lg font-display font-extrabold text-white uppercase tracking-wider break-words">
           {quiz.title}
         </h2>
         {rewardAmount > 0 && (
-          <span className="text-xs text-cyber-muted">
+          <span className="text-xs text-brand-muted">
             Cada resposta certa vale {rewardAmount} cupom{rewardAmount === 1 ? '' : 's'}.
           </span>
         )}
       </div>
 
       {wasReset && (
-        <div className="mb-4 p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider text-center">
+        <div className="mb-4 p-3 bg-brand-danger/10 border border-brand-danger/30 text-brand-danger text-xs font-ui font-bold uppercase rounded tracking-wider text-center">
           Você saiu da aba do quiz — o progresso foi reiniciado do zero.
         </div>
       )}
 
       <Card variant="secondary" glow>
         {/* Progress header */}
-        <div className="flex justify-between items-baseline border-b border-cyber-border/40 pb-3 mb-5 select-none">
-          <span className="text-xs font-rajdhani font-extrabold text-cyber-secondary tracking-widest uppercase">
+        <div className="flex justify-between items-baseline border-b border-brand-border/40 pb-3 mb-5 select-none">
+          <span className="text-xs font-ui font-extrabold text-brand-secondary tracking-widest uppercase">
             PERGUNTA {currentQuestionIndex + 1} DE {questions.length}
           </span>
-          <span className="text-[10px] font-mono text-cyber-muted tracking-widest uppercase">
+          <span className="text-[10px] font-mono text-brand-muted tracking-widest uppercase">
             {progressPercent}% concluído
           </span>
         </div>
 
         {/* Progress indicator bar */}
-        <div className="w-full h-1 bg-cyber-border rounded overflow-hidden mb-6">
+        <div className="w-full h-1 bg-brand-border rounded overflow-hidden mb-6">
           <div
-            className="h-full bg-cyber-secondary transition-all duration-300 ease-out"
+            className="h-full bg-brand-secondary transition-all duration-300 ease-out"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
 
         {/* Question Text */}
         <div className="mb-6">
-          <h3 className="text-base font-orbitron font-bold text-white uppercase tracking-wide leading-relaxed break-words">
+          <h3 className="text-base font-display font-bold text-white uppercase tracking-wide leading-relaxed break-words">
             {currentQuestion.text}
           </h3>
           {currentQuestion.imageUrl && (
-            <div className="mt-4 border border-cyber-border rounded overflow-hidden max-h-48 flex justify-center bg-black/40">
+            <div className="mt-4 border border-brand-border rounded overflow-hidden max-h-48 flex justify-center bg-black/40">
               <img 
                 src={currentQuestion.imageUrl} 
                 alt="Pista visual da pergunta"
@@ -397,16 +397,16 @@ export const QuizPage: React.FC = () => {
               <button
                 key={option.id}
                 onClick={() => handleOptionSelect(option.id)}
-                className={`w-full text-left p-4 rounded border transition-all duration-200 font-rajdhani font-bold text-sm tracking-wide uppercase select-none cursor-pointer relative overflow-hidden
+                className={`w-full text-left p-4 rounded border transition-all duration-200 font-ui font-bold text-sm tracking-wide uppercase select-none cursor-pointer relative overflow-hidden
                   ${isSelected 
-                    ? 'bg-cyber-secondary/15 border-cyber-secondary text-white glow-secondary' 
-                    : 'bg-cyber-surface/60 border-cyber-border text-cyber-muted hover:border-cyber-secondary/40 hover:text-white'}`}
+                    ? 'bg-brand-secondary/15 border-brand-secondary text-white glow-secondary' 
+                    : 'bg-brand-surface/60 border-brand-border text-brand-muted hover:border-brand-secondary/40 hover:text-white'}`}
               >
                 {/* Visual glow corner overlay when selected */}
                 {isSelected && (
-                  <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-cyber-secondary" />
+                  <div className="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-brand-secondary" />
                 )}
-                <span className="mr-3.5 font-mono text-cyber-secondary">[{index + 1}]</span>
+                <span className="mr-3.5 font-mono text-brand-secondary">[{index + 1}]</span>
                 {option.text}
               </button>
             );
@@ -414,7 +414,7 @@ export const QuizPage: React.FC = () => {
         </div>
 
         {/* Action Button Footer */}
-        <div className="flex justify-between mt-8 border-t border-cyber-border/40 pt-4">
+        <div className="flex justify-between mt-8 border-t border-brand-border/40 pt-4">
           <Button
             variant="secondary"
             size="md"

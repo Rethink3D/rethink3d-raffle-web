@@ -754,8 +754,8 @@ export const MissionFormPage: React.FC = () => {
 
   if (loadingMission) {
     return (
-      <div className="flex flex-col items-center justify-center p-20 text-cyber-muted font-mono space-y-4">
-        <RefreshCw size={24} className="animate-spin text-cyber-primary" />
+      <div className="flex flex-col items-center justify-center p-20 text-brand-muted font-mono space-y-4">
+        <RefreshCw size={24} className="animate-spin text-brand-primary" />
         <span>CARREGANDO MISSÃO...</span>
       </div>
     );
@@ -766,7 +766,7 @@ export const MissionFormPage: React.FC = () => {
       <div className="max-w-md mx-auto my-10">
         <Card variant="danger" title="Missão não encontrada">
           <div className="flex flex-col items-center gap-4 text-center py-4">
-            <p className="text-sm text-cyber-muted">Esta missão não existe mais ou foi removida.</p>
+            <p className="text-sm text-brand-muted">Esta missão não existe mais ou foi removida.</p>
             <Button variant="primary" size="md" icon={<ArrowLeft size={14} />} onClick={goBackToList}>
               Voltar para Missões
             </Button>
@@ -777,14 +777,14 @@ export const MissionFormPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6 font-inter max-w-3xl mx-auto">
+    <div className="space-y-6 font-body max-w-3xl mx-auto">
       {/* Top Banner */}
-      <div className="flex items-center gap-4 border-b border-cyber-border/40 pb-5">
+      <div className="flex items-center gap-4 border-b border-brand-border/40 pb-5">
         <Button variant="secondary" size="sm" icon={<ArrowLeft size={14} />} onClick={goBackToList}>
           Voltar
         </Button>
         <div>
-          <h1 className="text-2xl font-orbitron font-extrabold text-white tracking-widest uppercase">
+          <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase">
             {formStep === 'quiz'
               ? `${isEditing ? 'Editar' : 'Criar'} Perguntas do Quiz`
               : formStep === 'feedback'
@@ -795,7 +795,7 @@ export const MissionFormPage: React.FC = () => {
               ? `Editar Missão${formIsGlobal ? ' (Global)' : ''}`
               : `Criar ${formIsGlobal ? 'Missão Global' : 'Missão na Campanha'}`}
           </h1>
-          <p className="text-xs font-rajdhani font-bold text-cyber-secondary tracking-widest mt-1">
+          <p className="text-xs font-ui font-bold text-brand-secondary tracking-widest mt-1">
             {formStep === 'quiz'
               ? 'Monte as perguntas e alternativas do questionário'
               : formStep === 'feedback'
@@ -808,7 +808,7 @@ export const MissionFormPage: React.FC = () => {
       </div>
 
       {formError && (
-        <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider">
+        <div className="p-3 bg-brand-danger/10 border border-brand-danger/30 text-brand-danger text-xs font-ui font-bold uppercase rounded tracking-wider">
           ⚠ {formError}
         </div>
       )}
@@ -817,7 +817,7 @@ export const MissionFormPage: React.FC = () => {
         {formStep === 'mission' ? (
           <form onSubmit={(isQuizWizard || isFeedbackWizard || isSurveyWizard) ? handleGoToQuizStep : handleFormSubmit} className="flex flex-col gap-4">
             {formIsGlobal && (
-              <div className="flex items-center gap-2 bg-cyber-accent/10 border border-cyber-accent/30 rounded p-3 text-xs font-mono text-cyber-accent">
+              <div className="flex items-center gap-2 bg-brand-accent/10 border border-brand-accent/30 rounded p-3 text-xs font-mono text-brand-accent">
                 <Globe size={14} />
                 Esta missão será criada sem campanha vinculada (global).
                 Você poderá atribuí-la a uma campanha depois
@@ -833,12 +833,12 @@ export const MissionFormPage: React.FC = () => {
               required
             />
 
-            <div className="flex flex-col gap-1.5 font-inter">
-              <label className="text-xs font-rajdhani font-bold tracking-wider text-cyber-text uppercase px-1">
+            <div className="flex flex-col gap-1.5 font-body">
+              <label className="text-xs font-ui font-bold tracking-wider text-brand-text uppercase px-1">
                 Descrição do Desafio
               </label>
               <textarea
-                className="w-full bg-cyber-bg border border-cyber-border rounded px-4 py-2.5 text-sm font-rajdhani font-semibold text-white tracking-wide placeholder-cyber-muted focus:border-cyber-secondary focus:ring-1 focus:ring-cyber-secondary focus:outline-none"
+                className="w-full bg-brand-bg border border-brand-border rounded px-4 py-2.5 text-sm font-ui font-semibold text-white tracking-wide placeholder-brand-muted focus:border-brand-secondary focus:ring-1 focus:ring-brand-secondary focus:outline-none"
                 rows={3}
                 placeholder="Explique o que o participante precisa fazer para receber a recompensa."
                 value={formData.description}
@@ -857,14 +857,14 @@ export const MissionFormPage: React.FC = () => {
                 required
               />
 
-              <div className="flex flex-col gap-1.5 font-inter">
-                <label className="text-xs font-rajdhani font-bold tracking-wider text-cyber-text uppercase px-1">
+              <div className="flex flex-col gap-1.5 font-body">
+                <label className="text-xs font-ui font-bold tracking-wider text-brand-text uppercase px-1">
                   Tipo da Missão
                 </label>
                 <select
                   value={formData.type}
                   onChange={(e) => setFormData({ ...formData, type: e.target.value as MissionType })}
-                  className="w-full bg-cyber-bg border border-cyber-border rounded px-4 py-2.5 text-sm font-rajdhani font-bold text-white tracking-wide focus:border-cyber-secondary focus:outline-none h-[42px]"
+                  className="w-full bg-brand-bg border border-brand-border rounded px-4 py-2.5 text-sm font-ui font-bold text-white tracking-wide focus:border-brand-secondary focus:outline-none h-[42px]"
                 >
                   <option value="PROOF_UPLOAD">Envio de Comprovante</option>
                   <option value="QUIZ">Questionário (Quiz)</option>
@@ -876,13 +876,13 @@ export const MissionFormPage: React.FC = () => {
             </div>
 
             {formData.type === 'QUIZ' && (
-              <p className="text-[11px] text-cyber-muted -mt-2 px-1">
+              <p className="text-[11px] text-brand-muted -mt-2 px-1">
                 Cada resposta certa vale essa quantidade de tickets. Quem acerta tudo ganha o máximo possível.
               </p>
             )}
 
             {formData.type === 'SURVEY' && (
-              <p className="text-[11px] text-cyber-muted -mt-2 px-1">
+              <p className="text-[11px] text-brand-muted -mt-2 px-1">
                 Recompensa única e fixa ao concluir a pesquisa inteira — não é por pergunta. O participante vê um
                 aviso pedindo honestidade e avisando a recompensa antes de começar a responder.
               </p>
@@ -890,7 +890,7 @@ export const MissionFormPage: React.FC = () => {
 
             {formData.type === 'REFERRAL' && (
               <>
-                <p className="text-[11px] text-cyber-muted -mt-2 px-1">
+                <p className="text-[11px] text-brand-muted -mt-2 px-1">
                   A recompensa acima vai pra quem usa o código de um amigo. Não há limite de quantas vezes um código pode ser usado nesta campanha.
                 </p>
                 <Input
@@ -912,8 +912,8 @@ export const MissionFormPage: React.FC = () => {
             />
 
             {formData.type === 'PROOF_UPLOAD' && (
-              <div className="flex flex-col gap-1.5 font-inter">
-                <label className="text-xs font-rajdhani font-bold tracking-wider text-cyber-text uppercase px-1">
+              <div className="flex flex-col gap-1.5 font-body">
+                <label className="text-xs font-ui font-bold tracking-wider text-brand-text uppercase px-1">
                   Links da Missão (Opcional, até 3)
                 </label>
                 <div className="flex flex-col gap-2">
@@ -936,15 +936,15 @@ export const MissionFormPage: React.FC = () => {
                   id="active"
                   checked={formData.active}
                   onChange={(e) => setFormData({ ...formData, active: e.target.checked })}
-                  className="accent-cyber-secondary rounded bg-cyber-bg border border-cyber-border w-4 h-4 cursor-pointer"
+                  className="accent-brand-secondary rounded bg-brand-bg border border-brand-border w-4 h-4 cursor-pointer"
                 />
-                <label htmlFor="active" className="text-xs font-rajdhani font-bold text-cyber-text uppercase tracking-wider cursor-pointer">
+                <label htmlFor="active" className="text-xs font-ui font-bold text-brand-text uppercase tracking-wider cursor-pointer">
                   Ativar missão imediatamente
                 </label>
               </div>
             )}
 
-            <div className="flex justify-end gap-3 mt-4 border-t border-cyber-border/40 pt-4">
+            <div className="flex justify-end gap-3 mt-4 border-t border-brand-border/40 pt-4">
               <Button type="button" variant="secondary" onClick={goBackToList} disabled={isSaving}>
                 Cancelar
               </Button>
@@ -972,7 +972,7 @@ export const MissionFormPage: React.FC = () => {
               required
             />
 
-            <div className="flex items-center gap-2 bg-cyber-accent/10 border border-cyber-accent/30 rounded p-3 text-xs font-rajdhani font-semibold text-cyber-accent">
+            <div className="flex items-center gap-2 bg-brand-accent/10 border border-brand-accent/30 rounded p-3 text-xs font-ui font-semibold text-brand-accent">
               <CheckCircle2 size={14} className="shrink-0" />
               Cada pergunta vale {formData.reward} ticket{formData.reward === 1 ? '' : 's'} por acerto.
               Com {quizQuestions.length} pergunta{quizQuestions.length === 1 ? '' : 's'}, quem acertar tudo ganha até{' '}
@@ -980,7 +980,7 @@ export const MissionFormPage: React.FC = () => {
             </div>
 
             <div className="flex items-center justify-between px-1">
-              <span className="text-xs font-rajdhani font-bold text-cyber-text uppercase tracking-wider">
+              <span className="text-xs font-ui font-bold text-brand-text uppercase tracking-wider">
                 Perguntas ({quizQuestions.length}/{MAX_QUIZ_QUESTIONS}, mínimo {MIN_QUIZ_QUESTIONS})
               </span>
               <Button
@@ -997,9 +997,9 @@ export const MissionFormPage: React.FC = () => {
 
             <div className="flex flex-col gap-4">
               {quizQuestions.map((question, qIndex) => (
-                <div key={qIndex} className="border border-cyber-border rounded-lg p-4 flex flex-col gap-3 bg-black/20">
+                <div key={qIndex} className="border border-brand-border rounded-lg p-4 flex flex-col gap-3 bg-black/20">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-orbitron font-bold text-white uppercase tracking-wider">
+                    <span className="text-xs font-display font-bold text-white uppercase tracking-wider">
                       Pergunta {qIndex + 1}
                     </span>
                     <button
@@ -1007,7 +1007,7 @@ export const MissionFormPage: React.FC = () => {
                       onClick={() => removeQuizQuestion(qIndex)}
                       disabled={quizQuestions.length <= MIN_QUIZ_QUESTIONS}
                       title={quizQuestions.length <= MIN_QUIZ_QUESTIONS ? `O quiz precisa de ao menos ${MIN_QUIZ_QUESTIONS} perguntas` : 'Remover pergunta'}
-                      className="p-1 rounded text-cyber-muted hover:text-cyber-danger disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                      className="p-1 rounded text-brand-muted hover:text-brand-danger disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -1027,7 +1027,7 @@ export const MissionFormPage: React.FC = () => {
                   />
 
                   <div className="flex flex-col gap-2">
-                    <span className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider">
+                    <span className="text-[10px] font-mono text-brand-muted uppercase tracking-wider">
                       Alternativas (marque a correta)
                     </span>
                     {question.options.map((optionText, oIndex) => (
@@ -1038,8 +1038,8 @@ export const MissionFormPage: React.FC = () => {
                           title="Marcar como resposta correta"
                           className={`shrink-0 w-7 h-7 rounded-full border-2 flex items-center justify-center cursor-pointer transition-colors ${
                             question.correctIndex === oIndex
-                              ? 'bg-cyber-success border-cyber-success text-black'
-                              : 'border-cyber-border text-transparent hover:border-cyber-success/60'
+                              ? 'bg-brand-success border-brand-success text-black'
+                              : 'border-brand-border text-transparent hover:border-brand-success/60'
                           }`}
                         >
                           <CheckCircle2 size={14} />
@@ -1056,7 +1056,7 @@ export const MissionFormPage: React.FC = () => {
               ))}
             </div>
 
-            <div className="flex justify-between gap-3 mt-2 border-t border-cyber-border/40 pt-4">
+            <div className="flex justify-between gap-3 mt-2 border-t border-brand-border/40 pt-4">
               <Button
                 type="button"
                 variant="secondary"
@@ -1087,13 +1087,13 @@ export const MissionFormPage: React.FC = () => {
               required
             />
 
-            <div className="flex items-center gap-2 bg-cyber-accent/10 border border-cyber-accent/30 rounded p-3 text-xs font-rajdhani font-semibold text-cyber-accent">
+            <div className="flex items-center gap-2 bg-brand-accent/10 border border-brand-accent/30 rounded p-3 text-xs font-ui font-semibold text-brand-accent">
               <CheckCircle2 size={14} className="shrink-0" />
               Quem responder o formulário completo ganha {formData.reward} ticket{formData.reward === 1 ? '' : 's'}.
             </div>
 
             <div className="flex items-center justify-between px-1">
-              <span className="text-xs font-rajdhani font-bold text-cyber-text uppercase tracking-wider">
+              <span className="text-xs font-ui font-bold text-brand-text uppercase tracking-wider">
                 Perguntas ({feedbackQuestions.length}/{MAX_FEEDBACK_QUESTIONS}, mínimo {MIN_FEEDBACK_QUESTIONS})
               </span>
               <Button
@@ -1110,9 +1110,9 @@ export const MissionFormPage: React.FC = () => {
 
             <div className="flex flex-col gap-4">
               {feedbackQuestions.map((question, qIndex) => (
-                <div key={qIndex} className="border border-cyber-border rounded-lg p-4 flex flex-col gap-3 bg-black/20">
+                <div key={qIndex} className="border border-brand-border rounded-lg p-4 flex flex-col gap-3 bg-black/20">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-orbitron font-bold text-white uppercase tracking-wider">
+                    <span className="text-xs font-display font-bold text-white uppercase tracking-wider">
                       Pergunta {qIndex + 1}
                     </span>
                     <button
@@ -1120,7 +1120,7 @@ export const MissionFormPage: React.FC = () => {
                       onClick={() => removeFeedbackQuestion(qIndex)}
                       disabled={feedbackQuestions.length <= MIN_FEEDBACK_QUESTIONS}
                       title={feedbackQuestions.length <= MIN_FEEDBACK_QUESTIONS ? `O formulário precisa de ao menos ${MIN_FEEDBACK_QUESTIONS} perguntas` : 'Remover pergunta'}
-                      className="p-1 rounded text-cyber-muted hover:text-cyber-danger disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                      className="p-1 rounded text-brand-muted hover:text-brand-danger disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -1133,14 +1133,14 @@ export const MissionFormPage: React.FC = () => {
                   />
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="flex flex-col gap-1.5 font-inter">
-                      <label className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider">
+                    <div className="flex flex-col gap-1.5 font-body">
+                      <label className="text-[10px] font-mono text-brand-muted uppercase tracking-wider">
                         Tipo de Pergunta
                       </label>
                       <select
                         value={question.type}
                         onChange={(e) => updateFeedbackQuestionType(qIndex, e.target.value as QuestionType)}
-                        className="w-full bg-cyber-bg border border-cyber-border rounded px-3 py-2 text-xs font-rajdhani font-bold text-white tracking-wide focus:border-cyber-secondary focus:outline-none h-[38px]"
+                        className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-xs font-ui font-bold text-white tracking-wide focus:border-brand-secondary focus:outline-none h-[38px]"
                       >
                         {(Object.keys(feedbackQuestionTypeLabels) as QuestionType[])
                           .filter((type) => type !== 'NUMBER')
@@ -1156,9 +1156,9 @@ export const MissionFormPage: React.FC = () => {
                         id={`required-${qIndex}`}
                         checked={question.required}
                         onChange={(e) => updateFeedbackQuestionField(qIndex, 'required', e.target.checked)}
-                        className="accent-cyber-secondary rounded bg-cyber-bg border border-cyber-border w-4 h-4 cursor-pointer"
+                        className="accent-brand-secondary rounded bg-brand-bg border border-brand-border w-4 h-4 cursor-pointer"
                       />
-                      <label htmlFor={`required-${qIndex}`} className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider cursor-pointer">
+                      <label htmlFor={`required-${qIndex}`} className="text-[10px] font-mono text-brand-muted uppercase tracking-wider cursor-pointer">
                         Resposta obrigatória
                       </label>
                     </div>
@@ -1166,7 +1166,7 @@ export const MissionFormPage: React.FC = () => {
 
                   {questionTypeNeedsOptions(question.type) && (
                     <div className="flex flex-col gap-2">
-                      <span className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider">
+                      <span className="text-[10px] font-mono text-brand-muted uppercase tracking-wider">
                         Alternativas
                       </span>
                       {question.options.map((optionText, oIndex) => (
@@ -1181,7 +1181,7 @@ export const MissionFormPage: React.FC = () => {
                             onClick={() => removeFeedbackOption(qIndex, oIndex)}
                             disabled={question.options.length <= MIN_FEEDBACK_OPTIONS}
                             title={question.options.length <= MIN_FEEDBACK_OPTIONS ? `São necessárias ao menos ${MIN_FEEDBACK_OPTIONS} alternativas` : 'Remover alternativa'}
-                            className="shrink-0 p-1.5 rounded text-cyber-muted hover:text-cyber-danger disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                            className="shrink-0 p-1.5 rounded text-brand-muted hover:text-brand-danger disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                           >
                             <Trash2 size={13} />
                           </button>
@@ -1191,7 +1191,7 @@ export const MissionFormPage: React.FC = () => {
                         type="button"
                         onClick={() => addFeedbackOption(qIndex)}
                         disabled={question.options.length >= MAX_FEEDBACK_OPTIONS}
-                        className="self-start flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-cyber-secondary hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer mt-1"
+                        className="self-start flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-brand-secondary hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer mt-1"
                       >
                         <Plus size={11} /> Adicionar Alternativa
                       </button>
@@ -1199,7 +1199,7 @@ export const MissionFormPage: React.FC = () => {
                   )}
 
                   {question.type === 'SCALE' && (
-                    <p className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider">
+                    <p className="text-[10px] font-mono text-brand-muted uppercase tracking-wider">
                       O participante escolherá uma nota de 1 (pior) a 5 (melhor).
                     </p>
                   )}
@@ -1207,7 +1207,7 @@ export const MissionFormPage: React.FC = () => {
               ))}
             </div>
 
-            <div className="flex justify-between gap-3 mt-2 border-t border-cyber-border/40 pt-4">
+            <div className="flex justify-between gap-3 mt-2 border-t border-brand-border/40 pt-4">
               <Button
                 type="button"
                 variant="secondary"
@@ -1238,14 +1238,14 @@ export const MissionFormPage: React.FC = () => {
               required
             />
 
-            <div className="flex items-center gap-2 bg-cyber-accent/10 border border-cyber-accent/30 rounded p-3 text-xs font-rajdhani font-semibold text-cyber-accent">
+            <div className="flex items-center gap-2 bg-brand-accent/10 border border-brand-accent/30 rounded p-3 text-xs font-ui font-semibold text-brand-accent">
               <CheckCircle2 size={14} className="shrink-0" />
               Quem responder a pesquisa inteira ganha {formData.reward} ticket{formData.reward === 1 ? '' : 's'}.
               O participante verá um aviso de honestidade e a recompensa antes de começar.
             </div>
 
             <div className="flex items-center justify-between px-1">
-              <span className="text-xs font-rajdhani font-bold text-cyber-text uppercase tracking-wider">
+              <span className="text-xs font-ui font-bold text-brand-text uppercase tracking-wider">
                 Perguntas ({surveyQuestions.length}/{MAX_SURVEY_QUESTIONS}, mínimo {MIN_SURVEY_QUESTIONS})
               </span>
               <Button
@@ -1262,9 +1262,9 @@ export const MissionFormPage: React.FC = () => {
 
             <div className="flex flex-col gap-4">
               {surveyQuestions.map((question, qIndex) => (
-                <div key={qIndex} className="border border-cyber-border rounded-lg p-4 flex flex-col gap-3 bg-black/20">
+                <div key={qIndex} className="border border-brand-border rounded-lg p-4 flex flex-col gap-3 bg-black/20">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-orbitron font-bold text-white uppercase tracking-wider">
+                    <span className="text-xs font-display font-bold text-white uppercase tracking-wider">
                       Pergunta {qIndex + 1}
                     </span>
                     <button
@@ -1272,7 +1272,7 @@ export const MissionFormPage: React.FC = () => {
                       onClick={() => removeSurveyQuestion(qIndex)}
                       disabled={surveyQuestions.length <= MIN_SURVEY_QUESTIONS}
                       title={surveyQuestions.length <= MIN_SURVEY_QUESTIONS ? `A pesquisa precisa de ao menos ${MIN_SURVEY_QUESTIONS} perguntas` : 'Remover pergunta'}
-                      className="p-1 rounded text-cyber-muted hover:text-cyber-danger disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                      className="p-1 rounded text-brand-muted hover:text-brand-danger disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -1285,14 +1285,14 @@ export const MissionFormPage: React.FC = () => {
                   />
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div className="flex flex-col gap-1.5 font-inter">
-                      <label className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider">
+                    <div className="flex flex-col gap-1.5 font-body">
+                      <label className="text-[10px] font-mono text-brand-muted uppercase tracking-wider">
                         Tipo de Pergunta
                       </label>
                       <select
                         value={question.type}
                         onChange={(e) => updateSurveyQuestionType(qIndex, e.target.value as QuestionType)}
-                        className="w-full bg-cyber-bg border border-cyber-border rounded px-3 py-2 text-xs font-rajdhani font-bold text-white tracking-wide focus:border-cyber-secondary focus:outline-none h-[38px]"
+                        className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-xs font-ui font-bold text-white tracking-wide focus:border-brand-secondary focus:outline-none h-[38px]"
                       >
                         {(Object.keys(surveyQuestionTypeLabels) as QuestionType[]).map((type) => (
                           <option key={type} value={type}>{surveyQuestionTypeLabels[type]}</option>
@@ -1306,9 +1306,9 @@ export const MissionFormPage: React.FC = () => {
                         id={`survey-required-${qIndex}`}
                         checked={question.required}
                         onChange={(e) => updateSurveyQuestionField(qIndex, 'required', e.target.checked)}
-                        className="accent-cyber-secondary rounded bg-cyber-bg border border-cyber-border w-4 h-4 cursor-pointer"
+                        className="accent-brand-secondary rounded bg-brand-bg border border-brand-border w-4 h-4 cursor-pointer"
                       />
-                      <label htmlFor={`survey-required-${qIndex}`} className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider cursor-pointer">
+                      <label htmlFor={`survey-required-${qIndex}`} className="text-[10px] font-mono text-brand-muted uppercase tracking-wider cursor-pointer">
                         Resposta obrigatória
                       </label>
                     </div>
@@ -1316,7 +1316,7 @@ export const MissionFormPage: React.FC = () => {
 
                   {questionTypeNeedsOptions(question.type) && (
                     <div className="flex flex-col gap-2">
-                      <span className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider">
+                      <span className="text-[10px] font-mono text-brand-muted uppercase tracking-wider">
                         Alternativas
                       </span>
                       {question.options.map((optionText, oIndex) => (
@@ -1331,7 +1331,7 @@ export const MissionFormPage: React.FC = () => {
                             onClick={() => removeSurveyOption(qIndex, oIndex)}
                             disabled={question.options.length <= MIN_SURVEY_OPTIONS}
                             title={question.options.length <= MIN_SURVEY_OPTIONS ? `São necessárias ao menos ${MIN_SURVEY_OPTIONS} alternativas` : 'Remover alternativa'}
-                            className="shrink-0 p-1.5 rounded text-cyber-muted hover:text-cyber-danger disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+                            className="shrink-0 p-1.5 rounded text-brand-muted hover:text-brand-danger disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
                           >
                             <Trash2 size={13} />
                           </button>
@@ -1341,7 +1341,7 @@ export const MissionFormPage: React.FC = () => {
                         type="button"
                         onClick={() => addSurveyOption(qIndex)}
                         disabled={question.options.length >= MAX_SURVEY_OPTIONS}
-                        className="self-start flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-cyber-secondary hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer mt-1"
+                        className="self-start flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-brand-secondary hover:text-white disabled:opacity-30 disabled:pointer-events-none cursor-pointer mt-1"
                       >
                         <Plus size={11} /> Adicionar Alternativa
                       </button>
@@ -1349,7 +1349,7 @@ export const MissionFormPage: React.FC = () => {
                   )}
 
                   {question.type === 'SCALE' && (
-                    <p className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider">
+                    <p className="text-[10px] font-mono text-brand-muted uppercase tracking-wider">
                       O participante escolherá uma nota de 1 (pior) a 5 (melhor).
                     </p>
                   )}
@@ -1357,7 +1357,7 @@ export const MissionFormPage: React.FC = () => {
               ))}
             </div>
 
-            <div className="flex justify-between gap-3 mt-2 border-t border-cyber-border/40 pt-4">
+            <div className="flex justify-between gap-3 mt-2 border-t border-brand-border/40 pt-4">
               <Button
                 type="button"
                 variant="secondary"

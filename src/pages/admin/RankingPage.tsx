@@ -61,14 +61,14 @@ export const RankingPage: React.FC = () => {
   }, [selectedCampaignId]);
 
   return (
-    <div className="space-y-6 font-inter">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-cyber-border/40 pb-5">
+    <div className="space-y-6 font-body">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border/40 pb-5">
         <div>
-          <h1 className="text-2xl font-orbitron font-extrabold text-white tracking-widest uppercase flex items-center gap-2">
-            <Trophy size={22} className="text-cyber-primary" />
+          <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase flex items-center gap-2">
+            <Trophy size={22} className="text-brand-primary" />
             RANKING
           </h1>
-          <p className="text-xs font-rajdhani font-bold text-cyber-secondary tracking-widest mt-1">
+          <p className="text-xs font-ui font-bold text-brand-secondary tracking-widest mt-1">
             Top 10 participantes por cupons na campanha
           </p>
         </div>
@@ -83,20 +83,20 @@ export const RankingPage: React.FC = () => {
       </div>
 
       {error && (
-        <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider">
+        <div className="p-3 bg-brand-danger/10 border border-brand-danger/30 text-brand-danger text-xs font-ui font-bold uppercase rounded tracking-wider">
           ⚠ {error}
         </div>
       )}
 
       <Card variant="default">
         <div className="flex flex-col gap-2">
-          <label className="text-xs font-rajdhani font-bold text-cyber-muted uppercase tracking-wider">
+          <label className="text-xs font-ui font-bold text-brand-muted uppercase tracking-wider">
             Campanha
           </label>
           <select
             value={selectedCampaignId}
             onChange={(e) => setSelectedCampaignId(e.target.value)}
-            className="w-full bg-cyber-bg border border-cyber-border rounded px-3 py-2 text-sm font-rajdhani font-bold text-white tracking-wide focus:border-cyber-secondary focus:outline-none"
+            className="w-full bg-brand-bg border border-brand-border rounded px-3 py-2 text-sm font-ui font-bold text-white tracking-wide focus:border-brand-secondary focus:outline-none"
             disabled={isLoadingCampaigns}
           >
             <option value="">-- Selecione uma campanha --</option>
@@ -111,8 +111,8 @@ export const RankingPage: React.FC = () => {
 
       <Card variant="primary" title="Top 10" glow>
         {isLoadingRanking ? (
-          <div className="flex flex-col items-center justify-center p-16 text-cyber-muted font-mono space-y-4">
-            <RefreshCw size={24} className="animate-spin text-cyber-primary" />
+          <div className="flex flex-col items-center justify-center p-16 text-brand-muted font-mono space-y-4">
+            <RefreshCw size={24} className="animate-spin text-brand-primary" />
             <span>CARREGANDO RANKING...</span>
           </div>
         ) : (

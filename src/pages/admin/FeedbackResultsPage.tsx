@@ -110,26 +110,26 @@ export const FeedbackResultsPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center p-20 text-cyber-muted font-mono space-y-4">
-        <RefreshCw size={24} className="animate-spin text-cyber-primary" />
+      <div className="flex flex-col items-center justify-center p-20 text-brand-muted font-mono space-y-4">
+        <RefreshCw size={24} className="animate-spin text-brand-primary" />
         <span>CARREGANDO RESULTADOS...</span>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 font-inter">
+    <div className="space-y-6 font-body">
       {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-cyber-border/40 pb-5">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border/40 pb-5">
         <div className="flex items-center gap-4 min-w-0">
           <Button variant="secondary" size="sm" icon={<ArrowLeft size={14} />} onClick={() => navigate('/admin/missions')}>
             Voltar
           </Button>
           <div className="min-w-0">
-            <h1 className="text-2xl font-orbitron font-extrabold text-white tracking-widest uppercase break-words">
+            <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase break-words">
               Resultados do Feedback
             </h1>
-            <p className="text-xs font-rajdhani font-bold text-cyber-secondary tracking-widest mt-1 break-words">
+            <p className="text-xs font-ui font-bold text-brand-secondary tracking-widest mt-1 break-words">
               {stats?.title || missionTitle || 'Central de respostas'}
             </p>
           </div>
@@ -145,7 +145,7 @@ export const FeedbackResultsPage: React.FC = () => {
       </div>
 
       {error && (
-        <div className="p-3 bg-cyber-danger/10 border border-cyber-danger/30 text-cyber-danger text-xs font-rajdhani font-bold uppercase rounded tracking-wider">
+        <div className="p-3 bg-brand-danger/10 border border-brand-danger/30 text-brand-danger text-xs font-ui font-bold uppercase rounded tracking-wider">
           ⚠ {error}
         </div>
       )}
@@ -153,10 +153,10 @@ export const FeedbackResultsPage: React.FC = () => {
       {stats && (
         <Card variant="primary" glow>
           <div className="flex items-center gap-3">
-            <Users size={22} className="text-cyber-primary shrink-0" />
+            <Users size={22} className="text-brand-primary shrink-0" />
             <div>
-              <div className="text-2xl font-orbitron font-extrabold text-white">{stats.totalResponses}</div>
-              <div className="text-[10px] font-mono text-cyber-muted uppercase tracking-wider">Respostas Recebidas</div>
+              <div className="text-2xl font-display font-extrabold text-white">{stats.totalResponses}</div>
+              <div className="text-[10px] font-mono text-brand-muted uppercase tracking-wider">Respostas Recebidas</div>
             </div>
           </div>
         </Card>
@@ -164,7 +164,7 @@ export const FeedbackResultsPage: React.FC = () => {
 
       {stats && stats.totalResponses === 0 && (
         <Card variant="default">
-          <div className="text-center py-10 font-mono text-cyber-muted">
+          <div className="text-center py-10 font-mono text-brand-muted">
             NENHUMA RESPOSTA FOI ENVIADA PARA ESTE FORMULÁRIO AINDA.
           </div>
         </Card>
@@ -204,9 +204,9 @@ export const FeedbackResultsPage: React.FC = () => {
           {question.type === 'SCALE' && question.scale && (
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-2">
-                <Star size={16} className="text-cyber-accent" />
-                <span className="text-sm font-rajdhani font-bold text-white">
-                  Média: <span className="text-cyber-accent">{question.scale.average.toFixed(2)}</span> / 5
+                <Star size={16} className="text-brand-accent" />
+                <span className="text-sm font-ui font-bold text-white">
+                  Média: <span className="text-brand-accent">{question.scale.average.toFixed(2)}</span> / 5
                 </span>
               </div>
               <div className="w-full" style={{ height: 180 }}>
@@ -230,14 +230,14 @@ export const FeedbackResultsPage: React.FC = () => {
 
           {question.type === 'TEXT' && question.textAnswers && (
             question.textAnswers.length === 0 ? (
-              <div className="flex items-center gap-2 text-cyber-muted text-xs font-mono uppercase py-4 justify-center">
+              <div className="flex items-center gap-2 text-brand-muted text-xs font-mono uppercase py-4 justify-center">
                 <MessageSquare size={14} /> Nenhuma resposta de texto ainda.
               </div>
             ) : (
               <div className="flex flex-col gap-2">
                 <div className="flex flex-col gap-2 max-h-96 overflow-y-auto pr-1">
                   {question.textAnswers.slice(0, textAnswerLimits[question.id] ?? TEXT_ANSWERS_PAGE_SIZE).map((answer, idx) => (
-                    <div key={idx} className="p-3 rounded bg-black/25 border border-cyber-border/50 text-xs font-rajdhani font-semibold text-cyber-text break-words">
+                    <div key={idx} className="p-3 rounded bg-black/25 border border-brand-border/50 text-xs font-ui font-semibold text-brand-text break-words">
                       {answer}
                     </div>
                   ))}
