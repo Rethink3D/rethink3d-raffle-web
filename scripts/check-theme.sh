@@ -38,4 +38,9 @@ for f in $(grep -rl "assets/.*\.gif" src); do
 done
 grep -q 'favicon-feira' vite.config.ts || fail "vite sem troca de favicon no tema feira"
 
+grep -q 'export const copy' src/theme/copy.ts || fail "copy.ts sem export copy"
+grep -q 'Sorteio Gamificado' index.html || fail "index.html perdeu o texto do tema cyber"
+grep -q 'copy.adminMenu' src/components/layout/Layout.tsx || fail "Layout nao usa copy.adminMenu"
+grep -q 'copy.loading' src/routes/index.tsx || fail "PageLoader nao usa copy.loading"
+
 echo "OK"

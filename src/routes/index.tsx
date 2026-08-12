@@ -10,6 +10,7 @@ import RegisterPage from '../pages/public/RegisterPage';
 import ChangePinPage from '../pages/public/ChangePinPage';
 import DashboardPage from '../pages/participant/DashboardPage';
 import { ThemeAsset } from '../theme/assets';
+import { copy } from '../theme/copy';
 const QuestsPage     = lazy(() => import('../pages/participant/QuestsPage'));
 const QuizPage       = lazy(() => import('../pages/participant/QuizPage'));
 const FeedbackPage   = lazy(() => import('../pages/participant/FeedbackPage'));
@@ -37,7 +38,7 @@ const PageLoader: React.FC = () => (
     <div className="flex flex-col items-center gap-2">
       <ThemeAsset kind="loader" size={100} />
       <span className="text-[10px] font-mono text-brand-secondary tracking-widest uppercase animate-pulse">
-        CARREGANDO RECURSOS...
+        {copy.loading}
       </span>
     </div>
   </div>

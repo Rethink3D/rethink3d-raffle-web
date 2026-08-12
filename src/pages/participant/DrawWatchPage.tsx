@@ -15,6 +15,7 @@ import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { PrizeWheel } from '../../components/draw/PrizeWheel';
 import type { Campaign, Draw } from '../../types';
+import { copy } from '../../theme/copy';
 
 // Confete simples em canvas — só entra quando o vencedor é revelado
 const ConfettiCanvas: React.FC = () => {
@@ -312,7 +313,7 @@ export const DrawWatchPage: React.FC = () => {
                 </div>
 
                 <h3 className="text-lg font-display font-extrabold uppercase text-white tracking-widest">
-                  Missões congeladas por enquanto
+                  {copy.missionsFrozen}
                 </h3>
 
                 <p className="text-[10px] font-mono text-brand-muted uppercase tracking-widest mt-1">

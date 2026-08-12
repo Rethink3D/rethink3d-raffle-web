@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CheckCircle, AlertTriangle, Users } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { getApiErrorMessage } from '../../utils/apiError';
+import { copy } from '../../theme/copy';
 
 interface ReferralRedeemProps {
   missionId: string;
@@ -110,7 +111,7 @@ export const ReferralRedeem: React.FC<ReferralRedeemProps> = ({
               Código validado!
             </h4>
             <p className="text-xs font-mono text-brand-success tracking-widest uppercase flex items-center gap-1.5 justify-center">
-              <Users size={13} /> Missão cumprida
+              <Users size={13} /> {copy.missionDone}
             </p>
             <p className="text-xs text-brand-muted max-w-sm mt-1 leading-relaxed">
               Seus cupons já foram creditados — e seu amigo também ganhou os dele.
@@ -118,7 +119,7 @@ export const ReferralRedeem: React.FC<ReferralRedeemProps> = ({
           </div>
 
           <Button variant="primary" size="md" onClick={onCancel} className="mt-2">
-            Voltar para Missões
+            {copy.backToMissions}
           </Button>
         </div>
       )}

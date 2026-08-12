@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Upload, FileImage, CheckCircle, AlertTriangle, X } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { getApiErrorMessage } from '../../utils/apiError';
+import { copy } from '../../theme/copy';
 
 interface PrintUploadProps {
   missionId: string;
@@ -253,7 +254,7 @@ export const PrintUpload: React.FC<PrintUploadProps> = ({
               ENVIO REALIZADO COM SUCESSO
             </h4>
             <p className="text-xs font-mono text-brand-success tracking-widest uppercase">
-              MISSÃO CUMPRIDA
+              {copy.missionDoneUpper}
             </p>
             <p className="text-xs text-brand-muted max-w-sm mt-1 leading-relaxed">
               Seu comprovante foi enviado e seus tickets já foram creditados na sua conta.
@@ -266,7 +267,7 @@ export const PrintUpload: React.FC<PrintUploadProps> = ({
             onClick={onCancel}
             className="mt-2"
           >
-            Voltar para Missões
+            {copy.backToMissions}
           </Button>
         </div>
       )}

@@ -17,6 +17,7 @@ import { getCampaignStatusLabel } from '../../utils/campaignStatus';
 import { getNextDrawTarget, getUpcomingSchedules } from '../../utils/drawSchedule';
 import type { Campaign, Draw, Mission, Prize, TicketHistoryEntry, User } from '../../types';
 import { ThemeAsset } from '../../theme/assets';
+import { copy } from '../../theme/copy';
 
 // Cores do badge de status — mesma paleta usada nos outros indicadores da
 // campanha, pra reforçar visualmente ACTIVE (verde) vs DRAWING (roxo/aviso).
@@ -77,14 +78,14 @@ const ReferralCodeCard: React.FC<{ code: string }> = ({ code }) => {
         </div>
       </div>
       <p className="text-[11px] text-brand-muted leading-relaxed mt-1">
-        Passe esse código pra um amigo cumprir a missão "Indique um Amigo" — assim que ele usar, vocês dois ganham cupons na hora.
+        {copy.referralHintProse}
       </p>
       <p className="text-[11px] text-brand-accent/90 leading-relaxed mt-1.5 flex items-center gap-1.5">
         <Users size={12} className="shrink-0" />
         Compartilhe com quantos amigos quiser — cada indicação gera cupons pra vocês dois!
       </p>
       <p className="text-[11px] text-brand-muted leading-relaxed mt-1.5">
-        Recebeu um código de amigo? Vá até a missão{' '}
+        {copy.receivedCodeProse}{' '}
         <Link to="/quests" className="text-brand-secondary hover:underline font-bold">
           "Indique um Amigo"
         </Link>{' '}
@@ -120,7 +121,7 @@ const SignupBonusModal: React.FC = () => {
           </p>
         </div>
         <p className="text-xs text-brand-muted leading-relaxed max-w-xs">
-          Quer ganhar ainda mais cupons e aumentar suas chances de ganhar? Complete as missões disponíveis.
+          {copy.completeMoreProse}
         </p>
         <Button
           variant="primary"
@@ -132,7 +133,7 @@ const SignupBonusModal: React.FC = () => {
             navigate('/quests');
           }}
         >
-          Ver Missões
+          {copy.seeMissions}
         </Button>
       </div>
     </Modal>
@@ -333,7 +334,7 @@ export const DashboardPage: React.FC = () => {
             </h2>
 
             <p className="text-sm text-brand-text/80 font-body leading-relaxed max-w-2xl break-words border-l-2 border-brand-primary/40 pl-3">
-              {activeCampaign.description || 'Cumpra missões, junte cupons e concorra a prêmios incríveis!'}
+              {activeCampaign.description || copy.campaignFallbackProse}
             </p>
           </div>
 
@@ -344,7 +345,7 @@ export const DashboardPage: React.FC = () => {
               icon={<ListChecks size={14} />}
               onClick={() => navigate('/quests')}
             >
-              Missões
+              {copy.missions}
             </Button>
             <Button
               variant="secondary"
@@ -485,8 +486,8 @@ export const DashboardPage: React.FC = () => {
           {/* MISSION PROGRESS BAR */}
           <Card
             variant="secondary"
-            title="Suas Missões"
-            subtitle="Complete as missões restantes para ganhar mais cupons!"
+            title={copy.yourMissions}
+            subtitle={copy.remainingMissionsSubtitle}
           >
             <div className="flex flex-col gap-4 py-2 select-none">
 
@@ -519,7 +520,7 @@ export const DashboardPage: React.FC = () => {
               <div className="mt-1 pt-3 border-t border-brand-border/40">
                 <Link to="/quests" className="block w-full">
                   <Button variant="secondary" size="sm" icon={<ArrowRight size={13} />} fullWidth>
-                    Ver Missões
+                    {copy.seeMissions}
                   </Button>
                 </Link>
               </div>

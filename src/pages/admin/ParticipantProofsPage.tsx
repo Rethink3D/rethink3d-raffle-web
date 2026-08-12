@@ -4,6 +4,7 @@ import { adminService, type AdminProofWithUrl } from '../../services/admin.servi
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { ArrowLeft, ExternalLink, Calendar, RefreshCw, Image as ImageIcon } from 'lucide-react';
+import { copy } from '../../theme/copy';
 
 export const ParticipantProofsPage: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
@@ -114,7 +115,7 @@ export const ParticipantProofsPage: React.FC = () => {
               {/* Meta details */}
               <div className="p-3 space-y-1.5 text-[11px] font-ui font-semibold text-brand-muted">
                 <div className="text-white font-bold truncate text-xs">
-                  {proof.mission?.title || 'Missão Desconhecida'}
+                  {proof.mission?.title || copy.unknownMission}
                 </div>
                 <div className="flex justify-between font-mono text-[9px]">
                   <span>FORMATO: {proof.mimeType.replace('image/', '').toUpperCase()}</span>

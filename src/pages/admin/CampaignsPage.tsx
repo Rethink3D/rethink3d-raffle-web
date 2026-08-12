@@ -14,6 +14,7 @@ import {
   Edit2, Trash2, Calendar, Clock, X,
   ToggleLeft, CheckCircle2, AlertTriangle, Plus, RefreshCw
 } from 'lucide-react';
+import { copy } from '../../theme/copy';
 
 export const CampaignsPage: React.FC = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -527,7 +528,7 @@ setIsActionLoading(true);
           <p className="text-sm font-body text-brand-text">
             Você tem certeza de que deseja deletar permanentemente a campanha{' '}
             <strong className="text-white font-semibold">"{campaignToDelete?.name}"</strong>? 
-            Esta operação apagará todos os dados, missões, prêmios e cupons associados a esta campanha.
+            {copy.campaignWipeProse}
           </p>
 
           <div className="flex justify-end gap-3 pt-4 border-t border-brand-border/40">

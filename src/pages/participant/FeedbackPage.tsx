@@ -9,6 +9,7 @@ import { Button } from '../../components/ui/Button';
 import { useTicketRefreshStore } from '../../store/ticketRefreshStore';
 import type { FeedbackForm, FeedbackQuestion } from '../../types';
 import { ThemeAsset } from '../../theme/assets';
+import { copy } from '../../theme/copy';
 
 export const FeedbackPage: React.FC = () => {
   const { missionId } = useParams<{ missionId: string }>();
@@ -216,7 +217,7 @@ export const FeedbackPage: React.FC = () => {
             </div>
 
             <h3 className="text-lg font-display font-extrabold uppercase tracking-wider text-white">
-              Missão cumprida!
+              {copy.missionDoneBang}
             </h3>
 
             <p className="text-[10px] font-mono text-brand-muted uppercase tracking-widest mt-1">

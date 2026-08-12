@@ -16,6 +16,7 @@ import {
   Play, RefreshCw, AlertTriangle, ShieldCheck,
   Gift, Users, Ticket, Activity, Shuffle, Repeat, ListOrdered, Vault as VaultIcon, Square, X, PauseCircle, Hourglass, Undo2,
 } from 'lucide-react';
+import { copy } from '../../theme/copy';
 
 // Sugestões rápidas de motivo — o admin ainda pode digitar um texto livre.
 const REVOKE_REASON_PRESETS = [
@@ -432,7 +433,7 @@ export const DrawControlPage: React.FC = () => {
           </Card>
 
           {/* Campanha em intervalo: retomar sinaliza a próxima rodada pro
-              participante E reabre as missões, permitindo ganhar mais cupons
+              {copy.reopensMissionsProse}
               antes da rodada seguinte. */}
           {selectedCampaign?.status === 'PAUSED' && (
             <Card variant="secondary" glow>
@@ -447,7 +448,7 @@ export const DrawControlPage: React.FC = () => {
                     </h3>
                     <p className="text-[10px] text-brand-muted mt-0.5 leading-relaxed max-w-md">
                       Já rolou uma rodada. Os participantes veem "sorteio em intervalo" no painel deles. Retome pra
-                      "Ativa" pra sinalizar que a próxima rodada vem em breve e reabrir as missões, pra quem quiser
+                      {copy.reopenMissionsSoonProse}
                       ganhar mais cupons antes da próxima rodada.
                     </p>
                   </div>

@@ -11,6 +11,7 @@ import {
   Plus, Edit2, Trash2, ArrowUp, ArrowDown, RefreshCw,
   Globe, Link2, Layers, BarChart3, Users
 } from 'lucide-react';
+import { copy } from '../../theme/copy';
 
 type Tab = 'campaign' | 'global';
 
@@ -220,7 +221,7 @@ export const MissionsPage: React.FC = () => {
     if (loading) return (
       <div className="flex flex-col items-center justify-center p-20 text-brand-muted font-mono space-y-4">
         <RefreshCw size={24} className="animate-spin text-brand-primary" />
-        <span>CARREGANDO MISSÕES...</span>
+        <span>{copy.loadingMissionsUpper}</span>
       </div>
     );
 
@@ -228,8 +229,8 @@ export const MissionsPage: React.FC = () => {
       <Card variant="default">
         <div className="text-center py-10 font-mono text-brand-muted">
           {isGlobal
-            ? 'NENHUMA MISSÃO GLOBAL. CRIE UMA MISSÃO SEM CAMPANHA PARA COMEÇAR.'
-            : 'NENHUMA MISSÃO NESTA CAMPANHA. CLIQUE EM "CRIAR MISSÃO" PARA INICIAR.'}
+            ? copy.noGlobalMissionsUpper
+            : copy.noCampaignMissionsUpper}
         </div>
       </Card>
     );
@@ -288,7 +289,7 @@ export const MissionsPage: React.FC = () => {
                   <td className="p-4 text-center">
                     <span
                       className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-mono bg-brand-secondary/10 border border-brand-secondary/30 text-brand-secondary"
-                      title={isGlobal ? 'Missões globais (modelo) não são completadas diretamente' : 'Participantes que já concluíram esta missão'}
+                      title={isGlobal ? copy.globalMissionsNotDirect : copy.whoCompletedMission}
                     >
                       <Users size={12} />
                       {mission.completionsCount ?? 0}
@@ -297,7 +298,7 @@ export const MissionsPage: React.FC = () => {
                   <td className="p-4 text-center">
                     {isGlobal ? (
                       <span
-                        title="Ativo/inativo só se aplica quando a missão está vinculada a uma campanha"
+                        title={copy.activeOnlyWhenLinked}
                         className="px-2 py-0.5 rounded text-[10px] font-mono border bg-brand-border/30 border-brand-border/60 text-brand-muted"
                       >
                         MODELO
@@ -387,10 +388,10 @@ export const MissionsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-brand-border/40 pb-5">
         <div>
           <h1 className="text-2xl font-display font-extrabold text-white tracking-widest uppercase">
-            GERENCIAR MISSÕES
+            {copy.manageMissionsUpper}
           </h1>
           <p className="text-xs font-ui font-bold text-brand-secondary tracking-widest mt-1">
-            Criação e configuração das missões dos participantes
+            {copy.missionsPageSubtitle}
           </p>
         </div>
         <div className="flex gap-2">
@@ -401,7 +402,7 @@ export const MissionsPage: React.FC = () => {
             onClick={() => handleOpenCreate(activeTab === 'global')}
             disabled={activeTab === 'campaign' && !selectedCampaignId}
           >
-            {activeTab === 'global' ? 'Nova Missão Global' : 'Criar Missão'}
+            {activeTab === 'global' ? copy.newGlobalMission : copy.createMission}
           </Button>
           <Button
             variant="secondary"
@@ -442,7 +443,7 @@ export const MissionsPage: React.FC = () => {
           }`}
         >
           <Globe size={14} />
-          Missões Globais
+          {copy.globalMissionsTab}
         </button>
       </div>
 
@@ -456,7 +457,7 @@ export const MissionsPage: React.FC = () => {
                   CAMPANHA SELECIONADA
                 </h3>
                 <p className="text-[10px] font-mono text-brand-muted uppercase mt-0.5">
-                  Selecione a campanha para visualizar e gerenciar suas missões
+                  {copy.selectCampaignToManage}
                 </p>
               </div>
               <div className="w-full sm:w-72">
@@ -494,10 +495,10 @@ export const MissionsPage: React.FC = () => {
               <Globe size={18} className="text-brand-accent shrink-0 mt-0.5" />
               <div>
                 <h3 className="text-sm font-display font-bold text-white tracking-wider uppercase">
-                  MISSÕES SEM CAMPANHA VINCULADA
+                  {copy.globalMissionsHintUpper}
                 </h3>
                 <p className="text-[10px] font-mono text-brand-muted uppercase mt-0.5 leading-relaxed">
-                  Estas missões estão prontas mas não estão associadas a nenhuma campanha ativa.
+                  {copy.globalMissionsProse}
                   Use o botão "Atribuir" para vinculá-las a uma campanha específica quando desejar.
                 </p>
               </div>
@@ -512,7 +513,7 @@ export const MissionsPage: React.FC = () => {
       <Modal
         isOpen={isAssignOpen}
         onClose={() => setIsAssignOpen(false)}
-        title="Atribuir Missão a uma Campanha"
+        title={copy.assignMissionToCampaign}
         size="sm"
       >
         <div className="space-y-4">
@@ -543,12 +544,12 @@ export const MissionsPage: React.FC = () => {
       <Modal
         isOpen={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
-        title="Confirmar Exclusão de Missão"
+        title={copy.confirmDeleteMission}
         size="sm"
       >
         <div className="space-y-4">
           <p className="text-sm font-body text-brand-text">
-            Tem certeza de que deseja excluir a missão{' '}
+            {copy.confirmDeleteProse}{' '}
             <strong className="text-white">"{questToDelete?.title}"</strong>?
             Esta ação apagará todos os dados de completude e comprovantes associados.
           </p>

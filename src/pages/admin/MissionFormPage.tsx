@@ -11,6 +11,7 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { ImageUploadField } from '../../components/ui/ImageUploadField';
 import { ArrowLeft, Globe, Plus, Trash2, CheckCircle2, RefreshCw } from 'lucide-react';
+import { copy } from '../../theme/copy';
 
 type FormStep = 'mission' | 'quiz' | 'feedback' | 'survey';
 
@@ -756,7 +757,7 @@ export const MissionFormPage: React.FC = () => {
     return (
       <div className="flex flex-col items-center justify-center p-20 text-brand-muted font-mono space-y-4">
         <RefreshCw size={24} className="animate-spin text-brand-primary" />
-        <span>CARREGANDO MISSÃO...</span>
+        <span>{copy.loadingMissionUpper}</span>
       </div>
     );
   }
@@ -764,11 +765,11 @@ export const MissionFormPage: React.FC = () => {
   if (notFound) {
     return (
       <div className="max-w-md mx-auto my-10">
-        <Card variant="danger" title="Missão não encontrada">
+        <Card variant="danger" title={copy.missionNotFound}>
           <div className="flex flex-col items-center gap-4 text-center py-4">
-            <p className="text-sm text-brand-muted">Esta missão não existe mais ou foi removida.</p>
+            <p className="text-sm text-brand-muted">{copy.missionGoneProse}</p>
             <Button variant="primary" size="md" icon={<ArrowLeft size={14} />} onClick={goBackToList}>
-              Voltar para Missões
+              {copy.backToMissions}
             </Button>
           </div>
         </Card>
@@ -792,8 +793,8 @@ export const MissionFormPage: React.FC = () => {
               : formStep === 'survey'
               ? `${isEditing ? 'Editar' : 'Criar'} Perguntas da Pesquisa`
               : isEditing
-              ? `Editar Missão${formIsGlobal ? ' (Global)' : ''}`
-              : `Criar ${formIsGlobal ? 'Missão Global' : 'Missão na Campanha'}`}
+              ? `${copy.editMission}${formIsGlobal ? ' (Global)' : ''}`
+              : `Criar ${formIsGlobal ? copy.globalMissionSuffix : copy.campaignMissionSuffix}`}
           </h1>
           <p className="text-xs font-ui font-bold text-brand-secondary tracking-widest mt-1">
             {formStep === 'quiz'
@@ -802,7 +803,7 @@ export const MissionFormPage: React.FC = () => {
               ? 'Monte as perguntas do formulário de feedback'
               : formStep === 'survey'
               ? 'Monte as perguntas da pesquisa'
-              : 'Configuração da missão do participante'}
+              : copy.missionFormSubtitle}
           </p>
         </div>
       </div>
@@ -819,14 +820,14 @@ export const MissionFormPage: React.FC = () => {
             {formIsGlobal && (
               <div className="flex items-center gap-2 bg-brand-accent/10 border border-brand-accent/30 rounded p-3 text-xs font-mono text-brand-accent">
                 <Globe size={14} />
-                Esta missão será criada sem campanha vinculada (global).
+                {copy.missionWillBeGlobalProse}
                 Você poderá atribuí-la a uma campanha depois
                 {(isQuizWizard || isFeedbackWizard || isSurveyWizard) ? ', junto com todas as perguntas já configuradas.' : '.'}
               </div>
             )}
 
             <Input
-              label="Título da Missão"
+              label={copy.missionTitleLabel}
               placeholder="Ex: Seguir a Rethink3D no Instagram"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -859,7 +860,7 @@ export const MissionFormPage: React.FC = () => {
 
               <div className="flex flex-col gap-1.5 font-body">
                 <label className="text-xs font-ui font-bold tracking-wider text-brand-text uppercase px-1">
-                  Tipo da Missão
+                  {copy.missionTypeLabel}
                 </label>
                 <select
                   value={formData.type}
@@ -914,7 +915,7 @@ export const MissionFormPage: React.FC = () => {
             {formData.type === 'PROOF_UPLOAD' && (
               <div className="flex flex-col gap-1.5 font-body">
                 <label className="text-xs font-ui font-bold tracking-wider text-brand-text uppercase px-1">
-                  Links da Missão (Opcional, até 3)
+                  {copy.missionLinksLabel}
                 </label>
                 <div className="flex flex-col gap-2">
                   {formData.links.map((link, index) => (
@@ -939,7 +940,7 @@ export const MissionFormPage: React.FC = () => {
                   className="accent-brand-secondary rounded bg-brand-bg border border-brand-border w-4 h-4 cursor-pointer"
                 />
                 <label htmlFor="active" className="text-xs font-ui font-bold text-brand-text uppercase tracking-wider cursor-pointer">
-                  Ativar missão imediatamente
+                  {copy.activateMissionNow}
                 </label>
               </div>
             )}
@@ -958,7 +959,7 @@ export const MissionFormPage: React.FC = () => {
                   ? isLoadingWizardData
                     ? 'Carregando Perguntas...'
                     : `Próximo: ${isEditing ? 'Editar' : 'Criar'} Perguntas`
-                  : 'Salvar Missão'}
+                  : copy.saveMission}
               </Button>
             </div>
           </form>
@@ -1073,7 +1074,7 @@ export const MissionFormPage: React.FC = () => {
                 disabled={!isQuizStepValid}
                 onClick={handleFinalizeQuizMission}
               >
-                {isEditing ? 'Salvar Alterações' : 'Concluir e Criar Missão'}
+                {isEditing ? 'Salvar Alterações' : copy.finishAndCreateMission}
               </Button>
             </div>
           </div>
@@ -1224,7 +1225,7 @@ export const MissionFormPage: React.FC = () => {
                 disabled={!isFeedbackStepValid}
                 onClick={handleFinalizeFeedbackMission}
               >
-                {isEditing ? 'Salvar Alterações' : 'Concluir e Criar Missão'}
+                {isEditing ? 'Salvar Alterações' : copy.finishAndCreateMission}
               </Button>
             </div>
           </div>
@@ -1374,7 +1375,7 @@ export const MissionFormPage: React.FC = () => {
                 disabled={!isSurveyStepValid}
                 onClick={handleFinalizeSurveyMission}
               >
-                {isEditing ? 'Salvar Alterações' : 'Concluir e Criar Missão'}
+                {isEditing ? 'Salvar Alterações' : copy.finishAndCreateMission}
               </Button>
             </div>
           </div>

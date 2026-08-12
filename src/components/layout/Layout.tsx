@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Header } from './Header';
 import { useAuthStore } from '../../store/authStore';
+import { copy } from '../../theme/copy';
 import {
   Menu, X, LayoutDashboard, Award,
   Target, Users, Gift, PlayCircle, Trophy
@@ -22,7 +23,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const adminLinks = [
     { name: 'Painel', path: '/admin', icon: <LayoutDashboard size={18} /> },
     { name: 'Campanhas', path: '/admin/campaigns', icon: <Award size={18} /> },
-    { name: 'Missões', path: '/admin/missions', icon: <Target size={18} /> },
+    { name: copy.missions, path: '/admin/missions', icon: <Target size={18} /> },
     { name: 'Participantes', path: '/admin/participants', icon: <Users size={18} /> },
     { name: 'Prêmios', path: '/admin/prizes', icon: <Gift size={18} /> },
     { name: 'Sorteio', path: '/admin/draw-control', icon: <PlayCircle size={18} /> },
@@ -49,7 +50,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         {isAdmin && user && (
           <aside className="hidden md:flex flex-col w-64 bg-brand-surface/90 border-r border-brand-border/80 p-5 shrink-0">
             <div className="text-[10px] font-mono tracking-widest text-brand-accent uppercase mb-5">
-              Menu Administrativo
+              {copy.adminMenu}
             </div>
 
             <nav className="flex-1 flex flex-col gap-2">
@@ -100,7 +101,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             {/* Sidebar drawer content */}
             <aside className="relative flex flex-col w-64 max-w-xs bg-brand-surface border-r border-brand-border h-full p-5 z-50">
               <div className="text-[10px] font-mono tracking-widest text-brand-accent uppercase mb-6">
-                Menu Administrativo
+                {copy.adminMenu}
               </div>
 
               <nav className="flex-1 flex flex-col gap-2">

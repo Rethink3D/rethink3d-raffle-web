@@ -20,6 +20,25 @@ function themeHtml(theme: string): Plugin {
             'family=Figtree:wght@400;500;600;700;800&display=swap'
           )
           .replace('href="/favicon.svg"', 'href="/favicon-feira.svg"')
+          .replace(
+            'Participe do sorteio gamificado da Rethink3D. Complete missões, acumule cupons e concorra a prêmios exclusivos de impressão 3D em tempo real.',
+            'Participe do sorteio da Rethink3D na Feira do Empreendedor. Complete desafios, acumule cupons e concorra a prêmios de impressão 3D.'
+          )
+          .replace(
+            'Complete missões, acumule cupons e concorra a prêmios exclusivos de impressão 3D.',
+            'Complete desafios, acumule cupons e concorra a prêmios de impressão 3D.'
+          )
+          .replace(
+            'Sorteio gamificado ao vivo com missões e prêmios 3D.',
+            'Sorteio ao vivo com desafios e prêmios 3D.'
+          )
+          .replace(
+            /Rethink3D Raffle — Sorteio Gamificado/g,
+            'Rethink3D · Sorteio na Feira do Empreendedor'
+          )
+          .replace('// Sorteio Gamificado', 'Sorteio Rethink3D')
+          .replace(/Sorteio Gamificado/g, 'Sorteio Rethink3D · Feira do Empreendedor')
+          .replace('Iniciando sistema...', 'Carregando')
       }
       return out
     },

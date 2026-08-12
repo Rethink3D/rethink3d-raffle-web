@@ -35,6 +35,7 @@ import random4 from "../../assets/random4.gif";
 import random5 from "../../assets/random5.gif";
 import { THEME } from '../../theme/current';
 import { ThemeAsset } from '../../theme/assets';
+import { copy } from '../../theme/copy';
 
 export const LandingPage: React.FC = () => {
   const { token } = useAuthStore();
@@ -92,12 +93,12 @@ export const LandingPage: React.FC = () => {
       ),
     },
     {
-      title: "CUMPRIR MISSÕES",
+      title: copy.fulfillMissionsUpper,
       desc: "Complete as missões disponíveis na campanha. Algumas podem exigir o envio de um comprovante, outras podem envolver questionários, formulários ou ações automáticas.",
       icon: (
         <img
           src={step2}
-          alt="Cumprir Missões"
+          alt=""
           className="w-6 h-6 object-contain"
         />
       ),
@@ -319,7 +320,7 @@ export const LandingPage: React.FC = () => {
                   icon={<Zap size={16} />}
                 >
                   {token
-                    ? "Ir para Quests & Missões"
+                    ? copy.goToMissions
                     : "Registrar-se para Participar"}
                 </Button>
               </div>
@@ -479,7 +480,7 @@ export const LandingPage: React.FC = () => {
                 onClick={() => navigate(token ? "/dashboard" : "/register")}
                 icon={<Zap size={14} />}
               >
-                {token ? "Ver Minhas Missões" : "Cadastre-se e Entre no Ranking"}
+                {token ? copy.seeMyMissions : "Cadastre-se e Entre no Ranking"}
               </Button>
             </div>
           </Card>

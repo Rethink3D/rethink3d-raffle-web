@@ -12,6 +12,7 @@ import { ReferralRedeem } from '../../components/quest/ReferralRedeem';
 import { useTicketRefreshStore } from '../../store/ticketRefreshStore';
 import type { Campaign, Mission } from '../../types';
 import { ThemeAsset } from '../../theme/assets';
+import { copy } from '../../theme/copy';
 
 export const QuestsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -172,7 +173,7 @@ export const QuestsPage: React.FC = () => {
 
         <div className="flex flex-col">
           <h2 className="text-xl font-display font-extrabold text-white uppercase tracking-wider">
-            Suas Missões
+            {copy.yourMissions}
           </h2>
           <p className="text-xs text-brand-muted mt-1 leading-relaxed max-w-2xl">
             Complete as missões abaixo para ganhar cupons e aumentar suas chances no sorteio.
@@ -214,7 +215,7 @@ export const QuestsPage: React.FC = () => {
           <Lock size={18} className="shrink-0 text-brand-danger" />
           <div className="flex-1">
             <div className="text-sm font-ui font-bold uppercase tracking-wider text-brand-danger">
-              Missões encerradas
+              {copy.missionsFinished}
             </div>
             <div className="text-[11px] text-brand-muted mt-0.5 font-body leading-relaxed">
               O sorteio já começou, então não dá mais pra enviar missões. Acompanhe a transmissão ao vivo para saber o resultado!

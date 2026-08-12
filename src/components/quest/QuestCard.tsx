@@ -2,6 +2,7 @@ import React from 'react';
 import { CheckCircle2, Clock, Play, UploadCloud, HelpCircle, FileText, ExternalLink, Users, ClipboardList } from 'lucide-react';
 import type { Mission, MissionType } from '../../types';
 import { Button } from '../ui/Button';
+import { copy } from '../../theme/copy';
 
 interface QuestCardProps {
   mission: Mission;
@@ -51,7 +52,7 @@ export const QuestCard: React.FC<QuestCardProps> = ({
         };
       default:
         return {
-          label: 'Missão',
+          label: copy.missionsSingular,
           classes: 'text-brand-success border-brand-success/40 bg-brand-success/5',
           icon: <CheckCircle2 size={12} />,
         };

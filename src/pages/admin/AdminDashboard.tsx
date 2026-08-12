@@ -13,6 +13,7 @@ import {
   Users, Ticket, CheckSquare,
   Activity, Play, Plus, RefreshCw, Award
 } from 'lucide-react';
+import { copy } from '../../theme/copy';
 
 export const AdminDashboard: React.FC = () => {
   // Initialize WebSocket for admin updates
@@ -234,7 +235,7 @@ export const AdminDashboard: React.FC = () => {
           <div className="flex justify-between items-start">
             <div>
               <p className="text-xs font-ui font-bold text-brand-primary tracking-wider uppercase">
-                MISSÕES CONCLUÍDAS
+                {copy.missionsCompletedUpper}
               </p>
               <h2 className="text-2xl font-display font-extrabold text-white mt-2">
                 {isLoadingStats ? '---' : stats?.completedMissions ?? 0}
@@ -366,7 +367,7 @@ export const AdminDashboard: React.FC = () => {
               <div className="grid grid-cols-2 gap-2">
                 <Link to="/admin/missions" className="w-full">
                   <Button variant="primary" size="sm" fullWidth className="text-[11px]">
-                    Editar Missões
+                    {copy.editMissions}
                   </Button>
                 </Link>
                 <Link to="/admin/prizes" className="w-full">
