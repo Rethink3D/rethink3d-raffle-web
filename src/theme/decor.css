@@ -1,0 +1,91 @@
+[data-theme="cyber"] body {
+  background-image:
+    linear-gradient(rgba(10, 10, 15, 0.88), rgba(10, 10, 15, 0.94)),
+    url('/Background.webp');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+[data-theme="feira"] body {
+  background-image:
+    linear-gradient(180deg, rgb(var(--c-surface)) 0%, rgb(var(--c-bg)) 340px);
+  background-repeat: no-repeat;
+}
+
+.glow-primary   { box-shadow: 0 0 14px rgb(var(--c-primary) / 0.4); }
+.glow-secondary { box-shadow: 0 0 14px rgb(var(--c-secondary) / 0.4); }
+.glow-accent    { box-shadow: 0 0 14px rgb(var(--c-accent) / 0.4); }
+
+.text-glow-primary   { text-shadow: 0 0 8px rgb(var(--c-glow) / 0.55); }
+.text-glow-secondary { text-shadow: 0 0 8px rgb(var(--c-secondary) / 0.55); }
+.text-glow-accent    { text-shadow: 0 0 8px rgb(var(--c-accent) / 0.55); }
+
+.cyber-grid {
+  background-size: 32px 32px;
+  background-image:
+    linear-gradient(to right,  rgb(var(--c-border) / 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--c-border) / 0.12) 1px, transparent 1px);
+}
+
+.cyber-panel {
+  background-color: rgb(var(--c-surface));
+  border: 1px solid rgb(var(--c-border));
+  border-radius: 0.75rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.cyber-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgb(var(--c-primary)), transparent);
+}
+
+[data-theme="feira"] .cyber-panel { border-radius: var(--radius); }
+
+[data-theme="feira"] .glow-primary,
+[data-theme="feira"] .glow-secondary,
+[data-theme="feira"] .glow-accent {
+  box-shadow: 0 1px 3px rgb(var(--c-text) / 0.08);
+}
+
+[data-theme="feira"] .text-glow-primary,
+[data-theme="feira"] .text-glow-secondary,
+[data-theme="feira"] .text-glow-accent {
+  text-shadow: none;
+}
+
+[data-theme="feira"] .cyber-grid { background-image: none; }
+[data-theme="feira"] .cyber-panel::before { display: none; }
+[data-theme="feira"] .hud-corner { display: none; }
+
+[data-theme="feira"] .animate-lightning-1,
+[data-theme="feira"] .animate-lightning-2,
+[data-theme="feira"] .animate-lightning-flash { display: none; }
+
+[data-theme="feira"] .animate-pulse-glow,
+[data-theme="feira"] .animate-pulse-glow-ticket,
+[data-theme="feira"] .animate-float { animation: none; }
+
+[data-theme="feira"] .uppercase:not(.keep-caps) { text-transform: none; }
+
+[data-theme="feira"] .tracking-wide,
+[data-theme="feira"] .tracking-wider,
+[data-theme="feira"] .tracking-widest,
+[data-theme="feira"] .tracking-tighter { letter-spacing: 0; }
+
+[data-theme="feira"] .font-mono { font-family: var(--font-ui); }
+
+[data-theme="feira"] .rounded-md,
+[data-theme="feira"] .rounded-lg,
+[data-theme="feira"] .rounded-xl { border-radius: var(--radius); }
+
+[data-theme="feira"] ::-webkit-scrollbar-track { background: rgb(var(--c-surface)); }
+[data-theme="feira"] ::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); }
+[data-theme="feira"] ::-webkit-scrollbar-thumb:hover { background: rgb(var(--c-muted)); }

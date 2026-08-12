@@ -19,4 +19,11 @@ BRAND=$(grep -ro 'brand-\(bg\|surface\|border\|primary\|glow\|secondary\|accent\
 grep -rq 'font-orbitron\|font-rajdhani\|font-inter' src && fail "restaram nomes de fonte antigos"
 grep -rq 'clip-cyber' src && fail "restaram classes clip-cyber mortas"
 
+grep -q 'hud-corner' src/theme/decor.css || fail "decor.css sem hud-corner"
+grep -q 'keep-caps' src/theme/decor.css || fail "decor.css sem escape keep-caps"
+grep -q 'hud-corner' src/components/ui/Card.tsx || fail "Card sem hud-corner"
+grep -q "theme/decor.css" src/main.tsx || fail "main.tsx nao importa decor.css"
+grep -q 'glow-primary' src/theme/decor.css || fail "decor.css sem os utilitarios de brilho"
+grep -q '^\.glow-primary' src/index.css && fail "utilitarios de brilho ainda no index.css"
+
 echo "OK"

@@ -56,13 +56,13 @@ export const Card: React.FC<CardProps> = ({
       {...props}
     >
       {/* Decorative scanline overlay */}
-      <div className="absolute inset-0 pointer-events-none bg-cyber-grid opacity-10" />
+      <div className="hud-corner absolute inset-0 pointer-events-none bg-cyber-grid opacity-10" />
 
       {/* Cyberpunk HUD Corner Brackets */}
-      <div className={`absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 ${cornerTextColors[variant]}`} />
-      <div className={`absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 ${cornerTextColors[variant]}`} />
-      <div className={`absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 ${cornerTextColors[variant]}`} />
-      <div className={`absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 ${cornerTextColors[variant]}`} />
+      <div className={`hud-corner absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 ${cornerTextColors[variant]}`} />
+      <div className={`hud-corner absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 ${cornerTextColors[variant]}`} />
+      <div className={`hud-corner absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 ${cornerTextColors[variant]}`} />
+      <div className={`hud-corner absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 ${cornerTextColors[variant]}`} />
 
       {/* Card Header */}
       {(title || subtitle || headerExtra) && (
