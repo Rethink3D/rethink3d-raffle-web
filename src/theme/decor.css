@@ -96,6 +96,13 @@
   color: #ffffff;
 }
 
+[data-theme="padrao"] .nav-active {
+  background-color: rgb(var(--c-highlight));
+  border-color: transparent;
+  color: rgb(var(--c-primary));
+  box-shadow: inset 3px 0 0 rgb(var(--c-primary));
+}
+
 /* Dentro do header azul o botão sólido sumiria: fundo branco, texto azul. */
 [data-theme="padrao"] .theme-header .btn-v-primary {
   background-color: #ffffff;
