@@ -5,6 +5,9 @@ export interface RegisterDto {
   name: string;
   phone: string;
   pin: string;
+  // Código de 4 dígitos exibido na tela do estande, exigido pelo backend pra
+  // impedir cadastro de quem não está no evento.
+  standCode: string;
 }
 
 export interface LoginDto {

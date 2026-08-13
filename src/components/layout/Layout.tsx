@@ -5,7 +5,7 @@ import { useAuthStore } from '../../store/authStore';
 import { copy } from '../../theme/copy';
 import {
   Menu, X, LayoutDashboard, Award,
-  Target, Users, Gift, PlayCircle, Trophy
+  Target, Users, Gift, PlayCircle, Trophy, QrCode
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -28,6 +28,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Prêmios', path: '/admin/prizes', icon: <Gift size={18} /> },
     { name: 'Sorteio', path: '/admin/draw-control', icon: <PlayCircle size={18} /> },
     { name: 'Ranking', path: '/admin/ranking', icon: <Trophy size={18} /> },
+    { name: 'Estande', path: '/admin/stand', icon: <QrCode size={18} /> },
   ];
 
   const isActive = (path: string) => {

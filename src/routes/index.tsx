@@ -31,6 +31,7 @@ const SurveyResultsPage = lazy(() => import('../pages/admin/SurveyResultsPage'))
 const PrizesPage      = lazy(() => import('../pages/admin/PrizesPage'));
 const DrawControlPage = lazy(() => import('../pages/admin/DrawControlPage'));
 const AdminRankingPage = lazy(() => import('../pages/admin/RankingPage'));
+const StandPage = lazy(() => import('../pages/admin/StandPage'));
 
 // ─── Loading Fallback ────────────────────────────────────────────────────────
 const PageLoader: React.FC = () => (
@@ -125,6 +126,7 @@ export const AppRouter: React.FC = () => {
           <Route path="/admin/prizes"           element={<PrizesPage />} />
           <Route path="/admin/draw-control"     element={<DrawControlPage />} />
           <Route path="/admin/ranking"          element={<AdminRankingPage />} />
+          <Route path="/admin/stand"            element={<StandPage />} />
         </Route>
 
         {/* Fallback */}

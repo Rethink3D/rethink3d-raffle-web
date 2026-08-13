@@ -7,7 +7,7 @@ import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { copy } from '../../theme/copy';
-import { User, Phone, Lock } from 'lucide-react';
+import { User, Phone, Lock, MapPin } from 'lucide-react';
 import agree from '../../assets/agree.gif';
 import { ThemeAsset } from '../../theme/assets';
 import { THEME } from '../../theme/current';
@@ -22,6 +22,7 @@ export const RegisterPage: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [pin, setPin] = useState('');
   const [confirmPin, setConfirmPin] = useState('');
+  const [standCode, setStandCode] = useState('');
 
   // UI States
   const [isLoading, setIsLoading] = useState(false);
@@ -54,6 +55,10 @@ export const RegisterPage: React.FC = () => {
       errors.confirmPin = 'Os códigos PIN não coincidem';
     }
 
+    if (!/^\d{4}$/.test(standCode)) {
+      errors.standCode = 'Pegue o código de 4 dígitos na tela do estande';
+    }
+
     setErrorMap(errors);
     return Object.keys(errors).length === 0;
   };
@@ -84,6 +89,7 @@ export const RegisterPage: React.FC = () => {
     try {
       const cleanPhone = phone.replace(/\D/g, '');
       const response = await authService.register({
+        standCode,
         name,
         phone: cleanPhone,
         pin,
@@ -190,8 +196,33 @@ export const RegisterPage: React.FC = () => {
             />
           </div>
 
+          <div className="mt-2 rounded-lg border border-brand-secondary/30 bg-brand-secondary/5 p-3 flex flex-col gap-2">
+            <span className="text-xs font-bold text-brand-text flex items-center gap-1.5">
+              <MapPin size={13} className="shrink-0" />
+              Código do estande
+            </span>
+            <p className="text-[11px] text-brand-muted leading-relaxed">
+              O cadastro só é liberado para quem está no evento. Pegue o código
+              de 4 dígitos na tela do nosso estande — ele muda de tempos em
+              tempos, então use o que estiver na tela agora.
+            </p>
+            <Input
+              label="Código de 4 dígitos"
+              type="text"
+              inputMode="numeric"
+              maxLength={4}
+              placeholder="0000"
+              value={standCode}
+              onChange={(e) => setStandCode(e.target.value.replace(/\D/g, ''))}
+              error={errorMap.standCode}
+              icon={<MapPin size={16} />}
+              statusIndicator={standCode.length === 4 ? copy.sysReady : copy.sysWaiting}
+              required
+            />
+          </div>
+
           <div className="mt-4 flex flex-col gap-4">
-            <Button 
+            <Button
               type="submit" 
               variant="primary" 
               fullWidth 

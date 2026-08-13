@@ -143,6 +143,10 @@ export const LandingPage: React.FC = () => {
       a: copy.faq3A,
     },
     {
+      q: copy.faqStandQ,
+      a: copy.faqStandA,
+    },
+    {
       q: copy.faqReferralQ,
       a: copy.faqReferralA,
     },
