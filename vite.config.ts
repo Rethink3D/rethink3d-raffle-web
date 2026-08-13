@@ -19,7 +19,10 @@ function themeHtml(theme: string): Plugin {
             /family=Inter[^"]*/g,
             'family=Raleway:wght@600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap'
           )
-          .replace('href="/favicon.svg"', 'href="/favicon-padrao.svg"')
+          .replace(
+            'type="image/svg+xml" href="/favicon.svg"',
+            'type="image/png" href="/favicon-padrao.png"'
+          )
           .replace(
             'Participe do sorteio gamificado da Rethink3D. Complete missões, acumule cupons e concorra a prêmios exclusivos de impressão 3D em tempo real.',
             'Participe do sorteio da Rethink3D na Feira do Empreendedor. Complete desafios, acumule cupons e concorra a prêmios de impressão 3D.'
