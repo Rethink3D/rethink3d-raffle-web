@@ -126,7 +126,7 @@ export const StandPage: React.FC = () => {
           <img
             src="/LogoRethink3D.webp"
             alt="Rethink3D"
-            className="h-11 lg:h-14 w-auto object-contain shrink-0"
+            className="brand-logo h-11 lg:h-14 w-auto object-contain shrink-0"
           />
           <div className="hidden sm:block h-10 w-px bg-white/25" />
           <div className="hidden sm:block">
