@@ -112,6 +112,40 @@
   [data-theme="padrao"] .theme-header .brand-logo { height: 4rem; }
 }
 
+/* Entrar e Cadastrar vivem dentro do header, onde --c-primary é branco. Sem
+   estas regras o hover do Cadastrar pintava fundo branco sob texto branco. */
+[data-theme="padrao"] .theme-header .hdr-btn {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  padding: 0.5625rem 1.125rem;
+  box-shadow: none;
+}
+
+[data-theme="padrao"] .theme-header .hdr-btn-ghost {
+  background-color: transparent;
+  border-color: rgb(255 255 255 / 0.75);
+  color: #ffffff;
+}
+
+[data-theme="padrao"] .theme-header .hdr-btn-ghost:hover {
+  background-color: rgb(255 255 255 / 0.18);
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+[data-theme="padrao"] .theme-header .hdr-btn-solid {
+  background-color: #ffffff;
+  border-color: #ffffff;
+  color: rgb(var(--c-header));
+}
+
+[data-theme="padrao"] .theme-header .hdr-btn-solid:hover {
+  background-color: rgb(219 233 252);
+  border-color: rgb(219 233 252);
+  color: rgb(var(--c-header));
+  box-shadow: none;
+}
+
 [data-theme="padrao"] .nav-active {
   background-color: rgb(var(--c-highlight));
   border-color: transparent;

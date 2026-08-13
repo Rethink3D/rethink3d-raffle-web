@@ -307,13 +307,13 @@ export const Header: React.FC = () => {
           <div className="flex gap-2 shrink-0">
             <Link
               to="/login"
-              className="text-xs font-display uppercase border border-brand-border text-brand-muted px-3 sm:px-4 py-2 hover:border-brand-secondary hover:text-brand-secondary transition-all rounded shrink-0 whitespace-nowrap"
+              className="hdr-btn hdr-btn-ghost text-xs font-display uppercase border border-brand-border text-brand-muted px-3 sm:px-4 py-2 hover:border-brand-secondary hover:text-brand-secondary transition-all rounded shrink-0 whitespace-nowrap"
             >
               Entrar
             </Link>
             <Link
               to="/register"
-              className="text-xs font-display uppercase border border-brand-primary bg-brand-primary/10 text-brand-strong px-3 sm:px-4 py-2 hover:bg-brand-primary hover:glow-primary transition-all rounded shrink-0 whitespace-nowrap"
+              className="hdr-btn hdr-btn-solid text-xs font-display uppercase border border-brand-primary bg-brand-primary/10 text-brand-strong px-3 sm:px-4 py-2 hover:bg-brand-primary hover:glow-primary transition-all rounded shrink-0 whitespace-nowrap"
             >
               Cadastrar
             </Link>
