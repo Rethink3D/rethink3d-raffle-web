@@ -5,7 +5,7 @@ import { useAuthStore } from '../../store/authStore';
 import { copy } from '../../theme/copy';
 import {
   Menu, X, LayoutDashboard, Award,
-  Target, Users, Gift, PlayCircle, Trophy, QrCode
+  Target, Users, Gift, PlayCircle, Trophy, QrCode, ExternalLink
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -28,7 +28,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     { name: 'Prêmios', path: '/admin/prizes', icon: <Gift size={18} /> },
     { name: 'Sorteio', path: '/admin/draw-control', icon: <PlayCircle size={18} /> },
     { name: 'Ranking', path: '/admin/ranking', icon: <Trophy size={18} /> },
-    { name: 'Estande', path: '/admin/stand', icon: <QrCode size={18} /> },
+    // Abre em aba separada: essa tela vai pra TV do estande, sem o painel em volta.
+    { name: 'Estande', path: '/estande', icon: <QrCode size={18} />, newTab: true },
   ];
 
   const isActive = (path: string) => {
@@ -57,17 +58,31 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <nav className="flex-1 flex flex-col gap-2">
               {adminLinks.map((link) => {
                 const active = isActive(link.path);
+                const linkClass = `
+                  flex items-center gap-3 px-4 py-3 rounded font-ui font-bold text-sm tracking-wider uppercase transition-all duration-200 border
+                  ${active
+                    ? 'nav-active bg-brand-primary/10 border-brand-primary text-brand-strong glow-primary'
+                    : 'border-transparent text-brand-muted hover:text-brand-text hover:bg-brand-surface/50 hover:border-brand-border/50'}
+                `;
+
+                if (link.newTab) {
+                  return (
+                    <a
+                      key={link.path}
+                      href={link.path}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={linkClass}
+                    >
+                      {link.icon}
+                      <span>{link.name}</span>
+                      <ExternalLink size={13} className="ml-auto opacity-60" />
+                    </a>
+                  );
+                }
+
                 return (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    className={`
-                      flex items-center gap-3 px-4 py-3 rounded font-ui font-bold text-sm tracking-wider uppercase transition-all duration-200 border
-                      ${active 
-                        ? 'nav-active bg-brand-primary/10 border-brand-primary text-brand-strong glow-primary' 
-                        : 'border-transparent text-brand-muted hover:text-brand-text hover:bg-brand-surface/50 hover:border-brand-border/50'}
-                    `}
-                  >
+                  <Link key={link.path} to={link.path} className={linkClass}>
                     {link.icon}
                     <span>{link.name}</span>
                   </Link>
@@ -108,17 +123,36 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <nav className="flex-1 flex flex-col gap-2">
                 {adminLinks.map((link) => {
                   const active = isActive(link.path);
+                  const linkClass = `
+                    flex items-center gap-3 px-4 py-3 rounded font-ui font-bold text-sm tracking-wider uppercase transition-all duration-200 border
+                    ${active
+                      ? 'nav-active bg-brand-primary/10 border-brand-primary text-brand-strong glow-primary'
+                      : 'border-transparent text-brand-muted hover:text-brand-text hover:bg-brand-surface/50 hover:border-brand-border/50'}
+                  `;
+
+                  if (link.newTab) {
+                    return (
+                      <a
+                        key={link.path}
+                        href={link.path}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={() => setSidebarOpen(false)}
+                        className={linkClass}
+                      >
+                        {link.icon}
+                        <span>{link.name}</span>
+                        <ExternalLink size={13} className="ml-auto opacity-60" />
+                      </a>
+                    );
+                  }
+
                   return (
                     <Link
                       key={link.path}
                       to={link.path}
                       onClick={() => setSidebarOpen(false)}
-                      className={`
-                        flex items-center gap-3 px-4 py-3 rounded font-ui font-bold text-sm tracking-wider uppercase transition-all duration-200 border
-                        ${active 
-                          ? 'nav-active bg-brand-primary/10 border-brand-primary text-brand-strong glow-primary' 
-                          : 'border-transparent text-brand-muted hover:text-brand-text hover:bg-brand-surface/50 hover:border-brand-border/50'}
-                      `}
+                      className={linkClass}
                     >
                       {link.icon}
                       <span>{link.name}</span>

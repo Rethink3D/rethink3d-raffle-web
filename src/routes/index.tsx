@@ -86,6 +86,20 @@ const PublicRoute: React.FC = () => {
 export const AppRouter: React.FC = () => {
   return (
     <Routes>
+      {/* Tela do estande: fica fora do Layout porque roda sozinha numa TV, sem
+          cabeçalho nem menu do painel. Continua exigindo sessão de admin — o
+          token persistido cobre a aba nova. */}
+      <Route element={<AdminRoute />}>
+        <Route
+          path="/estande"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <StandPage />
+            </Suspense>
+          }
+        />
+      </Route>
+
       <Route element={<LayoutWrapper />}>
         {/* Página inicial */}
         <Route path="/" element={<HomeRedirect />} />
@@ -126,7 +140,6 @@ export const AppRouter: React.FC = () => {
           <Route path="/admin/prizes"           element={<PrizesPage />} />
           <Route path="/admin/draw-control"     element={<DrawControlPage />} />
           <Route path="/admin/ranking"          element={<AdminRankingPage />} />
-          <Route path="/admin/stand"            element={<StandPage />} />
         </Route>
 
         {/* Fallback */}

@@ -118,24 +118,38 @@ export const StandPage: React.FC = () => {
   const progress = stand ? secondsLeft / stand.periodSeconds : 0;
 
   return (
-    <div className="flex flex-col gap-6 font-body">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-brand-border pb-4">
-        <div>
-          <h1 className="text-2xl font-display font-extrabold text-brand-strong">
-            Cadastro no estande
-          </h1>
-          <p className="text-sm text-brand-muted mt-1">
-            Deixe esta tela aberta e visível para o público durante o evento.
-          </p>
+    <div className="min-h-screen bg-brand-bg flex flex-col font-body">
+      {/* Faixa de marca no topo: a logo é branca, então precisa do azul atrás
+          dela — mesma solução do header do app. */}
+      <header className="bg-brand-primary px-6 lg:px-10 py-5 flex items-center justify-between gap-6">
+        <div className="flex items-center gap-6">
+          <img
+            src="/LogoRethink3D.webp"
+            alt="Rethink3D"
+            className="h-11 lg:h-14 w-auto object-contain shrink-0"
+          />
+          <div className="hidden sm:block h-10 w-px bg-white/25" />
+          <div className="hidden sm:block">
+            <h1 className="text-2xl lg:text-3xl font-display font-extrabold text-white leading-tight">
+              Participe do sorteio
+            </h1>
+            <p className="text-sm lg:text-base text-white/80 mt-0.5">
+              Cadastre-se aqui no evento e concorra aos prêmios
+            </p>
+          </div>
         </div>
+
+        {/* Discreto de propósito: serve à equipe, não ao público. */}
         <button
           onClick={loadCode}
-          className="self-start sm:self-auto inline-flex items-center gap-2 text-sm font-bold text-brand-primary hover:underline"
+          title="Atualizar código"
+          className="shrink-0 p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-colors"
         >
-          <RefreshCw size={15} />
-          Atualizar agora
+          <RefreshCw size={18} />
         </button>
-      </div>
+      </header>
+
+      <div className="flex-1 p-6 lg:p-10 flex flex-col gap-8">
 
       {error && (
         <div className="rounded-lg border border-brand-danger/40 bg-brand-danger/10 p-3 text-sm text-brand-danger">
@@ -227,24 +241,25 @@ export const StandPage: React.FC = () => {
       </div>
 
       <section className="rounded-2xl border border-brand-border bg-brand-surface theme-card p-6">
-        <h2 className="text-base font-display font-extrabold text-brand-strong mb-3">
-          Como explicar para o visitante
+        <h2 className="text-xl font-display font-extrabold text-brand-strong mb-4">
+          É rápido: três passos
         </h2>
-        <ol className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-brand-muted">
-          <li className="rounded-xl bg-brand-highlight p-4 leading-relaxed">
-            <strong className="text-brand-text block mb-1">1. Escaneie</strong>
-            Aponte a câmera para o QR e abra a página de cadastro.
+        <ol className="grid grid-cols-1 md:grid-cols-3 gap-4 text-base text-brand-muted">
+          <li className="rounded-xl bg-brand-highlight p-5 leading-relaxed">
+            <strong className="text-brand-text block mb-1 text-lg">1. Escaneie</strong>
+            Aponte a câmera do celular para o QR ao lado.
           </li>
-          <li className="rounded-xl bg-brand-highlight p-4 leading-relaxed">
-            <strong className="text-brand-text block mb-1">2. Preencha</strong>
-            Nome, telefone e um PIN de 4 dígitos que você vai lembrar.
+          <li className="rounded-xl bg-brand-highlight p-5 leading-relaxed">
+            <strong className="text-brand-text block mb-1 text-lg">2. Preencha</strong>
+            Seu nome, telefone e um PIN de 4 dígitos que você vá lembrar.
           </li>
-          <li className="rounded-xl bg-brand-highlight p-4 leading-relaxed">
-            <strong className="text-brand-text block mb-1">3. Digite o código</strong>
+          <li className="rounded-xl bg-brand-highlight p-5 leading-relaxed">
+            <strong className="text-brand-text block mb-1 text-lg">3. Digite o código</strong>
             O código desta tela confirma que você está aqui no evento.
           </li>
         </ol>
       </section>
+      </div>
     </div>
   );
 };
