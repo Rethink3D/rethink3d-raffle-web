@@ -6,9 +6,20 @@ import { standCodeService } from '../../services/standCode.service';
 import type { StandCode } from '../../services/standCode.service';
 import { getNextDrawTarget } from '../../utils/drawSchedule';
 import { useCountdown } from '../../hooks/useCountdown';
+import type { CountdownDuration } from '../../hooks/useCountdown';
 import type { Campaign } from '../../types';
 
 const SIGNUP_URL = `${window.location.origin}/register`;
+
+// hudDisplayShort do useCountdown omite os dias, então um sorteio a 47h vira
+// "23h" na tela. Aqui os dias entram quando existem.
+const formatDrawCountdown = (d: CountdownDuration): string => {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  if (d.days > 0) {
+    return `${d.days}d ${pad(d.hours)}h ${pad(d.minutes)}m`;
+  }
+  return `${pad(d.hours)}h ${pad(d.minutes)}m ${pad(d.seconds)}s`;
+};
 
 // Anel que esvazia conforme a janela do código corre. Fica grande de propósito:
 // esta tela é vista de longe, em pé, por quem está na fila do estande.
@@ -200,7 +211,7 @@ export const StandPage: React.FC = () => {
                 <div className="flex items-end gap-2 text-brand-strong">
                   <Clock size={22} className="mb-1 text-brand-primary" />
                   <span className="font-display font-extrabold text-4xl tabular-nums leading-none">
-                    {drawCountdown.hudDisplayShort}
+                    {formatDrawCountdown(drawCountdown.duration)}
                   </span>
                 </div>
               </>
