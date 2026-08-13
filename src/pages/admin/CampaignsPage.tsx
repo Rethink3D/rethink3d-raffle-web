@@ -527,7 +527,7 @@ setIsActionLoading(true);
 
           <p className="text-sm font-body text-brand-text">
             Você tem certeza de que deseja deletar permanentemente a campanha{' '}
-            <strong className="text-brand-strong font-semibold">"{campaignToDelete?.name}"</strong>? 
+            <strong className="text-brand-strong font-semibold">"{campaignToDelete?.name}"</strong>?{' '}
             {copy.campaignWipeProse}
           </p>
 

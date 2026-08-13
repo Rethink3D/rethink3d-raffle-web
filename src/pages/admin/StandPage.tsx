@@ -14,6 +14,10 @@ const SIGNUP_URL = `${window.location.origin}/register`;
 // Moldura branca em volta do QR, descontada da medida disponivel.
 const QR_FRAME_PADDING = 24;
 
+// Espera antes de tentar de novo quando a API falha, pra tela nao virar um
+// gerador de requisicoes se a rede do evento cair.
+const RETRY_BACKOFF_MS = 5000;
+
 // hudDisplayShort do useCountdown omite os dias, então um sorteio a 47h vira
 // "23h" na tela. Aqui os dias entram quando existem.
 const formatDrawCountdown = (d: CountdownDuration): string => {
@@ -77,13 +81,28 @@ export const StandPage: React.FC = () => {
 
   const drawCountdown = useCountdown(getNextDrawTarget(campaign));
 
-  const loadCode = useCallback(async () => {
+  // Duas travas, porque o tick de 1 segundo pede código novo assim que a janela
+  // zera. Sem elas, uma resposta lenta geraria pedidos duplicados e — pior — uma
+  // API fora do ar deixaria a TV batendo no servidor uma vez por segundo a noite
+  // inteira, já que a falha não altera `stand` e o efeito nunca reexecuta.
+  const fetchingRef = useRef(false);
+  const retryAfterRef = useRef(0);
+
+  const loadCode = useCallback(async (force = false) => {
+    if (fetchingRef.current) return;
+    if (!force && Date.now() < retryAfterRef.current) return;
+
+    fetchingRef.current = true;
     try {
       const data = await standCodeService.getCurrent();
       setStand(data);
       setError(null);
+      retryAfterRef.current = 0;
     } catch {
       setError('Não foi possível obter o código. Verifique a conexão com a API.');
+      retryAfterRef.current = Date.now() + RETRY_BACKOFF_MS;
+    } finally {
+      fetchingRef.current = false;
     }
   }, []);
 
@@ -161,7 +180,7 @@ export const StandPage: React.FC = () => {
 
         {/* Discreto de propósito: serve à equipe, não ao público. */}
         <button
-          onClick={loadCode}
+          onClick={() => loadCode(true)}
           title="Atualizar código"
           className="shrink-0 p-[0.8vh] rounded-lg text-white/40 hover:text-white hover:bg-white/10 transition-colors"
         >

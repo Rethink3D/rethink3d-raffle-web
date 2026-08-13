@@ -433,7 +433,7 @@ export const DrawControlPage: React.FC = () => {
           </Card>
 
           {/* Campanha em intervalo: retomar sinaliza a próxima rodada pro
-              {copy.reopensMissionsProse}
+              participante e reabre as missões, permitindo ganhar mais cupons
               antes da rodada seguinte. */}
           {selectedCampaign?.status === 'PAUSED' && (
             <Card variant="secondary" glow>
@@ -447,8 +447,8 @@ export const DrawControlPage: React.FC = () => {
                       Campanha em intervalo
                     </h3>
                     <p className="text-[10px] text-brand-muted mt-0.5 leading-relaxed max-w-md">
-                      Já rolou uma rodada. Os participantes veem "sorteio em intervalo" no painel deles. Retome pra
-                      {copy.reopenMissionsSoonProse}
+                      Já rolou uma rodada. Os participantes veem "sorteio em intervalo" no painel deles. Retome pra{' '}
+                      {copy.reopenMissionsSoonProse}{' '}
                       ganhar mais cupons antes da próxima rodada.
                     </p>
                   </div>

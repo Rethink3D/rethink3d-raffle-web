@@ -820,7 +820,7 @@ export const MissionFormPage: React.FC = () => {
             {formIsGlobal && (
               <div className="flex items-center gap-2 bg-brand-accent/10 border border-brand-accent/30 rounded p-3 text-xs font-mono text-brand-accent">
                 <Globe size={14} />
-                {copy.missionWillBeGlobalProse}
+                {copy.missionWillBeGlobalProse}{' '}
                 Você poderá atribuí-la a uma campanha depois
                 {(isQuizWizard || isFeedbackWizard || isSurveyWizard) ? ', junto com todas as perguntas já configuradas.' : '.'}
               </div>
