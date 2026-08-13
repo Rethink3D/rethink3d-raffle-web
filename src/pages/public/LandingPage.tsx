@@ -143,6 +143,10 @@ export const LandingPage: React.FC = () => {
       a: copy.faq3A,
     },
     {
+      q: copy.faqReferralQ,
+      a: copy.faqReferralA,
+    },
+    {
       q: "Como sei quando o sorteio está ao vivo?",
       a: "Nossa página inicial exibe uma contagem regressiva. Quando ela chega a zero ou o administrador inicia o sorteio, o site muda automaticamente para a página de transmissão ao vivo. Você verá uma roleta selecionando vencedores em tempo real!",
     },

@@ -58,13 +58,18 @@ export const ReferralRedeem: React.FC<ReferralRedeemProps> = ({
       {!success ? (
         <div className="flex flex-col gap-4">
           <p className="text-xs text-brand-muted leading-relaxed">
-            Peça o código de 6 dígitos do seu amigo (ele encontra no painel dele) e digite abaixo. Os dois ganham cupons na hora!
+            Peça o código de 6 dígitos do seu amigo (ele encontra no painel dele) e digite abaixo. Seus cupons caem na hora.
           </p>
 
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-ui font-bold text-brand-text uppercase tracking-wider px-1">
               Código do amigo
             </label>
+
+            <p className="text-[11px] text-brand-muted leading-relaxed px-1 -mt-1">
+              Quem te indicou recebe os cupons dele assim que você concluir seu
+              primeiro desafio. Cada código pode ser usado por até 10 pessoas.
+            </p>
             <input
               value={code}
               onChange={handleChange}
@@ -114,7 +119,8 @@ export const ReferralRedeem: React.FC<ReferralRedeemProps> = ({
               <Users size={13} /> {copy.missionDone}
             </p>
             <p className="text-xs text-brand-muted max-w-sm mt-1 leading-relaxed">
-              Seus cupons já foram creditados — e seu amigo também ganhou os dele.
+              Seus cupons já foram creditados. Quem te indicou recebe os dele
+              assim que você concluir seu primeiro desafio — então bora começar.
             </p>
           </div>
 

@@ -61,7 +61,7 @@ const cyber = {
   reopensMissionsProse: 'participante E reabre as missões, permitindo ganhar mais cupons',
   reopenMissionsSoonProse: '"Ativa" pra sinalizar que a próxima rodada vem em breve e reabrir as missões, pra quem quiser',
 
-  referralHintProse: 'Passe esse código pra um amigo cumprir a missão "Indique um Amigo" — assim que ele usar, vocês dois ganham cupons na hora.',
+  referralHintProse: 'Passe esse código pra um amigo cumprir a missão "Indique um Amigo". Ele ganha cupons na hora; os seus caem quando ele concluir a primeira missão dele.',
   receivedCodeProse: 'Recebeu um código de amigo? Vá até a missão',
   completeMoreProse: 'Quer ganhar ainda mais cupons e aumentar suas chances de ganhar? Complete as missões disponíveis.',
   campaignFallbackProse: 'Cumpra missões, junte cupons e concorra a prêmios incríveis!',
@@ -106,6 +106,8 @@ const cyber = {
   faq1A: 'Cada missão concluída concede uma quantidade de cupons. No momento do sorteio, cada cupom representa uma chance adicional de ser sorteado.',
   faq2Q: 'Que tipos de missões/tarefas existem?',
   faq2A: 'As missões variam conforme a campanha. Elas podem incluir envio de comprovantes, quizzes, formulários de feedback ou outras atividades definidas pelos organizadores.',
+  faqReferralQ: 'Como funciona o código de amigo?',
+  faqReferralA: 'Cada participante tem um código de 6 dígitos. Quem usa o código de um amigo ganha cupons na hora. Já o dono do código só recebe os cupons dele quando a pessoa indicada concluir a primeira missão — não basta digitar o código. Cada código vale para até 10 pessoas.',
   faq3A: 'Caso uma missão exija um comprovante, siga as instruções exibidas na descrição da missão e envie a imagem solicitada. Após o envio, a missão será validada conforme as regras da campanha.',
 
   dashboardLoading: 'Carregando sua aventura...',
@@ -175,7 +177,7 @@ const padrao: typeof cyber = {
   reopensMissionsProse: 'participante E reabre os desafios, permitindo ganhar mais cupons',
   reopenMissionsSoonProse: '"Ativa" pra sinalizar que a próxima rodada vem em breve e reabrir os desafios, pra quem quiser',
 
-  referralHintProse: 'Passe esse código pra um amigo cumprir o desafio "Indique um Amigo" — assim que ele usar, vocês dois ganham cupons na hora.',
+  referralHintProse: 'Passe esse código pra um amigo cumprir o desafio "Indique um Amigo". Ele ganha cupons na hora; os seus caem quando ele concluir o primeiro desafio dele.',
   receivedCodeProse: 'Recebeu um código de amigo? Vá até o desafio',
   completeMoreProse: 'Quer ganhar ainda mais cupons e aumentar suas chances de ganhar? Complete os desafios disponíveis.',
   campaignFallbackProse: 'Cumpra desafios, junte cupons e concorra a prêmios incríveis!',
@@ -220,6 +222,8 @@ const padrao: typeof cyber = {
   faq1A: 'Cada desafio concluído concede uma quantidade de cupons. No momento do sorteio, cada cupom representa uma chance a mais de ser sorteado.',
   faq2Q: 'Que tipos de desafio existem?',
   faq2A: 'Os desafios variam conforme a campanha. Podem incluir envio de comprovantes, quizzes, formulários de feedback ou outras atividades definidas pelos organizadores.',
+  faqReferralQ: 'Como funciona o código de amigo?',
+  faqReferralA: 'Cada participante tem um código de 6 dígitos. Quem usa o código de um amigo ganha cupons na hora. Já o dono do código só recebe os cupons dele quando a pessoa indicada concluir o primeiro desafio — não basta digitar o código. Cada código vale para até 10 pessoas.',
   faq3A: 'Caso um desafio exija comprovante, siga as instruções na descrição e envie a imagem solicitada. Depois do envio, o desafio é validado conforme as regras da campanha.',
 
   dashboardLoading: 'Carregando',

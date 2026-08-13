@@ -80,10 +80,21 @@ const ReferralCodeCard: React.FC<{ code: string }> = ({ code }) => {
       <p className="text-[11px] text-brand-muted leading-relaxed mt-1">
         {copy.referralHintProse}
       </p>
-      <p className="text-[11px] text-brand-accent/90 leading-relaxed mt-1.5 flex items-center gap-1.5">
-        <Users size={12} className="shrink-0" />
-        Compartilhe com quantos amigos quiser — cada indicação gera cupons pra vocês dois!
-      </p>
+      <div className="mt-3 rounded-lg border border-brand-secondary/30 bg-brand-secondary/5 p-3 flex flex-col gap-2">
+        <span className="text-[11px] font-bold text-brand-text flex items-center gap-1.5">
+          <Users size={12} className="shrink-0" />
+          Como funciona a indicação
+        </span>
+        <ul className="flex flex-col gap-1.5 text-[11px] text-brand-muted leading-relaxed">
+          <li>
+            Seu código vale para <strong className="text-brand-text">até 10 pessoas</strong>. Depois disso ele para de aceitar novos usos.
+          </li>
+          <li>
+            Você recebe os seus cupons quando o amigo indicado{' '}
+            <strong className="text-brand-text">concluir o primeiro desafio dele</strong> — não basta ele digitar o código.
+          </li>
+        </ul>
+      </div>
       <p className="text-[11px] text-brand-muted leading-relaxed mt-1.5">
         {copy.receivedCodeProse}{' '}
         <Link to="/quests" className="text-brand-secondary hover:underline font-bold">
