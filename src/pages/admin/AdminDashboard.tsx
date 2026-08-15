@@ -382,6 +382,12 @@ export const AdminDashboard: React.FC = () => {
                   Ver Participantes
                 </Button>
               </Link>
+
+              <Link to="/admin/estande" className="w-full">
+                <Button variant="secondary" size="sm" fullWidth className="text-[11px]">
+                  Liberar Tela do Estande
+                </Button>
+              </Link>
             </div>
           </Card>
         </div>

@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
+import { useStandStore } from '../store/standStore';
 import { Layout } from '../components/layout/Layout';
 
 // Public & Main Participant Pages (Importação estática para evitar redirecionamento com tela de loading do Suspense)
@@ -32,6 +33,10 @@ const PrizesPage      = lazy(() => import('../pages/admin/PrizesPage'));
 const DrawControlPage = lazy(() => import('../pages/admin/DrawControlPage'));
 const AdminRankingPage = lazy(() => import('../pages/admin/RankingPage'));
 const StandPage = lazy(() => import('../pages/admin/StandPage'));
+const StandPairingPage = lazy(() => import('../pages/admin/StandPairingPage'));
+const StandPairingScreen = lazy(
+  () => import('../pages/stand/StandPairingScreen')
+);
 
 // ─── Loading Fallback ────────────────────────────────────────────────────────
 const PageLoader: React.FC = () => (
@@ -70,6 +75,13 @@ const AdminRoute: React.FC = () => {
   return <Outlet />;
 };
 
+const StandScreen: React.FC = () => {
+  const { token, role } = useAuthStore();
+  const standToken = useStandStore((state) => state.token);
+  if (standToken || (token && role === 'admin')) return <StandPage />;
+  return <StandPairingScreen />;
+};
+
 const HomeRedirect: React.FC = () => {
   const { token, role } = useAuthStore();
   if (token) return <Navigate to={role === 'admin' ? '/admin' : '/dashboard'} replace />;
@@ -87,18 +99,16 @@ export const AppRouter: React.FC = () => {
   return (
     <Routes>
       {/* Tela do estande: fica fora do Layout porque roda sozinha numa TV, sem
-          cabeçalho nem menu do painel. Continua exigindo sessão de admin — o
-          token persistido cobre a aba nova. */}
-      <Route element={<AdminRoute />}>
-        <Route
-          path="/estande"
-          element={
-            <Suspense fallback={<PageLoader />}>
-              <StandPage />
-            </Suspense>
-          }
-        />
-      </Route>
+          cabeçalho nem menu do painel. Sem sessão de admin na TV, a autorização
+          vem do token de estande, obtido por pareamento com o celular. */}
+      <Route
+        path="/estande"
+        element={
+          <Suspense fallback={<PageLoader />}>
+            <StandScreen />
+          </Suspense>
+        }
+      />
 
       <Route element={<LayoutWrapper />}>
         {/* Página inicial */}
@@ -140,6 +150,7 @@ export const AppRouter: React.FC = () => {
           <Route path="/admin/prizes"           element={<PrizesPage />} />
           <Route path="/admin/draw-control"     element={<DrawControlPage />} />
           <Route path="/admin/ranking"          element={<AdminRankingPage />} />
+          <Route path="/admin/estande"          element={<StandPairingPage />} />
         </Route>
 
         {/* Fallback */}
