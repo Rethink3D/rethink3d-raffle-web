@@ -165,14 +165,14 @@ export const StandPage: React.FC = () => {
           <img
             src="/LogoRethink3D.webp"
             alt="Rethink3D"
-            className="brand-logo h-[5vh] w-auto object-contain shrink-0"
+            className="brand-logo h-[6.5vh] w-auto object-contain shrink-0"
           />
-          <div className="h-[3.5vh] w-px bg-white/25 shrink-0" />
+          <div className="h-[6vh] w-px bg-white/25 shrink-0" />
           <div className="min-w-0">
-            <h1 className="text-[min(3vh,3.6vw)] font-display font-extrabold text-white leading-tight truncate">
+            <h1 className="text-[min(6vh,5vw)] font-display font-extrabold text-white leading-none truncate">
               Participe do sorteio
             </h1>
-            <p className="text-[min(1.7vh,2.1vw)] text-white/80 truncate">
+            <p className="text-[min(2.6vh,2.4vw)] text-white/85 leading-tight mt-[0.5vh] truncate">
               Cadastre-se aqui no evento e concorra aos prêmios
             </p>
           </div>
