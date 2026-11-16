@@ -16,6 +16,7 @@ const cyber = {
   missionsCompletedUpper: 'MISSÕES CONCLUÍDAS',
   fulfillMissionsUpper: 'CUMPRIR MISSÕES',
   missionsFrozen: 'Missões congeladas por enquanto',
+  missionsOpen: 'Missões abertas — ainda dá tempo de juntar cupons',
   missionsFinished: 'Missões encerradas',
 
   missionDone: 'Missão cumprida',
@@ -134,6 +135,7 @@ const padrao: typeof cyber = {
   missionsCompletedUpper: 'DESAFIOS CONCLUÍDOS',
   fulfillMissionsUpper: 'CUMPRIR DESAFIOS',
   missionsFrozen: 'Desafios congelados por enquanto',
+  missionsOpen: 'Desafios abertos — ainda dá tempo de juntar cupons',
   missionsFinished: 'Desafios encerrados',
 
   missionDone: 'Desafio cumprido',

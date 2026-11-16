@@ -177,6 +177,7 @@ export const DrawWatchPage: React.FC = () => {
 
   const countdown = useCountdown(getNextDrawTarget(activeCampaign));
 
+  const missionsOpen = activeCampaign?.status === 'ACTIVE';
   const isWinnerState = winner !== null && wheelSettled;
   const isSpinningState = isSpinning || (winner !== null && !wheelSettled);
   const vaultPrizes = (activeCampaign?.vault?.prizes ?? []).filter(
@@ -336,18 +337,24 @@ export const DrawWatchPage: React.FC = () => {
           </div>
         ) : (
           <div className="flex flex-col gap-6">
-            <Card variant="danger" title="O sorteio ainda não começou" subtitle="Prepare-se, tá quase!">
+            <Card variant={missionsOpen ? 'secondary' : 'danger'} title="O sorteio ainda não começou" subtitle="Prepare-se, tá quase!">
               <div className="flex flex-col items-center py-6 text-center select-none">
-                <div className="w-16 h-16 rounded border border-brand-danger bg-brand-danger/10 flex items-center justify-center mb-5 animate-pulse text-brand-danger">
-                  <Lock size={28} />
-                </div>
+                {missionsOpen ? (
+                  <div className="w-16 h-16 rounded border border-brand-secondary bg-brand-secondary/10 flex items-center justify-center mb-5 text-brand-secondary">
+                    <Gift size={28} />
+                  </div>
+                ) : (
+                  <div className="w-16 h-16 rounded border border-brand-danger bg-brand-danger/10 flex items-center justify-center mb-5 animate-pulse text-brand-danger">
+                    <Lock size={28} />
+                  </div>
+                )}
 
                 <h3 className="text-lg font-display font-extrabold uppercase text-brand-strong tracking-widest">
-                  {copy.missionsFrozen}
+                  {missionsOpen ? copy.missionsOpen : copy.missionsFrozen}
                 </h3>
 
                 <p className="text-[10px] font-mono text-brand-muted uppercase tracking-widest mt-1">
-                  Inscrições encerradas pra esta campanha
+                  {missionsOpen ? 'Cadastro aberto no estande' : 'Inscrições encerradas pra esta campanha'}
                 </p>
 
                 {!countdown.isExpired ? (
@@ -371,7 +378,9 @@ export const DrawWatchPage: React.FC = () => {
                 )}
 
                 <p className="text-xs text-brand-muted mt-5 leading-relaxed max-w-sm">
-                  Ninguém mais pode enviar comprovantes ou responder tarefas agora — mas seus tickets estão seguros e prontos pra concorrer. Mantenha essa página aberta.
+                  {missionsOpen
+                    ? 'Complete os desafios no seu painel pra juntar mais cupons até o sorteio começar. Quanto mais cupons, mais chances.'
+                    : 'Ninguém mais pode enviar comprovantes ou responder tarefas agora — mas seus tickets estão seguros e prontos pra concorrer. Mantenha essa página aberta.'}
                 </p>
               </div>
             </Card>
