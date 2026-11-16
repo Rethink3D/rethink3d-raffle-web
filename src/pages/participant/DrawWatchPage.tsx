@@ -243,17 +243,21 @@ export const DrawWatchPage: React.FC = () => {
         )}
 
         {isWinnerState ? (
-          <Card variant="primary" title="Temos um vencedor! 🎉" subtitle="Parabéns pra quem levou" glow>
+          <Card variant="primary" title="Temos um vencedor! 🎉" subtitle="Parabéns pra quem levou" glow className="anim-reveal">
             <div className="flex flex-col items-center py-6 text-center select-none">
-              <div className="relative w-28 h-28 mx-auto mb-6 flex items-center justify-center rounded-full bg-brand-primary/15 border-2 border-brand-primary glow-primary animate-float">
-                <PartyPopper size={48} className="text-brand-primary animate-pulse" />
+              <div className="relative w-28 h-28 mx-auto mb-6 flex items-center justify-center rounded-full overflow-hidden bg-brand-primary/15 border-2 border-brand-primary glow-primary animate-float">
+                {winner.prize?.imageUrl ? (
+                  <img src={winner.prize.imageUrl} alt={winner.prize.name} className="w-full h-full object-cover" />
+                ) : (
+                  <PartyPopper size={48} className="text-brand-primary animate-pulse" />
+                )}
               </div>
 
               <span className="text-[11px] font-mono text-brand-secondary tracking-widest uppercase font-bold">
                 O sorteado foi
               </span>
 
-              <h3 className="text-3xl font-display font-black text-brand-strong uppercase mt-2 tracking-wide text-glow-primary">
+              <h3 className="anim-reveal text-3xl sm:text-4xl font-display font-black text-brand-strong uppercase mt-2 tracking-wide text-glow-primary" style={{ animationDelay: '0.25s' }}>
                 {winner.winnerName}
               </h3>
 
@@ -272,7 +276,7 @@ export const DrawWatchPage: React.FC = () => {
                     </span>
                   </div>
                   <div>
-                    <span className="text-[9px] font-mono text-brand-muted uppercase block">Tickets no total</span>
+                    <span className="text-[9px] font-mono text-brand-muted uppercase block">Cupons na roleta</span>
                     <span className="font-ui font-bold text-sm text-brand-strong mt-0.5 block">
                       {winner.totalTickets}
                     </span>
@@ -307,12 +311,37 @@ export const DrawWatchPage: React.FC = () => {
 
               <div className="flex flex-col gap-1 items-center">
                 <span className="text-xs font-ui font-bold text-brand-strong uppercase tracking-wider">
-                  Cada fatia é uma chance real — quanto mais tickets, maior o pedaço
+                  Cada fatia é uma chance real — quanto mais cupons, maior o pedaço
                 </span>
                 <span className="text-[10px] font-mono text-brand-muted uppercase tracking-widest">
-                  {participants.length + (othersCount > 0 ? othersCount : 0)} participante(s) concorrendo · {totalTickets + othersTickets} tickets no total
+                  {participants.length + (othersCount > 0 ? othersCount : 0)} participante(s) concorrendo · {totalTickets} cupons na roleta
                 </span>
               </div>
+
+              {participants.length > 0 && totalTickets > 0 && (
+                <ol className="w-full max-w-sm flex flex-col gap-1.5 text-left">
+                  {[...participants]
+                    .sort((a, b) => b.tickets - a.tickets)
+                    .slice(0, 5)
+                    .map((p, i) => {
+                      const share = (p.tickets / totalTickets) * 100;
+                      return (
+                        <li key={p.userId} className="relative overflow-hidden rounded-theme border border-brand-border bg-sunken-30 px-3 py-2 text-sm">
+                          <span
+                            className="absolute inset-y-0 left-0 bg-brand-primary/20 anim-bar"
+                            style={{ width: `${Math.max(share, 2)}%`, animationDelay: `${i * 80}ms` }}
+                          />
+                          <span className="relative flex items-center justify-between gap-3">
+                            <span className="truncate text-brand-strong">{p.name}</span>
+                            <span className="shrink-0 text-brand-muted tabular-nums">
+                              {p.tickets} · {share >= 1 ? share.toFixed(1).replace('.', ',') : share.toFixed(2).replace('.', ',')}%
+                            </span>
+                          </span>
+                        </li>
+                      );
+                    })}
+                </ol>
+              )}
             </div>
           </Card>
         ) : activeCampaign?.status === 'PAUSED' ? (

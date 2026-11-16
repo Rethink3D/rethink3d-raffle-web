@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import type { DrawParticipantPreview } from '../../store/drawStore';
 
-const SLICE_COLORS = ['rgb(var(--c-primary))', 'rgb(var(--c-secondary))', 'rgb(var(--c-accent))', 'rgb(var(--c-success))', 'rgb(var(--c-danger))', 'rgb(var(--c-glow))'];
-const MIN_LABEL_DEGREES = 10;
+const SLICE_COLORS = ['rgb(var(--c-primary))', 'rgb(var(--c-glow))', 'rgb(var(--c-secondary))', 'rgb(var(--c-accent))'];
+const MIN_LABEL_DEGREES = 22;
 const SPIN_SPEED_DEG_PER_SEC = 300;
 const EXTRA_SPINS = 3;
 // Piso/teto de duração da freada — a duração "natural" (ver cálculo abaixo)
@@ -61,6 +61,10 @@ export const PrizeWheel: React.FC<PrizeWheelProps> = ({
     if (total === 0) return [];
 
     let cursor = 0;
+    const colorFor = (idx: number) => {
+      const isLast = idx === items.length - 1 && idx > 0 && idx % SLICE_COLORS.length === 0;
+      return SLICE_COLORS[isLast ? 2 : idx % SLICE_COLORS.length];
+    };
     return items.map((item, idx) => {
       const sliceDeg = (item.tickets / total) * 360;
       const startDeg = cursor;
@@ -73,7 +77,7 @@ export const PrizeWheel: React.FC<PrizeWheelProps> = ({
         startDeg,
         endDeg,
         midDeg: startDeg + sliceDeg / 2,
-        color: SLICE_COLORS[idx % SLICE_COLORS.length],
+        color: colorFor(idx),
       };
     });
   }, [participants, othersTickets, othersCount]);
@@ -182,10 +186,10 @@ export const PrizeWheel: React.FC<PrizeWheelProps> = ({
               style={{ transform: `rotate(${s.midDeg}deg)` }}
             >
               <span
-                className="mt-3 text-[9px] font-display font-bold text-brand-strong uppercase tracking-wide truncate max-w-[70px] drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]"
+                className="mt-3 text-[10px] font-display font-bold text-white tracking-wide truncate max-w-[76px] drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]"
                 title={s.label}
               >
-                {s.label}
+                {s.key === '__others__' ? s.label : s.label.split(' ')[0]}
               </span>
             </div>
           );

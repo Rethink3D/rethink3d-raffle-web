@@ -172,3 +172,73 @@
 .animate-lightning-flash {
   animation: thunder-flash 7s ease-out infinite;
 }
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+.anim-rise   { animation: rise-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.anim-rise-2 { animation-delay: 0.12s; }
+.anim-rise-3 { animation-delay: 0.24s; }
+.anim-rise-4 { animation-delay: 0.36s; }
+
+@keyframes orbit-spin { to { transform: rotate(360deg); } }
+.anim-orbit { animation: orbit-spin 30s linear infinite; transform-origin: 50% 50%; }
+
+@keyframes orbit-draw {
+  from { stroke-dashoffset: 943; }
+  to   { stroke-dashoffset: 0; }
+}
+.anim-orbit-draw { stroke-dasharray: 943; animation: orbit-draw 1.4s cubic-bezier(0.6, 0, 0.2, 1) 0.15s both; }
+
+@keyframes stamp-pop {
+  0%   { transform: scale(0.6); opacity: 0; }
+  60%  { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.anim-stamp { animation: stamp-pop 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; }
+
+@keyframes digit-tick {
+  from { transform: translateY(-40%); opacity: 0.15; }
+  to   { transform: none; opacity: 1; }
+}
+.anim-tick { display: inline-block; animation: digit-tick 0.35s ease-out both; }
+
+@keyframes reveal-zoom {
+  0%   { transform: scale(0.86); opacity: 0; }
+  100% { transform: none; opacity: 1; }
+}
+.anim-reveal { animation: reveal-zoom 0.65s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
+
+@keyframes sheen {
+  0%, 70% { transform: translateX(-120%); }
+  100%    { transform: translateX(120%); }
+}
+.anim-sheen { position: relative; overflow: hidden; isolation: isolate; }
+.anim-sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 35%, rgb(255 255 255 / 0.28) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: sheen 4s ease-in-out 1.4s infinite;
+  pointer-events: none;
+}
+
+@keyframes burst-fly {
+  0%   { transform: translate(-50%, -50%) rotate(var(--r)) translateY(0) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) rotate(var(--r)) translateY(var(--d)) scale(0.4); opacity: 0; }
+}
+.burst-piece {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  animation: burst-fly 0.9s cubic-bezier(0.1, 0.7, 0.3, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes bar-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.anim-bar { transform-origin: left center; animation: bar-fill 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s both; }

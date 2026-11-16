@@ -117,6 +117,15 @@ const cyber = {
   noCampaignProse:
     'Ainda não temos uma campanha ativa. Fique de olho — assim que uma nova aventura começar, ela aparece bem aqui.',
   prizesTitle: 'Prêmios em Jogo',
+  questsIntro: 'Complete as missões abaixo para ganhar cupons e aumentar suas chances no sorteio.',
+  questsLoading: 'Carregando suas missões...',
+  questsLoadError: 'Não conseguimos carregar suas missões agora. Tente de novo.',
+  questsNoneTitle: 'Nenhuma missão disponível',
+  questsNoneProse: 'Ainda não temos uma campanha ativa. Assim que uma nova começar, suas missões aparecem aqui.',
+  questsEmptyTitle: 'Nenhuma missão cadastrada ainda',
+  questsEmptyProse: 'Volte em breve, novas missões podem aparecer a qualquer momento.',
+  questsAllDoneTitle: 'Parabéns, você completou todas as missões!',
+  questsDoneLabel: 'Concluídas',
 };
 
 const padrao: typeof cyber = {
@@ -236,6 +245,15 @@ const padrao: typeof cyber = {
   noCampaignProse:
     'Ainda não temos uma campanha ativa. Fique de olho — assim que uma nova campanha começar, ela aparece bem aqui.',
   prizesTitle: 'Prêmios do sorteio',
+  questsIntro: 'Cada desafio feito coloca mais cupons seus na roleta. Comece pelos que valem mais.',
+  questsLoading: 'Carregando seus desafios',
+  questsLoadError: 'Não conseguimos carregar seus desafios agora. Tente de novo.',
+  questsNoneTitle: 'Nenhum desafio disponível',
+  questsNoneProse: 'Ainda não temos uma campanha ativa. Assim que uma nova começar, seus desafios aparecem aqui.',
+  questsEmptyTitle: 'Nenhum desafio cadastrado ainda',
+  questsEmptyProse: 'Volte em breve, novos desafios podem aparecer a qualquer momento.',
+  questsAllDoneTitle: 'Você fez todos os desafios!',
+  questsDoneLabel: 'Feitos',
 };
 
 const universoif: typeof cyber = {

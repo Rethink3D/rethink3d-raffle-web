@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock, HelpCircle, ArrowLeft, PartyPopper } from 'lucide-react';
+import { Lock, HelpCircle, ArrowLeft, PartyPopper, Ticket } from 'lucide-react';
 import { campaignService } from '../../services/campaign.service';
 import { questService } from '../../services/quest.service';
 import { Card } from '../../components/ui/Card';
@@ -25,6 +25,31 @@ export const QuestsPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [celebrating, setCelebrating] = useState<Set<string>>(new Set());
+
+  const markCelebrations = (list: Mission[]) => {
+    const done = list.filter((q) => q.isCompleted).map((q) => q.id);
+    let seen: string[] | null = null;
+    try {
+      const raw = sessionStorage.getItem('quests-seen-completed');
+      seen = raw ? (JSON.parse(raw) as string[]) : null;
+    } catch {
+      seen = null;
+    }
+    if (seen) {
+      const fresh = done.filter((id) => !seen!.includes(id));
+      if (fresh.length) {
+        setCelebrating(new Set(fresh));
+        setTimeout(() => setCelebrating(new Set()), 2600);
+      }
+    }
+    try {
+      sessionStorage.setItem('quests-seen-completed', JSON.stringify(done));
+    } catch {
+      return;
+    }
+  };
+
   const fetchQuests = async () => {
     try {
       setLoading(true);
@@ -35,13 +60,14 @@ export const QuestsPage: React.FC = () => {
         setActiveCampaign(campaign);
         const campaignQuests = await questService.getCampaignQuests(campaign.id);
         setQuests(campaignQuests);
+        markCelebrations(campaignQuests);
       } else {
         setActiveCampaign(null);
         setQuests([]);
       }
     } catch (err: any) {
       console.error('Error fetching campaign quests:', err);
-      setError('Não conseguimos carregar suas missões agora. Tente de novo.');
+      setError(copy.questsLoadError);
     } finally {
       setLoading(false);
     }
@@ -75,6 +101,7 @@ export const QuestsPage: React.FC = () => {
       await questService.uploadProof(selectedMission.id, file);
       const campaignQuests = await questService.getCampaignQuests(activeCampaign.id);
       setQuests(campaignQuests);
+      markCelebrations(campaignQuests);
       setJustEarnedTickets(true);
     } catch (err) {
       console.error('Failed upload proof submission:', err);
@@ -87,6 +114,7 @@ export const QuestsPage: React.FC = () => {
     await questService.redeemReferral(selectedMission.id, friendCode);
     const campaignQuests = await questService.getCampaignQuests(activeCampaign.id);
     setQuests(campaignQuests);
+    markCelebrations(campaignQuests);
     setJustEarnedTickets(true);
   };
 
@@ -103,12 +131,24 @@ export const QuestsPage: React.FC = () => {
     }
   };
 
+  const ordered = [...quests].sort((a, b) => {
+    if (a.isCompleted !== b.isCompleted) return a.isCompleted ? 1 : -1;
+    if (a.isCompleted) return 0;
+    const value = (m: Mission) => (m.type === 'QUIZ' ? m.reward * 5 : m.reward);
+    return value(b) - value(a);
+  });
+  const doneCount = quests.filter((q) => q.isCompleted).length;
+  const pendingTickets = quests
+    .filter((q) => !q.isCompleted && q.type !== 'QUIZ')
+    .reduce((sum, q) => sum + q.reward, 0);
+  const hasPendingQuiz = quests.some((q) => !q.isCompleted && q.type === 'QUIZ');
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] select-none pointer-events-none">
         <ThemeAsset kind="loader" size={120} />
         <div className="text-brand-secondary animate-pulse text-xs font-bold tracking-widest mt-2 uppercase">
-          Carregando suas missões...
+          {copy.questsLoading}
         </div>
       </div>
     );
@@ -134,11 +174,11 @@ export const QuestsPage: React.FC = () => {
   if (!activeCampaign) {
     return (
       <div className="max-w-xl mx-auto my-10 select-none">
-        <Card variant="default" title="Nenhuma missão disponível" glow>
+        <Card variant="default" title={copy.questsNoneTitle} glow>
           <div className="flex flex-col items-center gap-4 text-center py-4">
             <ThemeAsset kind="waiting" size={96} className="w-24" />
             <p className="text-sm font-body text-brand-muted max-w-sm">
-              Ainda não temos uma campanha ativa. Assim que uma nova começar, suas missões aparecem aqui.
+              {copy.questsNoneProse}
             </p>
           </div>
         </Card>
@@ -176,7 +216,7 @@ export const QuestsPage: React.FC = () => {
             {copy.yourMissions}
           </h2>
           <p className="text-xs text-brand-muted mt-1 leading-relaxed max-w-2xl">
-            Complete as missões abaixo para ganhar cupons e aumentar suas chances no sorteio.
+            {copy.questsIntro}
           </p>
         </div>
 
@@ -187,12 +227,30 @@ export const QuestsPage: React.FC = () => {
               Todas concluídas!
             </span>
           ) : (
-            <span className="text-xs font-ui font-bold text-brand-strong uppercase bg-brand-border/80 border border-brand-border/90 px-3 py-1.5 rounded">
-              {quests.length} missõe{quests.length === 1 ? '' : 's'} disponíve{quests.length === 1 ? 'l' : 'is'}
+            <span className="text-xs font-ui font-bold text-brand-strong bg-brand-border/80 border border-brand-border/90 px-3 py-1.5 rounded">
+              {copy.questsDoneLabel}: {doneCount} de {quests.length}
             </span>
           )}
         </div>
       </div>
+
+      {!allCompleted && quests.length > 0 && (
+        <div className="flex flex-col gap-2 rounded-theme border border-brand-border bg-brand-surface/80 p-4 select-none">
+          <div className="flex items-center justify-between gap-3 text-sm">
+            <span className="inline-flex items-center gap-2 text-brand-text">
+              <Ticket size={16} className="text-brand-accent" />
+              Ainda dá para ganhar <strong className="text-brand-strong">{pendingTickets}{hasPendingQuiz ? '+' : ''} cupons</strong>
+            </span>
+            <span className="text-brand-muted text-xs">{doneCount}/{quests.length}</span>
+          </div>
+          <div className="h-2 rounded-full bg-brand-border overflow-hidden">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-brand-primary to-brand-accent anim-bar"
+              style={{ width: `${quests.length ? (doneCount / quests.length) * 100 : 0}%` }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* ─── PARABÉNS: TODAS AS MISSÕES CONCLUÍDAS ─── */}
       {allCompleted && (
@@ -200,7 +258,7 @@ export const QuestsPage: React.FC = () => {
           <div className="flex flex-col items-center gap-3 py-4 select-none">
             <ThemeAsset kind="celebrate" size={80} className="w-20" />
             <h3 className="text-lg font-display font-extrabold text-brand-strong uppercase tracking-wider">
-              Parabéns, você completou todas as missões!
+              {copy.questsAllDoneTitle}
             </h3>
             <p className="text-sm text-brand-muted max-w-md">
               Seus cupons já estão garantidos. Agora é só aguardar o sorteio — boa sorte!
@@ -230,19 +288,21 @@ export const QuestsPage: React.FC = () => {
           <Card className="text-center py-10 select-none">
             <HelpCircle size={36} className="text-brand-muted mx-auto mb-2" />
             <p className="text-sm font-ui font-bold text-brand-strong uppercase tracking-wider">
-              Nenhuma missão cadastrada ainda
+              {copy.questsEmptyTitle}
             </p>
             <p className="text-xs text-brand-muted mt-1">
-              Volte em breve, novas missões podem aparecer a qualquer momento.
+              {copy.questsEmptyProse}
             </p>
           </Card>
         ) : (
-          quests.map((quest) => (
-            <QuestCard
-              key={quest.id}
-              mission={quest}
-              onAction={isLocked ? undefined : handleQuestAction}
-            />
+          ordered.map((quest, i) => (
+            <div key={quest.id} className="anim-rise" style={{ animationDelay: `${Math.min(i, 6) * 60}ms` }}>
+              <QuestCard
+                mission={quest}
+                onAction={isLocked ? undefined : handleQuestAction}
+                celebrate={celebrating.has(quest.id)}
+              />
+            </div>
           ))
         )}
       </div>

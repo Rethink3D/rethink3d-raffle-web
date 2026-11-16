@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { campaignService } from "../../services/campaign.service";
 import { ticketService } from "../../services/ticket.service";
+import { prizeService } from "../../services/prize.service";
+import { EventHero } from "../../components/landing/EventHero";
+import { formatDay, formatDrawWhen } from "../../utils/drawWhen";
 import { getCampaignStatusLabel } from "../../utils/campaignStatus";
 import { getNextDrawTarget } from "../../utils/drawSchedule";
-import type { Campaign, LeaderboardEntry } from "../../types";
+import type { Campaign, LeaderboardEntry, Prize } from "../../types";
 import { useCountdown } from "../../hooks/useCountdown";
 import { Button } from "../../components/ui/Button";
 import { Card } from "../../components/ui/Card";
@@ -48,6 +51,7 @@ export const LandingPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [rankingEntries, setRankingEntries] = useState<LeaderboardEntry[]>([]);
+  const [prizes, setPrizes] = useState<Prize[]>([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -59,6 +63,12 @@ export const LandingPage: React.FC = () => {
         setLoading(false);
 
         if (data) {
+          prizeService
+            .getCampaignPrizes(data.id)
+            .then((list) => {
+              if (isMounted) setPrizes(list);
+            })
+            .catch((err) => console.warn("Failed to load prizes:", err));
           ticketService
             .getPublicLeaderboard(data.id)
             .then((leaderboard) => {
@@ -83,6 +93,10 @@ export const LandingPage: React.FC = () => {
   // campanhas antigas sem nenhum horário cadastrado ainda).
   const drawTarget = getNextDrawTarget(activeCampaign) || "";
   const countdown = useCountdown(drawTarget);
+
+  const heroPrize =
+    prizes.find((p) => (p.available ?? p.quantity - p.claimed) > 0) ?? prizes[0];
+  const showEventHero = THEME !== "cyber" && !!activeCampaign && !!heroPrize;
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -162,7 +176,17 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-12 font-body text-brand-text">
-      {/* 1. HERO BANNER */}
+      {showEventHero && activeCampaign && heroPrize && (
+        <EventHero
+          campaign={activeCampaign}
+          prize={heroPrize}
+          drawTarget={drawTarget}
+          countdown={countdown}
+          loggedIn={!!token}
+        />
+      )}
+
+      {!showEventHero && (
       <section className="section-tint relative py-12 md:py-20 flex flex-col items-center justify-center text-center overflow-hidden border border-brand-primary/40 rounded-lg bg-brand-surface/60 px-4">
         {/* Elementos GIFs de fundo distribuídos nos cantos e laterais do Hero */}
         {THEME === 'cyber' && (
@@ -255,8 +279,9 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
       </section>
+      )}
 
-      {/* 2. DYNAMIC ACTIVE CAMPAIGN & COUNTDOWN */}
+      {!showEventHero && (
       <section className="flex flex-col gap-6">
         <h2 className="font-display text-base sm:text-xl font-bold text-brand-strong tracking-widest uppercase border-b border-brand-border pb-2">
           {copy.landingCampaigns}
@@ -302,17 +327,13 @@ export const LandingPage: React.FC = () => {
                     <span className="block text-brand-strong font-bold mb-1">
                       DATA DE LANÇAMENTO
                     </span>
-                    {activeCampaign.startDate
-                      ? new Date(activeCampaign.startDate).toLocaleDateString()
-                      : "N/D"}
+                    {formatDay(activeCampaign.startDate)}
                   </div>
                   <div>
                     <span className="block text-brand-strong font-bold mb-1">
                       DATA DO SORTEIO
                     </span>
-                    {drawTarget
-                      ? new Date(drawTarget).toLocaleString()
-                      : "N/D"}
+                    {formatDrawWhen(drawTarget)}
                   </div>
                 </div>
               </div>
@@ -464,6 +485,7 @@ export const LandingPage: React.FC = () => {
           </Card>
         )}
       </section>
+      )}
 
       {/* 2.5 RANKING PÚBLICO */}
       {activeCampaign && rankingEntries.length > 0 && (

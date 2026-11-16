@@ -378,6 +378,8 @@ export interface LeaderboardResponse {
   // Posição de quem fez a requisição, mesmo fora do top 10 — null se o
   // participante ainda não tem cupons na campanha, ou se quem pediu é admin.
   me: LeaderboardEntry | null;
+  totalTickets?: number;
+  totalParticipants?: number;
 }
 
 // ─── COFRE (VAULT) & PRIZE TYPES ──────────────────────────────────

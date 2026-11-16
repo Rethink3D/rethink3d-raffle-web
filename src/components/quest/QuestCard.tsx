@@ -1,19 +1,22 @@
 import React from 'react';
-import { CheckCircle2, Clock, Play, UploadCloud, HelpCircle, FileText, ExternalLink, Users, ClipboardList } from 'lucide-react';
+import { CheckCircle2, Play, UploadCloud, HelpCircle, FileText, ExternalLink, Users, ClipboardList } from 'lucide-react';
 import type { Mission, MissionType } from '../../types';
 import { Button } from '../ui/Button';
+import { Burst } from '../ui/Burst';
 import { copy } from '../../theme/copy';
 
 interface QuestCardProps {
   mission: Mission;
   onAction?: (mission: Mission) => void;
   isLoading?: boolean;
+  celebrate?: boolean;
 }
 
 export const QuestCard: React.FC<QuestCardProps> = ({
   mission,
   onAction,
   isLoading = false,
+  celebrate = false,
 }) => {
   const { title, description, reward, type, isCompleted, links, imageUrl } = mission;
 
@@ -66,19 +69,15 @@ export const QuestCard: React.FC<QuestCardProps> = ({
   const renderStatus = () => {
     if (isCompleted) {
       return (
-        <div className="flex items-center gap-1.5 text-brand-success font-mono text-xs font-bold bg-brand-success/10 border border-brand-success/40 px-2.5 py-1 rounded">
+        <div className={`relative flex items-center gap-1.5 text-brand-success font-mono text-xs font-bold bg-brand-success/10 border border-brand-success/40 px-2.5 py-1 rounded ${celebrate ? 'anim-stamp' : ''}`}>
+          {celebrate && <Burst />}
           <CheckCircle2 size={13} className="text-brand-success" />
-          <span>Concluída</span>
+          <span>{celebrate ? (type === 'QUIZ' ? 'Quiz respondido!' : `+${reward} cupons garantidos!`) : copy.missionsSingular === 'Desafio' ? 'Concluído' : 'Concluída'}</span>
         </div>
       );
     }
 
-    return (
-      <div className="flex items-center gap-1.5 text-brand-muted font-mono text-xs bg-brand-border/30 border border-brand-border/80 px-2.5 py-1 rounded">
-        <Clock size={13} />
-        <span>Disponível</span>
-      </div>
-    );
+    return null;
   };
 
   // Button text & action
@@ -108,10 +107,10 @@ export const QuestCard: React.FC<QuestCardProps> = ({
   return (
     <div
       className={`
-        relative bg-brand-surface/90 border rounded-lg p-5 transition-all duration-300 flex flex-col gap-4
+        relative bg-brand-surface/90 border rounded-lg transition-all duration-300 flex flex-col
         ${isCompleted
-          ? 'border-brand-success/30 bg-gradient-to-r from-brand-success/5 to-transparent'
-          : 'border-brand-border hover:border-brand-secondary/50'}
+          ? 'p-4 gap-3 border-brand-success/30 bg-gradient-to-r from-brand-success/5 to-transparent'
+          : 'p-5 gap-4 border-brand-border hover:border-brand-secondary/50'}
       `}
     >
       {/* Decorative vertical accent bar */}
@@ -173,13 +172,13 @@ export const QuestCard: React.FC<QuestCardProps> = ({
         )}
       </div>
 
-      {/* Description */}
-      <p className="text-xs text-brand-muted font-body leading-relaxed break-words">
-        {description}
-      </p>
+      {!isCompleted && (
+        <p className="text-xs text-brand-muted font-body leading-relaxed break-words">
+          {description}
+        </p>
+      )}
 
-      {/* Mission links (ex: post pra curtir, perfil pra seguir) — só para missões de comprovante */}
-      {type === 'PROOF_UPLOAD' && links && links.length > 0 && (
+      {!isCompleted && type === 'PROOF_UPLOAD' && links && links.length > 0 && (
         <div className="flex flex-wrap items-center gap-2">
           {links.map((link, index) => (
             <a
@@ -196,10 +195,11 @@ export const QuestCard: React.FC<QuestCardProps> = ({
         </div>
       )}
 
-      {/* Status tracker */}
-      <div className="flex items-center gap-3">
-        {renderStatus()}
-      </div>
+      {isCompleted && (
+        <div className="flex items-center gap-3">
+          {renderStatus()}
+        </div>
+      )}
 
       {/* Action Button (mobile, ocupa a largura toda) */}
       {actionText && onAction && (

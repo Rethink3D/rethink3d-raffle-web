@@ -17,6 +17,9 @@ import { getCampaignStatusLabel } from '../../utils/campaignStatus';
 import { getNextDrawTarget, getUpcomingSchedules } from '../../utils/drawSchedule';
 import type { Campaign, Draw, Mission, Prize, TicketHistoryEntry, User } from '../../types';
 import { ThemeAsset } from '../../theme/assets';
+import { ChanceCard } from '../../components/dashboard/ChanceCard';
+import { TickNumber } from '../../components/ui/TickNumber';
+import { formatDrawWhen } from '../../utils/drawWhen';
 import { copy } from '../../theme/copy';
 
 // Cores do badge de status — mesma paleta usada nos outros indicadores da
@@ -160,6 +163,7 @@ export const DashboardPage: React.FC = () => {
   const [prizes, setPrizes] = useState<Prize[]>([]);
   const [ticketHistory, setTicketHistory] = useState<TicketHistoryEntry[]>([]);
   const [drawHistory, setDrawHistory] = useState<Draw[]>([]);
+  const [standing, setStanding] = useState<{ rank: number | null; totalTickets: number | null; totalParticipants: number | null } | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -221,6 +225,18 @@ export const DashboardPage: React.FC = () => {
           } catch (e) {
             console.warn('Failed to load ticket history', e);
           }
+
+          ticketService
+            .getLeaderboard(campaign.id)
+            .then((board) => {
+              if (!isMounted) return;
+              setStanding({
+                rank: board.me?.rank ?? null,
+                totalTickets: board.totalTickets ?? null,
+                totalParticipants: board.totalParticipants ?? null,
+              });
+            })
+            .catch((e) => console.warn('Failed to load leaderboard', e));
 
           // 5. Fetch itens já sorteados nesta campanha
           try {
@@ -380,8 +396,14 @@ export const DashboardPage: React.FC = () => {
         </div>
       </div>
 
-      {/* ─── SEU CÓDIGO DE AMIGO ─── */}
-      {referralCode && <ReferralCodeCard code={referralCode} />}
+      <ChanceCard
+        myTickets={ticketHistory.reduce((sum, t) => sum + t.quantity, 0)}
+        rank={standing?.rank ?? null}
+        totalTickets={standing?.totalTickets ?? null}
+        totalParticipants={standing?.totalParticipants ?? null}
+        quests={quests}
+        locked={activeCampaign.status !== 'ACTIVE'}
+      />
 
       {/* ─── MAIN GRID ─── */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -445,25 +467,25 @@ export const DashboardPage: React.FC = () => {
                   <div className="grid grid-cols-4 gap-2 text-center">
                     <div className="bg-brand-surface border border-brand-primary/30 rounded p-2.5">
                       <div className="font-display font-black text-2xl text-brand-strong tracking-tighter">
-                        {countdown.formatted.days}
+                        <TickNumber value={countdown.formatted.days} />
                       </div>
                       <div className="text-[8px] font-mono text-brand-muted uppercase tracking-widest mt-0.5">DIAS</div>
                     </div>
                     <div className="bg-brand-surface border border-brand-primary/30 rounded p-2.5">
                       <div className="font-display font-black text-2xl text-brand-strong tracking-tighter">
-                        {countdown.formatted.hours}
+                        <TickNumber value={countdown.formatted.hours} />
                       </div>
                       <div className="text-[8px] font-mono text-brand-muted uppercase tracking-widest mt-0.5">HORAS</div>
                     </div>
                     <div className="bg-brand-surface border border-brand-primary/30 rounded p-2.5">
                       <div className="font-display font-black text-2xl text-brand-strong tracking-tighter">
-                        {countdown.formatted.minutes}
+                        <TickNumber value={countdown.formatted.minutes} />
                       </div>
                       <div className="text-[8px] font-mono text-brand-muted uppercase tracking-widest mt-0.5">MINS</div>
                     </div>
                     <div className="bg-brand-surface border border-brand-primary/30 rounded p-2.5">
                       <div className="font-display font-black text-2xl text-brand-primary text-glow-primary tracking-tighter">
-                        {countdown.formatted.seconds}
+                        <TickNumber value={countdown.formatted.seconds} />
                       </div>
                       <div className="text-[8px] font-mono text-brand-muted uppercase tracking-widest mt-0.5">SEGS</div>
                     </div>
@@ -472,11 +494,7 @@ export const DashboardPage: React.FC = () => {
                   <div className="flex items-center gap-2.5 bg-brand-primary/5 border border-brand-primary/30 rounded p-3 mt-1.5 text-xs text-brand-primary">
                     <Calendar size={15} className="shrink-0" />
                     <span className="font-ui font-bold tracking-wider">
-                      Sorteio em: {upcomingSchedules[0]
-                        ? new Date(upcomingSchedules[0].scheduledAt).toLocaleString('pt-BR')
-                        : activeCampaign.drawDate
-                        ? new Date(activeCampaign.drawDate).toLocaleString('pt-BR')
-                        : 'a definir'}
+                      Sorteio ao vivo {formatDrawWhen(upcomingSchedules[0]?.scheduledAt ?? activeCampaign.drawDate)}
                     </span>
                   </div>
 
@@ -636,6 +654,8 @@ export const DashboardPage: React.FC = () => {
           </div>
         </Card>
       )}
+
+      {referralCode && <ReferralCodeCard code={referralCode} />}
 
       {/* ─── HISTÓRICO DE CUPONS ─── */}
       {ticketHistory.length > 0 && (
