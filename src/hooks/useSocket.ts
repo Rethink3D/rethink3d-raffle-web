@@ -37,11 +37,12 @@ export const useSocket = (campaignId?: string) => {
   } = useDrawStore();
 
   useEffect(() => {
-    if (token) {
-      socket.auth = { token };
-      if (!socket.connected) socket.connect();
-    } else if (socket.connected) {
-      socket.disconnect();
+    const previousToken = (socket.auth as { token?: string } | undefined)?.token;
+    socket.auth = token ? { token } : {};
+    if (!socket.connected) {
+      socket.connect();
+    } else if (previousToken !== (token ?? undefined)) {
+      socket.disconnect().connect();
     }
   }, [token]);
 
