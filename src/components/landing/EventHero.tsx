@@ -5,6 +5,7 @@ import type { Campaign, Prize } from '../../types';
 import { Button } from '../ui/Button';
 import { TickNumber } from '../ui/TickNumber';
 import { formatDrawWhen } from '../../utils/drawWhen';
+import { copy } from '../../theme/copy';
 
 interface Countdown {
   isExpired: boolean;
@@ -53,7 +54,20 @@ export const EventHero: React.FC<EventHeroProps> = ({ campaign, prize, drawTarge
   const showDays = countdown.formatted.days !== '00';
 
   return (
-    <section className="section-tint relative overflow-hidden border border-brand-primary/40 rounded-theme bg-brand-surface/60 px-5 py-10 md:px-10 md:py-14">
+    <section className="section-tint relative overflow-hidden border border-brand-primary/40 rounded-theme bg-brand-surface/60 px-5 py-8 md:px-10 md:py-12">
+      {copy.eventName && (
+        <div className="anim-rise relative z-10 mb-8 md:mb-10 flex items-center justify-center md:justify-start gap-3 sm:gap-4 pb-6 border-b border-brand-border">
+          {copy.eventLogo && (
+            <img src={copy.eventLogo} alt="" className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover shrink-0" draggable={false} />
+          )}
+          <div className="text-left min-w-0">
+            <p className="font-display font-bold text-brand-strong text-base sm:text-lg leading-tight">
+              Sorteio da Rethink3D no {copy.eventName}
+            </p>
+            <p className="text-xs sm:text-sm text-brand-muted mt-1">{copy.eventPlace}</p>
+          </div>
+        </div>
+      )}
       <div className="relative z-10 grid md:grid-cols-[auto_minmax(0,1fr)] items-center gap-8 md:gap-12">
         <OrbitFrame imageUrl={prize.imageUrl} alt={prize.name} />
 
@@ -62,7 +76,7 @@ export const EventHero: React.FC<EventHeroProps> = ({ campaign, prize, drawTarge
             <Radio size={16} />
             {status === 'DRAWING'
               ? 'O sorteio está acontecendo agora'
-              : `Sorteio ao vivo ${formatDrawWhen(drawTarget)}`}
+              : `Sorteio ao vivo no estande, ${formatDrawWhen(drawTarget)}`}
           </p>
 
           <h1 className="anim-rise anim-rise-2 mt-3 font-display font-extrabold text-brand-strong text-3xl sm:text-4xl md:text-5xl leading-[1.08] max-w-[18ch]">

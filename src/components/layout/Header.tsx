@@ -13,6 +13,7 @@ import { campaignService } from "../../services/campaign.service";
 import { socket } from "../../hooks/useSocket";
 import logo from "../../assets/Logo.webp";
 import { THEME } from "../../theme/current";
+import { copy } from "../../theme/copy";
 
 export const Header: React.FC = () => {
   const { user, role, logout } = useAuthStore();
@@ -234,6 +235,18 @@ export const Header: React.FC = () => {
             className="brand-logo h-12 sm:h-20 md:h-24 w-auto object-contain shrink-0"
             draggable={false}
           />
+          {copy.eventLogo && (
+            <span className={`${user ? 'flex' : 'hidden sm:flex'} items-center shrink-0`}>
+              <span className="mx-2.5 sm:mx-4 h-8 sm:h-10 w-px bg-white/25" aria-hidden="true" />
+              <img
+                src={copy.eventLogo}
+                alt={copy.eventName}
+                title={copy.eventName}
+                className="h-9 w-9 sm:h-14 sm:w-14 rounded-full object-cover"
+                draggable={false}
+              />
+            </span>
+          )}
         </Link>
 
         {/* User Identity and Actions */}

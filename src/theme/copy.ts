@@ -126,6 +126,9 @@ const cyber = {
   questsEmptyProse: 'Volte em breve, novas missões podem aparecer a qualquer momento.',
   questsAllDoneTitle: 'Parabéns, você completou todas as missões!',
   questsDoneLabel: 'Concluídas',
+  eventName: '',
+  eventPlace: '',
+  eventLogo: '',
 };
 
 const padrao: typeof cyber = {
@@ -254,10 +257,16 @@ const padrao: typeof cyber = {
   questsEmptyProse: 'Volte em breve, novos desafios podem aparecer a qualquer momento.',
   questsAllDoneTitle: 'Você fez todos os desafios!',
   questsDoneLabel: 'Feitos',
+  eventName: '',
+  eventPlace: '',
+  eventLogo: '',
 };
 
 const universoif: typeof cyber = {
   ...padrao,
+  eventName: 'Universo IF 2026 "Ciência Delas"',
+  eventPlace: 'IFMA, Campus São Luís Monte Castelo, de 16 a 19 de novembro',
+  eventLogo: '/universoif-logo.webp',
   heroParagraph:
     'Passou pelo estande da Rethink3D no Universo IF "Ciência Delas"? Complete os desafios, junte cupons e concorra a prêmios de impressão 3D no sorteio ao vivo.',
   campaignFallbackProse:
