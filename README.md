@@ -27,10 +27,13 @@ VITE_THEME=padrao
 
 `VITE_THEME` escolhe a identidade visual no build:
 
-- **`feira`** (padrão) — tema sóbrio alinhado à Feira do Empreendedor do Sebrae: fundo claro, paleta vinho/navy/azul, tipografia Figtree, sem brilhos nem molduras de HUD, vocabulário sem jargão de jogo ("Desafios" no lugar de "Missões").
+- **`padrao`** — tema sóbrio e claro, azul de marca, Raleway/Open Sans, vocabulário sem jargão de jogo ("Desafios" no lugar de "Missões"). Usado na Feira do Empreendedor.
+- **`universoif`** — tema do Universo IF 2026 "Ciência Delas" (IFMA): fundo espacial azul-marinho com estrelas, degradê roxo→magenta nos botões e no header, Exo 2/Open Sans e textos que citam o evento. Mesma estrutura sóbria do `padrao`.
 - **`cyber`** — tema gamificado original: fundo escuro com papel de parede, neon roxo e ciano, Orbitron/Rajdhani, GIFs e loader de Pokébola.
 
-Ausente ou com valor desconhecido, resolve para `feira`. Trocar de tema exige novo build e novo deploy — não há troca em tempo de execução.
+Ausente ou com valor desconhecido, resolve para `padrao`. Trocar de tema exige novo build e novo deploy — não há troca em tempo de execução. O valor publicado fica fixado no `netlify.toml`.
+
+No HTML, `data-theme` escolhe as cores (`src/theme/tokens.css`) e `data-style` (`sobrio` ou `cyber`) escolhe o acabamento (`src/theme/decor.css`). Os textos por tema ficam em `src/theme/copy.ts` e o título, a descrição, as fontes e o favicon em `vite.config.ts`.
 
 ## Instalação e uso
 

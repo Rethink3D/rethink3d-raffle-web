@@ -1,4 +1,4 @@
-[data-theme="cyber"] body {
+[data-style="cyber"] body {
   background-image:
     linear-gradient(rgba(10, 10, 15, 0.88), rgba(10, 10, 15, 0.94)),
     url('/Background.webp');
@@ -8,28 +8,28 @@
   background-repeat: no-repeat;
 }
 
-[data-theme="padrao"] body {
+[data-style="sobrio"] body {
   background-image: none;
 }
 
 /* No tema escuro, opacidade parcial deixava o papel de parede aparecer atrás
    dos painéis. Sobre a página clara ela só lava o contraste: superfícies e
    texto voltam a ser opacos. */
-[data-theme="padrao"] [class*="bg-brand-surface/"] {
+[data-style="sobrio"] [class*="bg-brand-surface/"] {
   background-color: rgb(var(--c-surface));
 }
 
-[data-theme="padrao"] [class*="text-brand-text/"] {
+[data-style="sobrio"] [class*="text-brand-text/"] {
   color: rgb(var(--c-text));
 }
 
 /* Os tamanhos de 9 a 11px eram parte da estética de HUD e ficam ilegíveis
    sobre fundo claro. */
-[data-theme="padrao"] [class*="text-[9px]"]  { font-size: 0.6875rem; }
-[data-theme="padrao"] [class*="text-[10px]"] { font-size: 0.75rem; }
-[data-theme="padrao"] [class*="text-[11px]"] { font-size: 0.8125rem; }
+[data-style="sobrio"] [class*="text-[9px]"]  { font-size: 0.6875rem; }
+[data-style="sobrio"] [class*="text-[10px]"] { font-size: 0.75rem; }
+[data-style="sobrio"] [class*="text-[11px]"] { font-size: 0.8125rem; }
 
-[data-theme="padrao"] .theme-card {
+[data-style="sobrio"] .theme-card {
   box-shadow:
     0 1px 2px rgb(var(--c-text) / 0.06),
     0 12px 28px rgb(var(--c-text) / 0.07);
@@ -39,7 +39,7 @@
    vez de reescrever a cor de cada elemento lá dentro, o header redefine os
    próprios tokens: como as utilitárias resolvem rgb(var(--c-*)) no momento do
    uso, todo descendente acompanha sozinho. */
-[data-theme="padrao"] .theme-header {
+[data-style="sobrio"] .theme-header {
   background-color: rgb(var(--c-header));
   border-bottom-color: rgb(255 255 255 / 0.18);
   backdrop-filter: none;
@@ -55,7 +55,7 @@
   --c-accent: 255 224 168;
 }
 
-[data-theme="padrao"] .section-tint {
+[data-style="sobrio"] .section-tint {
   background-color: rgb(var(--c-highlight));
   border-color: rgb(var(--c-primary) / 0.12);
 }
@@ -63,35 +63,35 @@
 /* No tema escuro o botão é um contorno neon sobre preto. Sobre fundo claro,
    preenchimento a 10% quase não se distingue do cartão — a ação principal
    passa a ser sólida, como no padrão de mercado. */
-[data-theme="padrao"] .btn-v-primary {
+[data-style="sobrio"] .btn-v-primary {
   background-color: rgb(var(--c-primary));
   border-color: rgb(var(--c-primary));
   color: #ffffff;
 }
 
-[data-theme="padrao"] .btn-v-primary:hover {
+[data-style="sobrio"] .btn-v-primary:hover {
   background-color: rgb(var(--c-glow));
   border-color: rgb(var(--c-glow));
   color: #ffffff;
 }
 
-[data-theme="padrao"] .btn-v-danger {
+[data-style="sobrio"] .btn-v-danger {
   background-color: rgb(var(--c-danger));
   border-color: rgb(var(--c-danger));
   color: #ffffff;
 }
 
-[data-theme="padrao"] .btn-v-secondary,
-[data-theme="padrao"] .btn-v-accent {
+[data-style="sobrio"] .btn-v-secondary,
+[data-style="sobrio"] .btn-v-accent {
   background-color: rgb(var(--c-surface));
 }
 
-[data-theme="padrao"] .btn-v-secondary:hover {
+[data-style="sobrio"] .btn-v-secondary:hover {
   background-color: rgb(var(--c-secondary));
   color: #ffffff;
 }
 
-[data-theme="padrao"] .btn-v-accent:hover {
+[data-style="sobrio"] .btn-v-accent:hover {
   background-color: rgb(var(--c-accent));
   color: #ffffff;
 }
@@ -99,57 +99,57 @@
 /* A logo é um degradê prateado. Sobre o azul o prateado lê como sujeira; o
    filtro achata tudo em branco sólido, que é como ela foi desenhada pra
    aparecer. */
-[data-theme="padrao"] .brand-logo {
+[data-style="sobrio"] .brand-logo {
   filter: brightness(0) invert(1);
 }
 
-[data-theme="padrao"] .theme-header .brand-logo {
+[data-style="sobrio"] .theme-header .brand-logo {
   height: 2.75rem;
 }
 
 @media (min-width: 640px) {
-  [data-theme="padrao"] .theme-header .brand-logo { height: 3.5rem; }
+  [data-style="sobrio"] .theme-header .brand-logo { height: 3.5rem; }
 }
 
 @media (min-width: 768px) {
-  [data-theme="padrao"] .theme-header .brand-logo { height: 4rem; }
+  [data-style="sobrio"] .theme-header .brand-logo { height: 4rem; }
 }
 
 /* Entrar e Cadastrar vivem dentro do header, onde --c-primary é branco. Sem
    estas regras o hover do Cadastrar pintava fundo branco sob texto branco. */
-[data-theme="padrao"] .theme-header .hdr-btn {
+[data-style="sobrio"] .theme-header .hdr-btn {
   font-size: 0.8125rem;
   font-weight: 700;
   padding: 0.5625rem 1.125rem;
   box-shadow: none;
 }
 
-[data-theme="padrao"] .theme-header .hdr-btn-ghost {
+[data-style="sobrio"] .theme-header .hdr-btn-ghost {
   background-color: transparent;
   border-color: rgb(255 255 255 / 0.75);
   color: #ffffff;
 }
 
-[data-theme="padrao"] .theme-header .hdr-btn-ghost:hover {
+[data-style="sobrio"] .theme-header .hdr-btn-ghost:hover {
   background-color: rgb(255 255 255 / 0.18);
   border-color: #ffffff;
   color: #ffffff;
 }
 
-[data-theme="padrao"] .theme-header .hdr-btn-solid {
+[data-style="sobrio"] .theme-header .hdr-btn-solid {
   background-color: #ffffff;
   border-color: #ffffff;
   color: rgb(var(--c-header));
 }
 
-[data-theme="padrao"] .theme-header .hdr-btn-solid:hover {
+[data-style="sobrio"] .theme-header .hdr-btn-solid:hover {
   background-color: rgb(219 233 252);
   border-color: rgb(219 233 252);
   color: rgb(var(--c-header));
   box-shadow: none;
 }
 
-[data-theme="padrao"] .nav-active {
+[data-style="sobrio"] .nav-active {
   background-color: rgb(var(--c-highlight));
   border-color: transparent;
   color: rgb(var(--c-primary));
@@ -157,14 +157,14 @@
 }
 
 /* Dentro do header azul o botão sólido sumiria: fundo branco, texto azul. */
-[data-theme="padrao"] .theme-header .btn-v-primary {
+[data-style="sobrio"] .theme-header .btn-v-primary {
   background-color: #ffffff;
   color: rgb(var(--c-header));
 }
 
 /* Faixa de seção com fundo próprio, alternando com as seções sobre a página.
    Inerte no tema cyber, onde as seções não têm banda. */
-[data-theme="padrao"] .section-band {
+[data-style="sobrio"] .section-band {
   background-color: rgb(var(--c-highlight));
   border: 1px solid rgb(var(--c-primary) / 0.12);
   border-radius: var(--radius);
@@ -204,68 +204,137 @@
   background: linear-gradient(90deg, transparent, rgb(var(--c-primary)), transparent);
 }
 
-[data-theme="padrao"] .cyber-panel { border-radius: var(--radius); }
+[data-style="sobrio"] .cyber-panel { border-radius: var(--radius); }
 
-[data-theme="padrao"] .glow-primary,
-[data-theme="padrao"] .glow-secondary,
-[data-theme="padrao"] .glow-accent {
+[data-style="sobrio"] .glow-primary,
+[data-style="sobrio"] .glow-secondary,
+[data-style="sobrio"] .glow-accent {
   box-shadow: 0 1px 3px rgb(var(--c-text) / 0.08);
 }
 
-[data-theme="padrao"] .text-glow-primary,
-[data-theme="padrao"] .text-glow-secondary,
-[data-theme="padrao"] .text-glow-accent {
+[data-style="sobrio"] .text-glow-primary,
+[data-style="sobrio"] .text-glow-secondary,
+[data-style="sobrio"] .text-glow-accent {
   text-shadow: none;
 }
 
-[data-theme="padrao"] .cyber-grid { background-image: none; }
-[data-theme="padrao"] .cyber-panel::before { display: none; }
-[data-theme="padrao"] .hud-corner { display: none; }
+[data-style="sobrio"] .cyber-grid { background-image: none; }
+[data-style="sobrio"] .cyber-panel::before { display: none; }
+[data-style="sobrio"] .hud-corner { display: none; }
 
-[data-theme="padrao"] .animate-lightning-1,
-[data-theme="padrao"] .animate-lightning-2,
-[data-theme="padrao"] .animate-lightning-flash { display: none; }
+[data-style="sobrio"] .animate-lightning-1,
+[data-style="sobrio"] .animate-lightning-2,
+[data-style="sobrio"] .animate-lightning-flash { display: none; }
 
-[data-theme="padrao"] .animate-pulse-glow,
-[data-theme="padrao"] .animate-pulse-glow-ticket,
-[data-theme="padrao"] .animate-float { animation: none; }
+[data-style="sobrio"] .animate-pulse-glow,
+[data-style="sobrio"] .animate-pulse-glow-ticket,
+[data-style="sobrio"] .animate-float { animation: none; }
 
-[data-theme="padrao"] .uppercase:not(.keep-caps) { text-transform: none; }
+[data-style="sobrio"] .uppercase:not(.keep-caps) { text-transform: none; }
 
-[data-theme="padrao"] .tracking-wide,
-[data-theme="padrao"] .tracking-wider,
-[data-theme="padrao"] .tracking-widest,
-[data-theme="padrao"] .tracking-tighter { letter-spacing: 0; }
+[data-style="sobrio"] .tracking-wide,
+[data-style="sobrio"] .tracking-wider,
+[data-style="sobrio"] .tracking-widest,
+[data-style="sobrio"] .tracking-tighter { letter-spacing: 0; }
 
-[data-theme="padrao"] .font-mono { font-family: var(--font-ui); }
+[data-style="sobrio"] .font-mono { font-family: var(--font-ui); }
 
-[data-theme="padrao"] .rounded-md,
-[data-theme="padrao"] .rounded-lg,
-[data-theme="padrao"] .rounded-xl { border-radius: var(--radius); }
+[data-style="sobrio"] .rounded-md,
+[data-style="sobrio"] .rounded-lg,
+[data-style="sobrio"] .rounded-xl { border-radius: var(--radius); }
 
-[data-theme="cyber"] .on-fill { color: #000000; }
-[data-theme="padrao"] .on-fill { color: #ffffff; }
-[data-theme="cyber"] .on-fill-hover:hover { color: #000000; }
-[data-theme="padrao"] .on-fill-hover:hover { color: #ffffff; }
+[data-style="cyber"] .on-fill { color: #000000; }
+[data-style="sobrio"] .on-fill { color: #ffffff; }
+[data-style="cyber"] .on-fill-hover:hover { color: #000000; }
+[data-style="sobrio"] .on-fill-hover:hover { color: #ffffff; }
 
-[data-theme="cyber"] .bg-sunken-20 { background-color: rgb(0 0 0 / 0.20); }
-[data-theme="cyber"] .bg-sunken-25 { background-color: rgb(0 0 0 / 0.25); }
-[data-theme="cyber"] .bg-sunken-30 { background-color: rgb(0 0 0 / 0.30); }
-[data-theme="cyber"] .bg-sunken-35 { background-color: rgb(0 0 0 / 0.35); }
-[data-theme="cyber"] .bg-sunken-40 { background-color: rgb(0 0 0 / 0.40); }
-[data-theme="cyber"] .bg-sunken-45 { background-color: rgb(0 0 0 / 0.45); }
-[data-theme="cyber"] .bg-sunken-55 { background-color: rgb(0 0 0 / 0.55); }
-[data-theme="cyber"] .bg-sunken-60 { background-color: rgb(0 0 0 / 0.60); }
+[data-style="cyber"] .bg-sunken-20 { background-color: rgb(0 0 0 / 0.20); }
+[data-style="cyber"] .bg-sunken-25 { background-color: rgb(0 0 0 / 0.25); }
+[data-style="cyber"] .bg-sunken-30 { background-color: rgb(0 0 0 / 0.30); }
+[data-style="cyber"] .bg-sunken-35 { background-color: rgb(0 0 0 / 0.35); }
+[data-style="cyber"] .bg-sunken-40 { background-color: rgb(0 0 0 / 0.40); }
+[data-style="cyber"] .bg-sunken-45 { background-color: rgb(0 0 0 / 0.45); }
+[data-style="cyber"] .bg-sunken-55 { background-color: rgb(0 0 0 / 0.55); }
+[data-style="cyber"] .bg-sunken-60 { background-color: rgb(0 0 0 / 0.60); }
 
-[data-theme="padrao"] .bg-sunken-20 { background-color: rgb(var(--c-text) / 0.025); }
-[data-theme="padrao"] .bg-sunken-25 { background-color: rgb(var(--c-text) / 0.030); }
-[data-theme="padrao"] .bg-sunken-30 { background-color: rgb(var(--c-text) / 0.035); }
-[data-theme="padrao"] .bg-sunken-35 { background-color: rgb(var(--c-text) / 0.040); }
-[data-theme="padrao"] .bg-sunken-40 { background-color: rgb(var(--c-text) / 0.050); }
-[data-theme="padrao"] .bg-sunken-45 { background-color: rgb(var(--c-text) / 0.055); }
-[data-theme="padrao"] .bg-sunken-55 { background-color: rgb(var(--c-text) / 0.070); }
-[data-theme="padrao"] .bg-sunken-60 { background-color: rgb(var(--c-text) / 0.080); }
+[data-style="sobrio"] .bg-sunken-20 { background-color: rgb(var(--c-text) / 0.025); }
+[data-style="sobrio"] .bg-sunken-25 { background-color: rgb(var(--c-text) / 0.030); }
+[data-style="sobrio"] .bg-sunken-30 { background-color: rgb(var(--c-text) / 0.035); }
+[data-style="sobrio"] .bg-sunken-35 { background-color: rgb(var(--c-text) / 0.040); }
+[data-style="sobrio"] .bg-sunken-40 { background-color: rgb(var(--c-text) / 0.050); }
+[data-style="sobrio"] .bg-sunken-45 { background-color: rgb(var(--c-text) / 0.055); }
+[data-style="sobrio"] .bg-sunken-55 { background-color: rgb(var(--c-text) / 0.070); }
+[data-style="sobrio"] .bg-sunken-60 { background-color: rgb(var(--c-text) / 0.080); }
 
-[data-theme="padrao"] ::-webkit-scrollbar-track { background: rgb(var(--c-surface)); }
-[data-theme="padrao"] ::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); }
-[data-theme="padrao"] ::-webkit-scrollbar-thumb:hover { background: rgb(var(--c-muted)); }
+[data-style="sobrio"] ::-webkit-scrollbar-track { background: rgb(var(--c-surface)); }
+[data-style="sobrio"] ::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); }
+[data-style="sobrio"] ::-webkit-scrollbar-thumb:hover { background: rgb(var(--c-muted)); }
+
+[data-theme="universoif"] body {
+  background-color: rgb(var(--c-bg));
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgb(255 255 255 / 0.75), transparent 60%),
+    radial-gradient(1px 1px at 72% 12%, rgb(255 255 255 / 0.6), transparent 60%),
+    radial-gradient(1.5px 1.5px at 38% 64%, rgb(255 255 255 / 0.55), transparent 60%),
+    radial-gradient(1px 1px at 88% 52%, rgb(255 255 255 / 0.7), transparent 60%),
+    radial-gradient(1.5px 1.5px at 22% 86%, rgb(255 255 255 / 0.5), transparent 60%),
+    radial-gradient(1px 1px at 58% 32%, rgb(255 255 255 / 0.45), transparent 60%),
+    radial-gradient(60rem 40rem at 85% -10%, rgb(var(--c-primary) / 0.35), transparent 70%),
+    radial-gradient(50rem 36rem at -10% 110%, rgb(var(--c-accent) / 0.22), transparent 70%);
+  background-attachment: fixed;
+}
+
+[data-theme="universoif"] .theme-card {
+  box-shadow:
+    0 0 0 1px rgb(var(--c-primary) / 0.18),
+    0 16px 40px rgb(2 6 30 / 0.55);
+}
+
+[data-theme="universoif"] .theme-header {
+  background-color: rgb(var(--c-header) / 0.92);
+  border-bottom: 3px solid transparent;
+  border-image: linear-gradient(90deg, rgb(var(--c-grad-a)), rgb(var(--c-grad-mid)), rgb(var(--c-grad-b))) 1;
+  backdrop-filter: blur(8px);
+  --c-muted: 190 196 240;
+  --c-secondary: 150 190 255;
+  --c-accent: 255 170 245;
+}
+
+[data-theme="universoif"] .btn-v-primary,
+[data-theme="universoif"] .theme-header .hdr-btn-solid {
+  background-image: linear-gradient(90deg, rgb(var(--c-grad-a)), rgb(var(--c-grad-b)));
+  border-color: transparent;
+  color: #ffffff;
+}
+
+[data-theme="universoif"] .btn-v-primary:hover,
+[data-theme="universoif"] .theme-header .hdr-btn-solid:hover {
+  background-image: linear-gradient(90deg, rgb(var(--c-grad-mid)), rgb(var(--c-grad-b)));
+  border-color: transparent;
+  color: #ffffff;
+  box-shadow: 0 0 18px rgb(var(--c-grad-b) / 0.45);
+}
+
+[data-theme="universoif"] .theme-header .btn-v-primary {
+  color: #ffffff;
+}
+
+[data-theme="universoif"] .section-tint,
+[data-theme="universoif"] .section-band {
+  background-color: rgb(var(--c-highlight) / 0.75);
+  border-color: rgb(var(--c-primary) / 0.35);
+}
+
+[data-theme="universoif"] .nav-active {
+  color: rgb(var(--c-strong));
+  box-shadow: inset 3px 0 0 rgb(var(--c-accent));
+}
+
+[data-theme="universoif"] .bg-sunken-20,
+[data-theme="universoif"] .bg-sunken-25,
+[data-theme="universoif"] .bg-sunken-30,
+[data-theme="universoif"] .bg-sunken-35 { background-color: rgb(2 6 30 / 0.30); }
+[data-theme="universoif"] .bg-sunken-40,
+[data-theme="universoif"] .bg-sunken-45,
+[data-theme="universoif"] .bg-sunken-55,
+[data-theme="universoif"] .bg-sunken-60 { background-color: rgb(2 6 30 / 0.45); }

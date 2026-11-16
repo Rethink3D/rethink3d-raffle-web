@@ -1,4 +1,7 @@
-export type ThemeId = 'padrao' | 'cyber';
+export type ThemeId = 'padrao' | 'cyber' | 'universoif';
 
-export const THEME: ThemeId =
-  import.meta.env.VITE_THEME === 'cyber' ? 'cyber' : 'padrao';
+const THEMES: readonly ThemeId[] = ['padrao', 'cyber', 'universoif'];
+
+export const THEME: ThemeId = THEMES.includes(import.meta.env.VITE_THEME as ThemeId)
+  ? (import.meta.env.VITE_THEME as ThemeId)
+  : 'padrao';

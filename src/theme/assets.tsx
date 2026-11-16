@@ -88,6 +88,29 @@ const HeroPolygons: React.FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
+const HeroOrbit: React.FC<{ className?: string }> = ({ className }) => (
+  <svg viewBox="0 0 400 300" className={className} aria-hidden="true">
+    <defs>
+      <linearGradient id="orbit-ring" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="rgb(var(--c-primary))" />
+        <stop offset="1" stopColor="rgb(var(--c-accent))" />
+      </linearGradient>
+      <radialGradient id="orbit-planet" cx="0.35" cy="0.35" r="0.7">
+        <stop offset="0" stopColor="rgb(var(--c-glow))" />
+        <stop offset="1" stopColor="rgb(var(--c-highlight))" />
+      </radialGradient>
+    </defs>
+    <circle cx="230" cy="170" r="96" fill="none" stroke="url(#orbit-ring)" strokeWidth="6" />
+    <circle cx="303" cy="108" r="11" fill="rgb(var(--c-strong))" />
+    <circle cx="160" cy="236" r="9" fill="rgb(var(--c-strong))" />
+    <circle cx="230" cy="170" r="44" fill="url(#orbit-planet)" opacity="0.9" />
+    <ellipse cx="230" cy="170" rx="70" ry="14" fill="none" stroke="rgb(var(--c-secondary))"
+             strokeWidth="3" opacity="0.8" transform="rotate(-18 230 170)" />
+    <path d="M90 70l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" fill="rgb(var(--c-strong))" opacity="0.85" />
+    <path d="M350 230l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="rgb(var(--c-strong))" opacity="0.7" />
+  </svg>
+);
+
 const gifByKind: Partial<Record<AssetKind, string>> = {
   waiting: nika,
   celebrate: agree,
@@ -110,7 +133,10 @@ export const ThemeAsset: React.FC<ThemeAssetProps> = ({ kind, size = 100, classN
   }
 
   if (kind === 'heroDecor') {
-    return THEME === 'cyber' ? null : <HeroPolygons className={className} />;
+    if (THEME === 'cyber') return null;
+    return THEME === 'universoif'
+      ? <HeroOrbit className={className} />
+      : <HeroPolygons className={className} />;
   }
 
   if (THEME === 'cyber') {

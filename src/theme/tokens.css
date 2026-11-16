@@ -47,3 +47,31 @@
 :root[data-theme="cyber"] {
   --c-header: 18 18 30;
 }
+
+:root[data-theme="universoif"] {
+  --c-bg: 8 14 52;
+  --c-surface: 20 27 86;
+  --c-border: 52 62 140;
+  --c-primary: 127 75 254;
+  --c-glow: 188 79 245;
+  --c-secondary: 72 140 255;
+  --c-accent: 251 82 239;
+  --c-highlight: 34 33 112;
+  --c-success: 52 211 153;
+  --c-danger: 251 113 133;
+  --c-text: 226 230 255;
+  --c-strong: 255 255 255;
+  --c-muted: 160 168 220;
+
+  --font-display: 'Exo 2', sans-serif;
+  --font-ui: 'Open Sans', sans-serif;
+  --font-body: 'Open Sans', sans-serif;
+
+  --radius: 1rem;
+
+  --c-header: 12 18 66;
+
+  --c-grad-a: 127 75 254;
+  --c-grad-mid: 188 79 245;
+  --c-grad-b: 251 82 239;
+}

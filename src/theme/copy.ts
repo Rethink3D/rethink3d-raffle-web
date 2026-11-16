@@ -236,4 +236,19 @@ const padrao: typeof cyber = {
   prizesTitle: 'Prêmios do sorteio',
 };
 
-export const copy = THEME === 'cyber' ? cyber : padrao;
+const universoif: typeof cyber = {
+  ...padrao,
+  heroParagraph:
+    'Passou pelo estande da Rethink3D no Universo IF "Ciência Delas"? Complete os desafios, junte cupons e concorra a prêmios de impressão 3D no sorteio ao vivo.',
+  campaignFallbackProse:
+    'Cumpra desafios, junte cupons e concorra a prêmios de impressão 3D no Universo IF 2026!',
+  step1Desc:
+    'Cadastre-se com nome, telefone e um PIN de 4 dígitos. Você também informa o código exibido na tela do estande da Rethink3D no Universo IF — só quem está no evento consegue criar conta.',
+  faqStandQ: 'Preciso estar no Universo IF para me cadastrar?',
+  noCampaignProse:
+    'O sorteio do Universo IF ainda não começou. Fique de olho — assim que a campanha abrir, ela aparece bem aqui.',
+};
+
+const byTheme = { cyber, padrao, universoif };
+
+export const copy = byTheme[THEME];
