@@ -11,6 +11,7 @@ import { useStandStore } from '../../store/standStore';
 const APPROVE_URL = `${window.location.origin}/admin/estande`;
 
 const RETRY_BACKOFF_MS = 5000;
+const PAIRING_TTL_MS = 5 * 60 * 1000;
 
 const formatUserCode = (code: string): string =>
   `${code.slice(0, 3)}-${code.slice(3)}`;
@@ -32,7 +33,10 @@ export const StandPairingScreen: React.FC = () => {
     requestingRef.current = true;
     try {
       const data = await standPairingService.create();
-      setPairing(data);
+      setPairing({
+        ...data,
+        expiresAt: new Date(Date.now() + PAIRING_TTL_MS).toISOString(),
+      });
       setError(null);
       retryAfterRef.current = 0;
     } catch {

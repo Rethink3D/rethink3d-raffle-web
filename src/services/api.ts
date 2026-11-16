@@ -48,6 +48,8 @@ api.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       if (isStandRoute()) {
+        const { token, role } = useAuthStore.getState();
+        if (token && role === 'admin') useAuthStore.getState().logout();
         useStandStore.getState().clear();
         return Promise.reject(error);
       }

@@ -29,6 +29,43 @@ export interface AuthResponse {
   signupBonus?: number;
 }
 
+const ME_ATTEMPTS = 3;
+const ME_RETRY_DELAY_MS = 800;
+
+const tokenSubject = (token: string): string => {
+  try {
+    const payload = token.split('.')[1] ?? '';
+    const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+    const sub = (JSON.parse(json) as { sub?: unknown }).sub;
+    return typeof sub === 'string' ? sub : '';
+  } catch {
+    return '';
+  }
+};
+
+const fetchRegisteredUser = async (data: RegisterDto, token: string): Promise<User> => {
+  for (let attempt = 1; attempt <= ME_ATTEMPTS; attempt++) {
+    try {
+      const userResponse = await api.get<User>('/auth/me');
+      return userResponse.data;
+    } catch {
+      if (attempt < ME_ATTEMPTS) {
+        await new Promise((resolve) => setTimeout(resolve, ME_RETRY_DELAY_MS));
+      }
+    }
+  }
+
+  const now = new Date().toISOString();
+  return {
+    id: tokenSubject(token),
+    name: data.name,
+    phone: data.phone,
+    mustChangePinOnNextLogin: false,
+    createdAt: now,
+    updatedAt: now,
+  };
+};
+
 export const authService = {
   async register(data: RegisterDto): Promise<AuthResponse> {
     const response = await api.post<{ access_token: string; signupBonus: number }>('/auth/register', data);
@@ -44,10 +81,9 @@ export const authService = {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     try {
-      const userResponse = await api.get<User>('/auth/me');
       return {
         token,
-        user: userResponse.data,
+        user: await fetchRegisteredUser(data, token),
         role: 'participant',
         signupBonus,
       };
