@@ -17,6 +17,8 @@ import { PrizeWheel } from '../../components/draw/PrizeWheel';
 import type { Campaign, Draw } from '../../types';
 import { copy } from '../../theme/copy';
 
+const CAMPAIGN_REFRESH_MS = 60_000;
+
 // Confete simples em canvas — só entra quando o vencedor é revelado
 const ConfettiCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -154,6 +156,24 @@ export const DrawWatchPage: React.FC = () => {
     };
     fetchActiveCampaign();
   }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    const refreshCampaign = () => {
+      campaignService
+        .getActiveCampaign()
+        .then((campaign) => {
+          if (isMounted) setActiveCampaign(campaign);
+        })
+        .catch((err) => console.warn('Failed to refresh active campaign', err));
+    };
+    const interval = setInterval(refreshCampaign, CAMPAIGN_REFRESH_MS);
+    if (winner || sessionEndedReason || revokeVersion > 0) refreshCampaign();
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [winner, sessionEndedReason, revokeVersion]);
 
   const countdown = useCountdown(getNextDrawTarget(activeCampaign));
 

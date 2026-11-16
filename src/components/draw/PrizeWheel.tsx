@@ -147,6 +147,14 @@ export const PrizeWheel: React.FC<PrizeWheelProps> = ({
     phaseRef.current = 'decelerating';
   }, [winnerId, slices]);
 
+  useEffect(() => {
+    if (!winnerId || phaseRef.current === 'decelerating') return;
+    if (phaseRef.current === 'idle' || slices.length === 0) {
+      phaseRef.current = 'idle';
+      onSettledRef.current?.();
+    }
+  }, [winnerId, slices.length]);
+
   if (slices.length === 0) {
     return (
       <div className="w-64 h-64 rounded-full border-4 border-brand-border bg-brand-surface/60 flex items-center justify-center text-brand-muted text-xs font-mono text-center px-6">

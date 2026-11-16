@@ -23,6 +23,35 @@ export const socket: Socket = io(`${SOCKET_URL}/draw`, {
 // Conecta ao namespace /draw e entra na sala da campanha (isolamento real via
 // Socket.IO rooms no backend — sem isso, sorteios de campanhas diferentes se
 // misturariam). Usado tanto pela tela pública de sorteio quanto pelo admin.
+const ROOM_LEAVE_GRACE_MS = 10_000;
+const roomUsers = new Map<string, number>();
+const pendingLeaves = new Map<string, ReturnType<typeof setTimeout>>();
+
+const enterRoom = (campaignId: string) => {
+  const pending = pendingLeaves.get(campaignId);
+  if (pending) {
+    clearTimeout(pending);
+    pendingLeaves.delete(campaignId);
+  }
+  roomUsers.set(campaignId, (roomUsers.get(campaignId) ?? 0) + 1);
+};
+
+const exitRoom = (campaignId: string) => {
+  const remaining = (roomUsers.get(campaignId) ?? 1) - 1;
+  if (remaining > 0) {
+    roomUsers.set(campaignId, remaining);
+    return;
+  }
+  roomUsers.delete(campaignId);
+  pendingLeaves.set(
+    campaignId,
+    setTimeout(() => {
+      pendingLeaves.delete(campaignId);
+      if (!roomUsers.has(campaignId)) socket.emit('leave', { campaignId });
+    }, ROOM_LEAVE_GRACE_MS),
+  );
+};
+
 export const useSocket = (campaignId?: string) => {
   const navigate = useNavigate();
   const { token, role } = useAuthStore();
@@ -50,12 +79,13 @@ export const useSocket = (campaignId?: string) => {
     if (!campaignId) return;
 
     const join = () => socket.emit('join', { campaignId });
+    enterRoom(campaignId);
     socket.on('connect', join);
     if (socket.connected) join();
 
     return () => {
       socket.off('connect', join);
-      socket.emit('leave', { campaignId });
+      exitRoom(campaignId);
     };
   }, [campaignId]);
 
@@ -77,7 +107,9 @@ export const useSocket = (campaignId?: string) => {
       setSessionEnded(data.reason);
     };
 
-    const onCancelled = () => {
+    const onCancelled = (data: { drawId?: string }) => {
+      const currentDrawId = useDrawStore.getState().drawId;
+      if (currentDrawId && data?.drawId && data.drawId !== currentDrawId) return;
       clearDraw();
       if (role === 'participant') navigate('/dashboard');
     };
@@ -86,8 +118,8 @@ export const useSocket = (campaignId?: string) => {
       setOnlineCount(data.onlineCount);
     };
 
-    const onRevoked = () => {
-      setRevoked();
+    const onRevoked = (data: { drawId?: string }) => {
+      setRevoked(data?.drawId ?? null);
     };
 
     socket.on('draw:started', onDrawStarted);

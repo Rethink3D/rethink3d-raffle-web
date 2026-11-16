@@ -216,13 +216,27 @@ export const DrawControlPage: React.FC = () => {
     }
   };
 
+  const warnIfLiveResultMissed = (result: Draw | undefined) => {
+    if (selectedCampaignId) {
+      loadVault(selectedCampaignId);
+      loadHistory(selectedCampaignId);
+    }
+    if (!result?.winnerName || useDrawStore.getState().winner) return;
+    setError(
+      `Resultado gravado: ${result.winnerName} ganhou ${result.prize?.name ?? 'o prêmio'}. ` +
+        'O aviso ao vivo não chegou a este painel; confira a conexão antes da próxima rodada.',
+    );
+  };
+
   const handleExecuteDraw = async () => {
     if (!pendingDraw) return;
     setIsActionLoading(true);
     setError(null);
     try {
-      await drawService.executeDraw(pendingDraw.id);
+      const result = await drawService.executeDraw(pendingDraw.id);
+      warnIfLiveResultMissed(result);
     } catch (err: any) {
+      clearDraw();
       setError(getApiErrorMessage(err, 'Erro durante o sorteio de cupons.'));
     } finally {
       setIsActionLoading(false);
@@ -300,8 +314,10 @@ export const DrawControlPage: React.FC = () => {
     setError(null);
     clearDraw();
     try {
-      await drawService.drawNextInSession(activeSession.id);
+      const result = await drawService.drawNextInSession(activeSession.id);
+      warnIfLiveResultMissed(result);
     } catch (err: any) {
+      clearDraw();
       setError(getApiErrorMessage(err, 'Falha ao sortear a próxima rodada da cadeia.'));
     } finally {
       setIsActionLoading(false);
@@ -386,12 +402,20 @@ export const DrawControlPage: React.FC = () => {
           </p>
         </div>
         <div className="flex gap-2">
-          {(pendingDraw || drawId) && !isSessionMode && (
-            <Button variant="danger" size="sm" onClick={handleCancelDraw} disabled={isSpinning}>
+          {(pendingDraw || drawId) && !winner && (!isSessionMode || isSpinning) && (
+            <Button variant="danger" size="sm" onClick={handleCancelDraw} disabled={isActionLoading && !isSpinning}>
               Cancelar Sorteio
             </Button>
           )}
-          <Button variant="secondary" size="sm" icon={<RefreshCw size={14} />} onClick={() => loadCampaigns()} disabled={isSpinning}>
+          <Button
+            variant="secondary"
+            size="sm"
+            icon={<RefreshCw size={14} />}
+            onClick={() => {
+              if (isSpinning) clearDraw();
+              loadCampaigns();
+            }}
+          >
             Limpar Painel
           </Button>
         </div>

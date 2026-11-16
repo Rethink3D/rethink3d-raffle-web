@@ -21,6 +21,7 @@ export interface DrawWinner {
   totalTickets: number;
   totalParticipants: number;
   sessionId?: string;
+  drawId?: string;
 }
 
 export interface DrawState {
@@ -51,7 +52,7 @@ export interface DrawState {
   setWinner: (winner: DrawWinner) => void;
   setSessionEnded: (reason: 'exhausted' | 'manual') => void;
   setOnlineCount: (count: number) => void;
-  setRevoked: () => void;
+  setRevoked: (drawId: string | null) => void;
   clearDraw: () => void;
 }
 
@@ -96,17 +97,26 @@ export const useDrawStore = create<DrawState>((set) => ({
     }),
 
   setWinner: (winner) =>
-    set({
+    set((s) => ({
       winner,
+      drawId: winner.drawId ?? s.drawId,
       isSpinning: false,
       status: 'COMPLETED',
-    }),
+    })),
 
   setSessionEnded: (reason) => set({ sessionEndedReason: reason }),
 
   setOnlineCount: (onlineCount) => set({ onlineCount }),
 
-  setRevoked: () => set((s) => ({ revokeVersion: s.revokeVersion + 1 })),
+  setRevoked: (drawId) =>
+    set((s) => {
+      const showingRevokedWinner =
+        drawId !== null && s.winner !== null && s.drawId === drawId;
+      return {
+        ...(showingRevokedWinner ? initialDrawFields : {}),
+        revokeVersion: s.revokeVersion + 1,
+      };
+    }),
 
   clearDraw: () => set({ ...initialDrawFields }),
 }));
