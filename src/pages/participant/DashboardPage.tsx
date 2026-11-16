@@ -626,7 +626,7 @@ export const DashboardPage: React.FC = () => {
                     </span>
                     {draw.winnerTickets != null && (
                       <span className="text-[10px] font-mono text-brand-accent uppercase tracking-wider mt-0.5">
-                        ganhou com {draw.winnerTickets} cupom{draw.winnerTickets === 1 ? '' : 's'}
+                        ganhou com {draw.winnerTickets} {draw.winnerTickets === 1 ? 'cupom' : 'cupons'}
                       </span>
                     )}
                   </div>

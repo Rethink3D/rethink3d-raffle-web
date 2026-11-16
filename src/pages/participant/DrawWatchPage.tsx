@@ -267,7 +267,7 @@ export const DrawWatchPage: React.FC = () => {
                   <div>
                     <span className="text-[9px] font-mono text-brand-muted uppercase block">Ganhou com</span>
                     <span className="font-ui font-bold text-sm text-brand-accent mt-0.5 block">
-                      {winner.winnerTickets} cupom{winner.winnerTickets === 1 ? '' : 's'}
+                      {winner.winnerTickets} {winner.winnerTickets === 1 ? 'cupom' : 'cupons'}
                     </span>
                   </div>
                   <div>
@@ -428,7 +428,7 @@ export const DrawWatchPage: React.FC = () => {
                     </p>
                     <p className="text-[10px] font-mono text-brand-muted uppercase tracking-wider mt-0.5 truncate">
                       {draw.prize?.name ?? 'Prêmio'}
-                      {draw.winnerTickets != null ? ` · ganhou com ${draw.winnerTickets} cupom${draw.winnerTickets === 1 ? '' : 's'}` : ''}
+                      {draw.winnerTickets != null ? ` · ganhou com ${draw.winnerTickets} ${draw.winnerTickets === 1 ? 'cupom' : 'cupons'}` : ''}
                     </p>
                   </div>
                 </div>

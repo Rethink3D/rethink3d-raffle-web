@@ -705,7 +705,7 @@ export const DrawControlPage: React.FC = () => {
                         {winner.winnerName}
                       </h2>
                       <div className="mt-3 flex justify-center gap-4 text-xs font-mono text-brand-muted">
-                        <span>GANHOU COM: <strong className="text-brand-secondary">{winner.winnerTickets} cupom{winner.winnerTickets === 1 ? '' : 's'}</strong></span>
+                        <span>GANHOU COM: <strong className="text-brand-secondary">{winner.winnerTickets} {winner.winnerTickets === 1 ? 'cupom' : 'cupons'}</strong></span>
                         <span>•</span>
                         <span>CUPONS NO TOTAL: {winner.totalTickets}</span>
                         <span>•</span>
@@ -782,7 +782,7 @@ export const DrawControlPage: React.FC = () => {
                     <div className="relative p-6 bg-sunken-45 border border-brand-border rounded-lg max-w-lg mx-auto">
                       <span className="text-[10px] font-mono text-brand-muted block mb-1 uppercase tracking-widest">GANHADOR DESTA RODADA</span>
                       <h2 className="text-3xl font-display font-extrabold text-brand-strong uppercase tracking-wide truncate">{winner.winnerName}</h2>
-                      <span className="text-xs font-mono text-brand-muted">GANHOU COM: {winner.winnerTickets} cupom{winner.winnerTickets === 1 ? '' : 's'} (total: {winner.totalTickets})</span>
+                      <span className="text-xs font-mono text-brand-muted">GANHOU COM: {winner.winnerTickets} {winner.winnerTickets === 1 ? 'cupom' : 'cupons'} (total: {winner.totalTickets})</span>
                       {winner.prize && (
                         <div className="mt-3 text-xs font-ui font-bold text-brand-accent uppercase">
                           Prêmio: {winner.prize.name}

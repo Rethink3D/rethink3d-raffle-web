@@ -317,7 +317,7 @@ export const QuizPage: React.FC = () => {
         </h2>
         {rewardAmount > 0 && (
           <span className="text-xs text-brand-muted">
-            Cada resposta certa vale {rewardAmount} cupom{rewardAmount === 1 ? '' : 's'}.
+            Cada resposta certa vale {rewardAmount} {rewardAmount === 1 ? 'cupom' : 'cupons'}.
           </span>
         )}
       </div>
